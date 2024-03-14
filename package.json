@@ -1,0 +1,38 @@
+{
+  "name": "dramapedia",
+  "private": true,
+  "type": "module",
+  "description": "Asian drama encyclopedia",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/anhthang/dramapedia.git"
+  },
+  "keywords": [
+    "drama",
+    "encyclopedia",
+    "c-drama",
+    "k-drama"
+  ],
+  "author": "Anh Thang Bui <buianhthang89@gmail.com> (https://anhthang.org)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/anhthang/dramapedia/issues"
+  },
+  "homepage": "https://github.com/anhthang/dramapedia#readme",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "nuxt": "^3.10.3",
+    "vue": "^3.4.21",
+    "vue-router": "^4.3.0"
+  },
+  "devDependencies": {},
+  "packageManager": "yarn@4.1.1+sha256.f3cc0eda8e5560e529c7147565b30faa43b4e472d90e8634d7134a37c7f59781"
+}
