@@ -9,6 +9,7 @@ export default defineEventHandler(async (event) => {
     .from('dramas')
     .select('*, cast:drama_cast(*), crew:drama_crew(*)')
     .eq('id', drama_id)
+    .single()
 
   return data
 })
