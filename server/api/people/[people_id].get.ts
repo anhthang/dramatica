@@ -3,14 +3,14 @@ import { serverSupabaseClient } from '#supabase/server'
 export default defineEventHandler(async (event) => {
   const client = await serverSupabaseClient(event)
 
-  const { drama_id } = event.context.params
+  const { people_id } = event.context.params
 
   const { data } = await client
-    .from('dramas')
+    .from('people')
     .select(
-      '*, cast:drama_cast(*, people(name, name_vi, profile_url)), crew:drama_crew(*)',
+      '*, dramas:drama_cast(*, drama:dramas(title, title_vi, release_year, poster_url))',
     )
-    .eq('id', drama_id)
+    .eq('id', people_id)
     .single()
 
   return data

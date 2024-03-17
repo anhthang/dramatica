@@ -25,18 +25,20 @@
 
       <a-row :gutter="[8, 8]" type="flex">
         <a-col v-for="actor in drama.cast" :key="actor.id" :xs="12" :sm="4">
-          <a-card>
-            <a-card-meta
-              :title="actor.character_name"
-              :description="actor.character_name_vi"
-            >
-              <template #avatar>
-                <a-avatar size="large">
-                  {{ actor.character_name.charAt(0) }}
-                </a-avatar>
-              </template>
-            </a-card-meta>
-          </a-card>
+          <nuxt-link :to="`/people/${actor.people_id}`">
+            <a-card>
+              <a-card-meta
+                :title="actor.people.name"
+                :description="actor.character_name"
+              >
+                <template #avatar>
+                  <a-avatar :src="actor.people.profile_url" size="large">
+                    {{ actor.people.name.charAt(0) }}
+                  </a-avatar>
+                </template>
+              </a-card-meta>
+            </a-card>
+          </nuxt-link>
         </a-col>
       </a-row>
     </a-page-header>

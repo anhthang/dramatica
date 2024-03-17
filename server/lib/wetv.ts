@@ -17,10 +17,8 @@ export default async (url: string) => {
     backdrop_url,
   }
 
-  const linkedData = jsonld.find((ld: any) => Array.isArray(ld['@graph']))
-
-  if (linkedData) {
-    linkedData['@graph'].forEach((data: any) => {
+  if (Array.isArray(jsonld)) {
+    jsonld.forEach((data: any) => {
       switch (data['@type']) {
         case 'BreadcrumbList':
           if (Array.isArray(data.itemListElement)) {

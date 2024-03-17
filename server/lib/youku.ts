@@ -9,10 +9,8 @@ export default async (url: string) => {
     name,
   }
 
-  const linkedData = jsonld.find((ld: any) => Array.isArray(ld['@graph']))
-
-  if (linkedData) {
-    linkedData['@graph'].forEach((data: any) => {
+  if (Array.isArray(jsonld)) {
+    jsonld.forEach((data: any) => {
       switch (data['@type']) {
         case 'TVSeries':
           information.synopsis = data.description
