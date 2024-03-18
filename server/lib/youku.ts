@@ -3,10 +3,13 @@ import urlMetadata from 'url-metadata'
 export default async (url: string) => {
   const metadata = await urlMetadata(url)
 
-  const { irAlbumName: name, jsonld } = metadata
+  const { irAlbumName: title, jsonld } = metadata
 
   const information: { [x: string]: any } = {
-    name,
+    title,
+    synopsis_source: 'Youku',
+    airing_platform: 'Youku',
+    watch_link: url,
   }
 
   if (Array.isArray(jsonld)) {

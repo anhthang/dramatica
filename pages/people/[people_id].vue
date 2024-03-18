@@ -29,20 +29,30 @@
             </a-typography-text>
           </a-descriptions>
 
-          <a-divider />
+          <a-card title="Drama">
+            <a-timeline
+              v-for="year of Object.keys(dramaByYear).reverse()"
+              :key="year"
+            >
+              <a-timeline-item>
+                <template #dot>
+                  <clock-circle-outlined style="font-size: 16px" />
+                </template>
+                <a-typography-title :level="5">{{ year }}</a-typography-title>
+              </a-timeline-item>
 
-          <a-typography-title :level="5">Drama</a-typography-title>
-
-          <a-timeline>
-            <a-timeline-item v-for="drama in people.dramas" :key="drama.id">
-              <a-typography-paragraph strong>
-                {{ drama.drama.title }} ({{ drama.drama.release_year }})
-              </a-typography-paragraph>
-              <a-typography-paragraph type="secondary">
-                {{ drama.character_name }}
-              </a-typography-paragraph>
-            </a-timeline-item>
-          </a-timeline>
+              <a-timeline-item
+                v-for="drama in dramaByYear[year]"
+                :key="drama.id"
+                :color="airingColor[drama.drama.airing_status] || 'gray'"
+              >
+                <a-card-meta
+                  :title="drama.drama.title"
+                  :description="drama.character_name"
+                />
+              </a-timeline-item>
+            </a-timeline>
+          </a-card>
         </a-col>
       </a-row>
     </a-page-header>
@@ -50,10 +60,22 @@
 </template>
 
 <script setup>
+import groupBy from 'lodash.groupby'
+
+const airingColor = {
+  Airing: 'blue',
+  Ended: 'green',
+  Hiatus: 'orange',
+}
+
 const route = useRoute()
 
 const { data: people } = await useAsyncData(() =>
   $fetch(`/api/people/${route.params.people_id}`),
+)
+
+const dramaByYear = computed(() =>
+  groupBy(people.value.dramas, 'drama.release_year'),
 )
 
 useSeoMeta({

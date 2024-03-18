@@ -47,9 +47,14 @@ const { data } = await useAsyncData(() => $fetch('/api/drama'))
 }
 
 .drama-container {
-  .ant-card-cover img {
+  .ant-card-cover {
     height: 320px;
-    object-fit: cover;
+    overflow: hidden;
+
+    img {
+      height: 320px;
+      object-fit: cover;
+    }
   }
 }
 </style>

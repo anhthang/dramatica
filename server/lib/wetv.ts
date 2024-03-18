@@ -15,6 +15,9 @@ export default async (url: string) => {
   const information: { [x: string]: any } = {
     language,
     backdrop_url,
+    synopsis_source: 'WeTV',
+    airing_platform: 'WeTV',
+    watch_link: url,
   }
 
   if (Array.isArray(jsonld)) {
@@ -23,7 +26,7 @@ export default async (url: string) => {
         case 'BreadcrumbList':
           if (Array.isArray(data.itemListElement)) {
             const { name } = data.itemListElement.reverse()[0]
-            information.name = name
+            information.title = name
           }
           break
 
@@ -31,13 +34,14 @@ export default async (url: string) => {
           {
             const { description, actor } = data
             if (Array.isArray(actor)) {
-              if (Array.isArray(actor[0].name.workInfo)) {
-                const workInfo = actor[0].name.workInfo.find(
-                  (w: any) => w.cid === cid,
-                )
-                if (workInfo) {
-                  information.poster_url = workInfo.posterVt
-                }
+              const workInfos = actor.reduce((out, cur) => {
+                out = out.concat(cur.name.workInfo)
+                return out
+              }, [])
+
+              const workInfo = workInfos.find((w: any) => w.cid === cid)
+              if (workInfo) {
+                information.poster_url = workInfo.posterVt
               }
             }
 

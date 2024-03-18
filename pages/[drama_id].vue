@@ -6,6 +6,9 @@
       @back="() => $router.go(-1)"
     >
       <template #extra>
+        <a v-if="drama.watch_link" :href="drama.watch_link" target="_blank">
+          <a-button><video-camera-outlined /> Watch </a-button>
+        </a>
         <a-button><edit-outlined /> Edit</a-button>
       </template>
 
@@ -14,11 +17,28 @@
       </template>
 
       <a-flex justify="space-between" gap="middle">
-        <a-typography>
-          <a-typography-paragraph>
-            {{ drama.synopsis }}
-          </a-typography-paragraph>
-        </a-typography>
+        <a-flex vertical>
+          <a-typography>
+            <a-typography-paragraph>
+              {{ drama.synopsis }}
+            </a-typography-paragraph>
+          </a-typography>
+
+          <a-descriptions title="Information" :column="1" size="small">
+            <a-descriptions-item label="Status">
+              {{ drama.airing_status }}
+            </a-descriptions-item>
+            <a-descriptions-item label="Episodes">
+              {{ drama.number_of_episodes }}
+            </a-descriptions-item>
+            <a-descriptions-item label="Airing Platform">
+              {{ drama.airing_platform }}
+            </a-descriptions-item>
+            <a-descriptions-item label="Genres">
+              {{ drama.genres.map(({ genre }) => genre.name).join(', ') }}
+            </a-descriptions-item>
+          </a-descriptions>
+        </a-flex>
 
         <img alt="avatar" :src="drama.poster_url" :width="250" />
       </a-flex>
