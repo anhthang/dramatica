@@ -1,22 +1,54 @@
 <template>
   <div class="container">
-    <a-page-header v-if="people" :title="people.name">
-      <template #extra>
-        <a-button><edit-outlined /> Edit</a-button>
-      </template>
-
+    <a-page-header v-if="people">
       <a-row :gutter="[8, 8]" type="flex">
         <a-col :sm="6">
+          <a-flex vertical gap="large" align="center">
+            <a-avatar
+              :src="people.profile_url"
+              :size="{ xs: 160, sm: 160, md: 160, lg: 240, xl: 240, xxl: 240 }"
+            >
+              <template #icon><user-outlined /></template>
+            </a-avatar>
+
+            <a-typography-title :level="3">
+              {{ people.name }}
+            </a-typography-title>
+
+            <a-flex gap="middle">
+              <weibo-outlined style="font-size: large" />
+              <qq-outlined style="font-size: large" />
+              <instagram-outlined style="font-size: large" />
+            </a-flex>
+          </a-flex>
+          <a-divider />
+
           <a-descriptions title="Personal Information" :column="1" size="small">
+            <template #extra>
+              <a-button><edit-outlined /> Edit</a-button>
+            </template>
             <a-descriptions-item label="Native Name">
-              {{ people.name_ch }}
-            </a-descriptions-item>
-            <a-descriptions-item label="Birthday">
-              {{ people.dob }}
+              {{ people.native_name }}
             </a-descriptions-item>
             <a-descriptions-item label="Gender">
               {{ people.gender }}
             </a-descriptions-item>
+            <a-descriptions-item label="Birthday">
+              {{
+                new Date(people.dob).toLocaleDateString('en', {
+                  month: 'long',
+                  day: 'numeric',
+                  year: 'numeric',
+                })
+              }}
+            </a-descriptions-item>
+            <!-- <a-descriptions-item label="Age">
+              {{
+                Math.floor(
+                  (new Date() - new Date(people.dob).getTime()) / 3.15576e10,
+                )
+              }}
+            </a-descriptions-item> -->
           </a-descriptions>
         </a-col>
         <a-col :sm="18">
@@ -30,6 +62,11 @@
           </a-descriptions>
 
           <a-card title="Drama">
+            <template #extra>
+              <a-button type="primary" ghost>
+                <video-camera-add-outlined /> Add
+              </a-button>
+            </template>
             <a-timeline
               v-for="year of Object.keys(dramaByYear).reverse()"
               :key="year"

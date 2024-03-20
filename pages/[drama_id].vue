@@ -43,6 +43,8 @@
         <img alt="avatar" :src="drama.poster_url" :width="250" />
       </a-flex>
 
+      <a-typography-title :level="4">Cast</a-typography-title>
+
       <a-row :gutter="[8, 8]" type="flex">
         <a-col v-for="actor in drama.cast" :key="actor.id" :xs="12" :sm="4">
           <nuxt-link :to="`/people/${actor.people_id}`">
@@ -52,7 +54,7 @@
                 :description="actor.character_name"
               >
                 <template #avatar>
-                  <a-avatar :src="actor.people.profile_url" size="large">
+                  <a-avatar :src="actor.people.profile_url" :size="60">
                     {{ actor.people.name.charAt(0) }}
                   </a-avatar>
                 </template>
