@@ -91,7 +91,9 @@
     </a-form-item>
 
     <a-form-item>
-      <a-button type="primary" @click="onSubmit">Submit</a-button>
+      <a-button type="primary" @click="onSubmit">
+        <save-outlined /> Save
+      </a-button>
     </a-form-item>
   </a-form>
 </template>

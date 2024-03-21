@@ -1,11 +1,5 @@
 <template>
-  <a-form
-    :ref="formRef"
-    layout="vertical"
-    :model="tv"
-    :rules="formRules"
-    :disabled="disabled"
-  >
+  <a-form :ref="formRef" layout="vertical" :model="tv" :rules="formRules">
     <a-row :gutter="[8, 8]" type="flex">
       <a-col :xl="8">
         <a-form-item
@@ -184,23 +178,17 @@
       </a-col>
       <a-col :xl="8">
         <a-form-item
-          ref="backdrop_url"
-          name="backdrop_url"
-          label="Backdrop"
-          v-bind="validateInfos.backdrop_url"
+          ref="cover_url"
+          name="cover_url"
+          label="Cover"
+          v-bind="validateInfos.cover_url"
         >
-          <a-input v-model:value="tv.backdrop_url">
+          <a-input v-model:value="tv.cover_url">
             <template #prefix><file-image-outlined /></template>
           </a-input>
         </a-form-item>
       </a-col>
     </a-row>
-
-    <a-form-item>
-      <a-button type="primary" :loading="disabled" @click="onSubmit">
-        Save
-      </a-button>
-    </a-form-item>
   </a-form>
 </template>
 
@@ -264,7 +252,7 @@ const formRules = ref({
   synopsis_source: [{ type: 'string', trigger: ['change', 'blur'] }],
   airing_platform: [{ type: 'string', trigger: ['change', 'blur'] }],
   poster_url: [{ type: 'url', trigger: ['change', 'blur'] }],
-  backdrop_url: [{ type: 'url', trigger: ['change', 'blur'] }],
+  cover_url: [{ type: 'url', trigger: ['change', 'blur'] }],
   trailer_url: [{ type: 'url', trigger: ['change', 'blur'] }],
   watch_link: [{ type: 'url', trigger: ['change', 'blur'] }],
   airing_status: [
@@ -294,10 +282,7 @@ const onChangeDates = () => {
 const { useForm } = Form
 const { validate, validateInfos } = useForm(tv, formRules)
 
-const disabled = ref(false)
 const onSubmit = async () => {
-  disabled.value = true
-
   await validate()
     .then(() => {
       $fetch(`/api/tv`, {
@@ -310,12 +295,13 @@ const onSubmit = async () => {
         .catch((error) => {
           message.error(error.message)
         })
-        .finally(() => {
-          disabled.value = false
-        })
     })
     .catch(() => {
       // nothing
     })
 }
+
+defineExpose({
+  onSubmit,
+})
 </script>

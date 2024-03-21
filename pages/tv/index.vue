@@ -1,6 +1,26 @@
 <template>
   <a-page-header class="container" title="TV">
-    <a-card :loading="loading">
+    <a-card :loading="loading" title="Drama Information">
+      <template #extra>
+        <a-button
+          v-if="!checked"
+          type="primary"
+          :disabled="!metadata.watch_link"
+          :loading="loading"
+          @click="fetchMetadata"
+        >
+          <import-outlined /> Import
+        </a-button>
+        <a-flex v-else gap="small">
+          <a-button @click="toggleChecked">
+            <arrow-left-outlined /> Back
+          </a-button>
+          <a-button type="primary" @click="onSave">
+            <save-outlined /> Save
+          </a-button>
+        </a-flex>
+      </template>
+
       <div v-if="!checked">
         <a-typography-paragraph>
           For new Chinese dramas streaming on WeTV, iQiyi, or Youku, you can
@@ -18,19 +38,19 @@
               <template #prefix><link-outlined /></template>
             </a-input>
           </a-form-item>
-
-          <a-form-item>
-            <a-button :disabled="!metadata.watch_link" @click="fetchMetadata">
-              Fetch
-            </a-button>
-          </a-form-item>
         </a-form>
       </div>
-      <a-checkbox v-model:checked="checked">
+
+      <a-checkbox v-if="!checked" v-model:checked="checked">
         I would prefer to enter the information manually.
       </a-checkbox>
 
-      <form-t-v v-if="checked" :metadata="metadata" style="margin-top: 8px" />
+      <form-t-v
+        v-if="checked"
+        ref="tvForm"
+        :metadata="metadata"
+        style="margin-top: 8px"
+      />
     </a-card>
   </a-page-header>
 </template>
@@ -88,6 +108,19 @@ const fetchMetadata = () => {
       'This streaming service is not currently supported. Please use another link.',
     )
   }
+}
+
+const toggleChecked = () => {
+  checked.value = !checked.value
+}
+
+const tvForm = ref()
+const onSave = async () => {
+  loading.value = true
+
+  await tvForm.value.onSubmit()
+
+  loading.value = false
 }
 
 useSeoMeta({

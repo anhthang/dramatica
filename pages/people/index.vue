@@ -1,6 +1,8 @@
 <template>
   <a-page-header class="container" title="People">
-    <form-people />
+    <a-card>
+      <form-people />
+    </a-card>
   </a-page-header>
 </template>
 

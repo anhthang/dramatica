@@ -3,10 +3,10 @@ import urlMetadata from 'url-metadata'
 export default async (url: string) => {
   const metadata = await urlMetadata(url)
 
-  const { canonical, 'og:image': backdrop_url, jsonld } = metadata
+  const { canonical, 'og:image': cover_url, jsonld } = metadata
 
   const information: { [x: string]: any } = {
-    backdrop_url,
+    cover_url,
     synopsis_source: 'iQiyi',
     airing_platform: 'iQiyi',
     watch_link: canonical || url,

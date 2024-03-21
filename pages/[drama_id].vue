@@ -48,7 +48,7 @@
     <a-row :gutter="[8, 8]" type="flex">
       <a-col v-for="actor in drama.cast" :key="actor.id" :xs="12" :sm="4">
         <nuxt-link :to="`/people/${actor.people_id}`">
-          <a-card>
+          <a-card hoverable>
             <a-card-meta
               :title="actor.people.name"
               :description="actor.character_name"

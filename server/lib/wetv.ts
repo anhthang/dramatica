@@ -4,10 +4,10 @@ const fetchMetada = async (lang: string, show_id: string) => {
   const watch_link = `https://wetv.vip/${lang}/play/${show_id}`
   const metadata = await urlMetadata(watch_link)
 
-  const { 'og:image': backdrop_url, jsonld } = metadata
+  const { 'og:image': cover_url, jsonld } = metadata
 
   const information: { [x: string]: any } = {
-    backdrop_url,
+    cover_url,
     synopsis_source: 'WeTV',
     airing_platform: 'WeTV',
     watch_link,
