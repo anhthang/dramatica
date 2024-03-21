@@ -1,99 +1,97 @@
 <template>
-  <div class="container">
-    <a-page-header v-if="people">
-      <a-row :gutter="[8, 8]" type="flex">
-        <a-col :sm="6">
-          <a-flex vertical gap="large" align="center">
-            <a-avatar
-              :src="people.profile_url"
-              :size="{ xs: 160, sm: 160, md: 160, lg: 240, xl: 240, xxl: 240 }"
-            >
-              <template #icon><user-outlined /></template>
-            </a-avatar>
+  <a-page-header v-if="people" class="container">
+    <a-row :gutter="[8, 8]" type="flex">
+      <a-col :sm="6">
+        <a-flex vertical gap="large" align="center">
+          <a-avatar
+            :src="people.profile_url"
+            :size="{ xs: 160, sm: 160, md: 160, lg: 240, xl: 240, xxl: 240 }"
+          >
+            <template #icon><user-outlined /></template>
+          </a-avatar>
 
-            <a-typography-title :level="3">
-              {{ people.name }}
-            </a-typography-title>
+          <a-typography-title :level="3">
+            {{ people.name }}
+          </a-typography-title>
 
-            <a-flex gap="middle">
-              <weibo-outlined style="font-size: large" />
-              <qq-outlined style="font-size: large" />
-              <instagram-outlined style="font-size: large" />
-            </a-flex>
+          <a-flex gap="middle">
+            <weibo-outlined style="font-size: large" />
+            <qq-outlined style="font-size: large" />
+            <instagram-outlined style="font-size: large" />
           </a-flex>
-          <a-divider />
+        </a-flex>
+        <a-divider />
 
-          <a-descriptions title="Personal Information" :column="1" size="small">
-            <template #extra>
-              <a-button><edit-outlined /> Edit</a-button>
-            </template>
-            <a-descriptions-item label="Native Name">
-              {{ people.native_name }}
-            </a-descriptions-item>
-            <a-descriptions-item label="Gender">
-              {{ people.gender }}
-            </a-descriptions-item>
-            <a-descriptions-item label="Birthday">
-              {{
-                new Date(people.dob).toLocaleDateString('en', {
-                  month: 'long',
-                  day: 'numeric',
-                  year: 'numeric',
-                })
-              }}
-            </a-descriptions-item>
-            <!-- <a-descriptions-item label="Age">
+        <a-descriptions title="Personal Information" :column="1" size="small">
+          <template #extra>
+            <a-button><edit-outlined /> Edit</a-button>
+          </template>
+          <a-descriptions-item label="Native Name">
+            {{ people.native_name }}
+          </a-descriptions-item>
+          <a-descriptions-item label="Gender">
+            {{ people.gender }}
+          </a-descriptions-item>
+          <a-descriptions-item label="Birthday">
+            {{
+              new Date(people.dob).toLocaleDateString('en', {
+                month: 'long',
+                day: 'numeric',
+                year: 'numeric',
+              })
+            }}
+          </a-descriptions-item>
+          <!-- <a-descriptions-item label="Age">
               {{
                 Math.floor(
                   (new Date() - new Date(people.dob).getTime()) / 3.15576e10,
                 )
               }}
             </a-descriptions-item> -->
-          </a-descriptions>
-        </a-col>
-        <a-col :sm="18">
-          <a-descriptions title="Biography" :column="1">
-            <a-typography-text v-if="people.biography">
-              {{ people.biography }}
-            </a-typography-text>
-            <a-typography-text v-else>
-              We don't have a biography for {{ people.name }}
-            </a-typography-text>
-          </a-descriptions>
+        </a-descriptions>
+      </a-col>
+      <a-col :sm="18">
+        <a-descriptions title="Biography" :column="1">
+          <a-typography-text v-if="people.biography">
+            {{ people.biography }}
+          </a-typography-text>
+          <a-typography-text v-else>
+            We don't have a biography for {{ people.name }}
+          </a-typography-text>
+        </a-descriptions>
 
-          <a-card title="Drama">
-            <template #extra>
-              <a-button type="primary" ghost>
-                <video-camera-add-outlined /> Add
-              </a-button>
-            </template>
-            <a-timeline
-              v-for="year of Object.keys(dramaByYear).reverse()"
-              :key="year"
+        <a-card title="Drama">
+          <template #extra>
+            <a-button type="primary" ghost>
+              <video-camera-add-outlined /> Add
+            </a-button>
+          </template>
+          <a-timeline
+            v-for="year of Object.keys(dramaByYear).reverse()"
+            :key="year"
+          >
+            <a-timeline-item>
+              <template #dot>
+                <clock-circle-outlined style="font-size: 16px" />
+              </template>
+              <a-typography-title :level="5">{{ year }}</a-typography-title>
+            </a-timeline-item>
+
+            <a-timeline-item
+              v-for="drama in dramaByYear[year]"
+              :key="drama.id"
+              :color="airingColor[drama.drama.airing_status] || 'gray'"
             >
-              <a-timeline-item>
-                <template #dot>
-                  <clock-circle-outlined style="font-size: 16px" />
-                </template>
-                <a-typography-title :level="5">{{ year }}</a-typography-title>
-              </a-timeline-item>
-
-              <a-timeline-item
-                v-for="drama in dramaByYear[year]"
-                :key="drama.id"
-                :color="airingColor[drama.drama.airing_status] || 'gray'"
-              >
-                <a-card-meta
-                  :title="drama.drama.title"
-                  :description="drama.character_name"
-                />
-              </a-timeline-item>
-            </a-timeline>
-          </a-card>
-        </a-col>
-      </a-row>
-    </a-page-header>
-  </div>
+              <a-card-meta
+                :title="drama.drama.title"
+                :description="drama.character_name"
+              />
+            </a-timeline-item>
+          </a-timeline>
+        </a-card>
+      </a-col>
+    </a-row>
+  </a-page-header>
 </template>
 
 <script setup>
