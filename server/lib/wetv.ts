@@ -1,23 +1,16 @@
 import urlMetadata from 'url-metadata'
 
-export default async (url: string) => {
-  /**
-   * It seems WeTV returning images based on IP country
-   * We need to fix this to correct poster & backdrop image
-   */
-  const metadata = await urlMetadata(url)
+const fetchMetada = async (lang: string, show_id: string) => {
+  const watch_link = `https://wetv.vip/${lang}/play/${show_id}`
+  const metadata = await urlMetadata(watch_link)
 
-  const paths = url.split('/')
-  const cid = paths[5]
-
-  const { lang: language, 'og:image': backdrop_url, jsonld } = metadata
+  const { 'og:image': backdrop_url, jsonld } = metadata
 
   const information: { [x: string]: any } = {
-    language,
     backdrop_url,
     synopsis_source: 'WeTV',
     airing_platform: 'WeTV',
-    watch_link: url,
+    watch_link,
   }
 
   if (Array.isArray(jsonld)) {
@@ -39,13 +32,13 @@ export default async (url: string) => {
                 return out
               }, [])
 
-              const workInfo = workInfos.find((w: any) => w.cid === cid)
+              const workInfo = workInfos.find((w: any) => w.cid === show_id)
               if (workInfo) {
                 information.poster_url = workInfo.posterVt
               }
             }
 
-            if (language === 'en') {
+            if (lang === 'en') {
               const [synopsis] = description.split(' | ')
               information.synopsis = synopsis
             }
@@ -58,4 +51,18 @@ export default async (url: string) => {
   }
 
   return information
+}
+
+export default async (url: string) => {
+  const urlObj = new URL(url)
+
+  const [, , , path] = urlObj.pathname.split('/')
+  const [show_id] = path.split('-')
+
+  const en = await fetchMetada('en', show_id)
+  const vi = await fetchMetada('vi', show_id)
+
+  en.title_vi = vi && vi.title
+
+  return en
 }

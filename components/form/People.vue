@@ -80,7 +80,10 @@
       v-bind="validateInfos.biography"
       label="Biography"
     >
-      <a-textarea v-model:value="people.biography" auto-size />
+      <a-textarea
+        v-model:value="people.biography"
+        :auto-size="{ minRows: 3, maxRows: 6 }"
+      />
       <template #extra>
         When citing a biography found online, please include a reference at the
         bottom.
