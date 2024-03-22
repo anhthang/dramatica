@@ -43,24 +43,13 @@
       <img alt="avatar" :src="drama.poster_url" :width="250" />
     </a-flex>
 
-    <a-typography-title :level="4">Cast</a-typography-title>
+    <a-typography-title :level="4">
+      <nuxt-link :to="`/${drama.id}/cast`"> Cast </nuxt-link>
+    </a-typography-title>
 
     <a-row :gutter="[8, 8]" type="flex">
       <a-col v-for="actor in drama.cast" :key="actor.id" :xs="12" :sm="4">
-        <nuxt-link :to="`/people/${actor.people_id}`">
-          <a-card hoverable>
-            <a-card-meta
-              :title="actor.people.name"
-              :description="actor.character_name"
-            >
-              <template #avatar>
-                <a-avatar :src="actor.people.profile_url" :size="60">
-                  {{ actor.people.name.charAt(0) }}
-                </a-avatar>
-              </template>
-            </a-card-meta>
-          </a-card>
-        </nuxt-link>
+        <card-people :people="actor" />
       </a-col>
     </a-row>
   </a-page-header>
