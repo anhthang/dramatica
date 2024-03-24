@@ -1,4 +1,6 @@
 <template>
+  <potential-duplicates v-if="tv.title" :title="tv.title" />
+
   <a-form :ref="formRef" layout="vertical" :model="tv" :rules="formRules">
     <a-row :gutter="[8, 8]" type="flex">
       <a-col :xl="8">
@@ -193,6 +195,7 @@
 </template>
 
 <script setup>
+import dayjs from 'dayjs'
 import { Form } from 'ant-design-vue'
 
 const { metadata } = defineProps({
@@ -211,6 +214,9 @@ const tv = ref({
 
 onBeforeMount(() => {
   Object.assign(tv.value, metadata)
+  if (metadata.air_date) {
+    tv.value.date = dayjs(metadata.air_date, 'YYYY-MM-DD')
+  }
 })
 
 const dayOfWeek = [

@@ -1,3 +1,4 @@
+import unescape from 'lodash.unescape'
 import urlMetadata from 'url-metadata'
 
 const fetchMetada = async (lang: string, show_id: string) => {
@@ -40,7 +41,7 @@ const fetchMetada = async (lang: string, show_id: string) => {
 
             if (lang === 'en') {
               const [synopsis] = description.split(' | ')
-              information.synopsis = synopsis
+              information.synopsis = unescape(synopsis)
             }
           }
           break

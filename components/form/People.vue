@@ -148,8 +148,6 @@ const onSubmit = async () => {
       })
         .then(() => {
           message.success(`[${people.value.name}] added successfully!`)
-
-          formRef.value.resetFields()
         })
         .catch((error) => {
           message.error(error.message)

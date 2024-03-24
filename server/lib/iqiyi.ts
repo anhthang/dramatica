@@ -1,3 +1,4 @@
+import unescape from 'lodash.unescape'
 import urlMetadata from 'url-metadata'
 
 export default async (url: string) => {
@@ -28,7 +29,7 @@ export default async (url: string) => {
 
             Object.assign(information, {
               title: title.trim(),
-              synopsis,
+              synopsis: unescape(synopsis),
               number_of_episodes: Number(numberOfEpisodes),
               release_year: Number(copyrightYear),
             })
