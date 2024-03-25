@@ -31,18 +31,24 @@
 </template>
 
 <script setup>
-const { title } = defineProps({
-  title: {
-    type: String,
-    default: '',
+const { props } = defineProps({
+  props: {
+    type: Object,
+    default() {
+      return {}
+    },
   },
 })
 
-const { data } = await useAsyncData(() =>
-  $fetch('/api/drama', {
-    params: {
-      query: title,
-    },
-  }),
+const { data } = await useAsyncData(
+  () =>
+    $fetch('/api/drama', {
+      params: {
+        query: props.title,
+      },
+    }),
+  {
+    watch: [() => props.title],
+  },
 )
 </script>

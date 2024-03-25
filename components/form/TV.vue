@@ -1,5 +1,5 @@
 <template>
-  <potential-duplicates v-if="tv.title" :title="tv.title" />
+  <potential-duplicates-t-v v-if="tv.title" :props="tv" />
 
   <a-form :ref="formRef" layout="vertical" :model="tv" :rules="formRules">
     <a-row :gutter="[8, 8]" type="flex">
@@ -286,7 +286,7 @@ const onChangeDates = () => {
 }
 
 const { useForm } = Form
-const { validate, validateInfos } = useForm(tv, formRules)
+const { validate, validateInfos, resetFields } = useForm(tv, formRules)
 
 const onSubmit = async () => {
   await validate()
@@ -297,6 +297,8 @@ const onSubmit = async () => {
       })
         .then(() => {
           message.success(`[${tv.value.title}] added successfully!`)
+
+          resetFields()
         })
         .catch((error) => {
           message.error(error.message)

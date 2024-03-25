@@ -45,12 +45,7 @@
         I would prefer to enter the information manually.
       </a-checkbox>
 
-      <form-t-v
-        v-if="checked"
-        ref="tvForm"
-        :metadata="metadata"
-        style="margin-top: 8px"
-      />
+      <form-t-v v-if="checked" ref="tvForm" :metadata="metadata" />
     </a-card>
   </a-page-header>
 </template>
@@ -59,6 +54,7 @@
 const metadata = ref({
   watch_link: '',
 })
+
 const checked = ref(false)
 
 watch(checked, () => {

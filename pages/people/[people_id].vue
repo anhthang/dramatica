@@ -16,7 +16,7 @@
 
           <a-flex gap="middle">
             <weibo-outlined style="font-size: large" />
-            <qq-outlined style="font-size: large" />
+            <!-- <douyin-outlined style="font-size: large" /> -->
             <instagram-outlined style="font-size: large" />
           </a-flex>
         </a-flex>

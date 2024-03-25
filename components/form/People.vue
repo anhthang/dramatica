@@ -1,4 +1,6 @@
 <template>
+  <potential-duplicates-people v-if="people.name" :props="people" />
+
   <a-form
     :ref="formRef"
     layout="vertical"
@@ -6,19 +8,20 @@
     :rules="formRules"
     :disabled="disabled"
   >
-    <a-form-item
-      ref="name"
-      name="name"
-      label="Stage Name"
-      v-bind="validateInfos.name"
-    >
-      <a-input v-model:value="people.name">
-        <template #prefix><font-size-outlined /></template>
-      </a-input>
-    </a-form-item>
-
     <a-row :gutter="[8, 8]" type="flex">
-      <a-col :xs="12">
+      <a-col :xs="24" :md="8">
+        <a-form-item
+          ref="name"
+          name="name"
+          label="Stage Name"
+          v-bind="validateInfos.name"
+        >
+          <a-input v-model:value="people.name">
+            <template #prefix><font-size-outlined /></template>
+          </a-input>
+        </a-form-item>
+      </a-col>
+      <a-col :xs="24" :md="8">
         <a-form-item
           ref="native_name"
           name="native_name"
@@ -30,7 +33,7 @@
           </a-input>
         </a-form-item>
       </a-col>
-      <a-col :xs="12">
+      <a-col :xs="24" :md="8">
         <a-form-item
           ref="name_vi"
           name="name_vi"
@@ -45,7 +48,7 @@
     </a-row>
 
     <a-row :gutter="[8, 8]" type="flex">
-      <a-col :xs="12">
+      <a-col :xs="24" :md="8">
         <a-form-item
           ref="gender"
           name="gender"
@@ -58,7 +61,7 @@
           />
         </a-form-item>
       </a-col>
-      <a-col :xs="12">
+      <a-col :xs="24" :md="8">
         <a-form-item
           ref="dob"
           name="dob"
@@ -89,6 +92,45 @@
         bottom.
       </template>
     </a-form-item>
+
+    <a-row :gutter="[8, 8]" type="flex">
+      <a-col xs="24" :md="8">
+        <a-form-item
+          ref="weibo"
+          name="weibo"
+          v-bind="validateInfos.weibo"
+          label="Weibo"
+        >
+          <a-input v-model:value="people.weibo">
+            <template #prefix><weibo-outlined /></template>
+          </a-input>
+        </a-form-item>
+      </a-col>
+      <!-- <a-col xs="24" :md="8">
+        <a-form-item
+          ref="douyin"
+          name="douyin"
+          v-bind="validateInfos.douyin"
+          label="Douyin"
+        >
+          <a-input v-model:value="people.douyin">
+            <template #prefix><douyin-outlined /></template>
+          </a-input>
+        </a-form-item>
+      </a-col> -->
+      <a-col xs="24" :md="8">
+        <a-form-item
+          ref="instagram"
+          name="instagram"
+          v-bind="validateInfos.instagram"
+          label="Instagram"
+        >
+          <a-input v-model:value="people.instagram">
+            <template #prefix><instagram-outlined /></template>
+          </a-input>
+        </a-form-item>
+      </a-col>
+    </a-row>
 
     <a-form-item>
       <a-button type="primary" @click="onSubmit">
@@ -125,6 +167,9 @@ const formRules = ref({
   name_vi: [{ required: false, type: 'string', trigger: ['change', 'blur'] }],
   dob: [{ required: false, type: 'date', trigger: ['change', 'blur'] }],
   biography: [{ type: 'string', trigger: ['change', 'blur'] }],
+  weibo: [{ type: 'url', trigger: ['change', 'blur'] }],
+  douyin: [{ type: 'url', trigger: ['change', 'blur'] }],
+  instagram: [{ type: 'url', trigger: ['change', 'blur'] }],
 })
 
 const onChangeDates = () => {
@@ -134,7 +179,7 @@ const onChangeDates = () => {
 }
 
 const { useForm } = Form
-const { validate, validateInfos } = useForm(people, formRules)
+const { validate, validateInfos, resetFields } = useForm(people, formRules)
 
 const disabled = ref(false)
 const onSubmit = async () => {
@@ -148,6 +193,8 @@ const onSubmit = async () => {
       })
         .then(() => {
           message.success(`[${people.value.name}] added successfully!`)
+
+          resetFields()
         })
         .catch((error) => {
           message.error(error.message)

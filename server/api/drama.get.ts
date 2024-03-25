@@ -7,13 +7,17 @@ export default defineEventHandler(async (event) => {
 
   let sqlQuery
   if (query) {
-    // const fts = query
-    //   .toString()
-    //   .trim()
-    //   .split(/[\s,\t,\n]+/) // split and remove more than 1 space
-    //   .join(' | ')
+    const fts = query
+      .toString()
+      .trim()
+      .split(/[\s,\t,\n]+/) // split and remove more than 1 space
+      .join(' | ')
 
-    sqlQuery = client.from('dramas').select().eq('title', query).limit(10)
+    sqlQuery = client
+      .from('dramas')
+      .select()
+      .textSearch('title', `${fts}`)
+      .limit(10)
   } else {
     sqlQuery = client.from('dramas').select()
   }
