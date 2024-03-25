@@ -24,7 +24,7 @@
 
         <a-descriptions title="Personal Information" :column="1" size="small">
           <template #extra>
-            <a-button><edit-outlined /> Edit</a-button>
+            <a-button @click="toggleEdit"><edit-outlined /> Edit</a-button>
           </template>
           <a-descriptions-item label="Native Name">
             {{ people.native_name }}
@@ -91,6 +91,17 @@
         </a-card>
       </a-col>
     </a-row>
+
+    <a-modal
+      v-model:open="visible"
+      title="Edit People"
+      destroy-on-close
+      width="1000px"
+      :confirm-loading="loading"
+      @ok="onEditPeople"
+    >
+      <form-people ref="peopleForm" :is-edit="true" :metadata="people" />
+    </a-modal>
   </a-page-header>
 </template>
 
@@ -117,4 +128,22 @@ useSeoMeta({
   title: people.value && people.value.name,
   description: people.value && people.value.biography,
 })
+
+const visible = ref(false)
+const toggleEdit = () => {
+  visible.value = !visible.value
+}
+
+const loading = ref(false)
+
+const peopleForm = ref()
+const onEditPeople = async () => {
+  loading.value = true
+
+  await peopleForm.value.onSubmit().then(() => {
+    toggleEdit()
+  })
+
+  loading.value = false
+}
 </script>

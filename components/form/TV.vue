@@ -1,5 +1,5 @@
 <template>
-  <potential-duplicates-t-v v-if="tv.title" :props="tv" />
+  <potential-duplicates-t-v v-if="!isEdit && tv.title" :props="tv" />
 
   <a-form :ref="formRef" layout="vertical" :model="tv" :rules="formRules">
     <a-row :gutter="[8, 8]" type="flex">
@@ -198,7 +198,8 @@
 import dayjs from 'dayjs'
 import { Form } from 'ant-design-vue'
 
-const { metadata } = defineProps({
+const { isEdit, metadata } = defineProps({
+  isEdit: Boolean,
   metadata: {
     type: Object,
     default() {
@@ -291,12 +292,18 @@ const { validate, validateInfos, resetFields } = useForm(tv, formRules)
 const onSubmit = async () => {
   await validate()
     .then(() => {
-      $fetch(`/api/tv`, {
+      const url = isEdit ? `/api/tv/${tv.value.id}` : '/api/tv'
+
+      $fetch(url, {
         method: 'post',
         body: tv.value,
       })
         .then(() => {
-          message.success(`[${tv.value.title}] added successfully!`)
+          if (isEdit) {
+            message.success(`[${tv.value.title}] updated successfully!`)
+          } else {
+            message.success(`[${tv.value.title}] added successfully!`)
+          }
 
           resetFields()
         })

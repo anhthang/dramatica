@@ -137,7 +137,7 @@ const { validate, validateInfos } = useForm(cast, formRules)
 const onSubmit = async () => {
   await validate()
     .then(() => {
-      $fetch(`/api/tv/:drama_id`, {
+      $fetch(`/api/tv/${cast.value.drama_id}/cast`, {
         method: 'post',
         body: cast.value,
       })

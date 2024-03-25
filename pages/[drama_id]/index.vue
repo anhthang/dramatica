@@ -9,7 +9,7 @@
       <a v-if="drama.watch_link" :href="drama.watch_link" target="_blank">
         <a-button><video-camera-outlined /> Watch </a-button>
       </a>
-      <a-button><edit-outlined /> Edit</a-button>
+      <a-button @click="toggleEdit"><edit-outlined /> Edit</a-button>
     </template>
 
     <template #tags>
@@ -52,6 +52,17 @@
         <card-people :people="actor" />
       </a-col>
     </a-row>
+
+    <a-modal
+      v-model:open="visible"
+      title="Edit Drama"
+      destroy-on-close
+      :confirm-loading="loading"
+      width="1200px"
+      @ok="onEdit"
+    >
+      <form-t-v ref="tvForm" :is-edit="true" :metadata="drama" />
+    </a-modal>
   </a-page-header>
 </template>
 
@@ -66,4 +77,22 @@ useSeoMeta({
   title: drama.value && `${drama.value.title} (${drama.value.release_year})`,
   description: drama.value && drama.value.synopsis,
 })
+
+const visible = ref(false)
+const toggleEdit = () => {
+  visible.value = !visible.value
+}
+
+const loading = ref(false)
+const tvForm = ref()
+
+const onEdit = async () => {
+  loading.value = true
+
+  await tvForm.value.onSubmit().then(() => {
+    toggleEdit()
+  })
+
+  loading.value = false
+}
 </script>

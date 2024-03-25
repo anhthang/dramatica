@@ -1,5 +1,5 @@
 <template>
-  <potential-duplicates-people v-if="people.name" :props="people" />
+  <potential-duplicates-people v-if="!isEdit && people.name" :props="people" />
 
   <a-form
     :ref="formRef"
@@ -131,21 +131,34 @@
         </a-form-item>
       </a-col>
     </a-row>
-
-    <a-form-item>
-      <a-button type="primary" @click="onSubmit">
-        <save-outlined /> Save
-      </a-button>
-    </a-form-item>
   </a-form>
 </template>
 
 <script setup>
 import { Form } from 'ant-design-vue'
+import dayjs from 'dayjs'
+
+const { isEdit, metadata } = defineProps({
+  isEdit: Boolean,
+  metadata: {
+    type: Object,
+    default() {
+      return {}
+    },
+  },
+})
 
 const people = ref({
   name: '',
   date: '',
+})
+
+onBeforeMount(() => {
+  Object.assign(people.value, metadata)
+
+  if (metadata.dob) {
+    people.value.date = dayjs(metadata.dob, 'YYYY-MM-DD')
+  }
 })
 
 const genders = ['Male', 'Female', 'Other']
@@ -187,12 +200,18 @@ const onSubmit = async () => {
 
   await validate()
     .then(() => {
-      $fetch(`/api/people`, {
+      const url = isEdit ? `/api/people/${people.value.id}` : '/api/people'
+
+      $fetch(url, {
         method: 'post',
         body: people.value,
       })
         .then(() => {
-          message.success(`[${people.value.name}] added successfully!`)
+          if (isEdit) {
+            message.success(`[${people.value.name}] updated successfully!`)
+          } else {
+            message.success(`[${people.value.name}] added successfully!`)
+          }
 
           resetFields()
         })
@@ -207,4 +226,8 @@ const onSubmit = async () => {
       disabled.value = false
     })
 }
+
+defineExpose({
+  onSubmit,
+})
 </script>
