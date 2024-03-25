@@ -21,7 +21,7 @@
     </a-form-item>
 
     <a-form-item v-if="actor">
-      <a-card>
+      <a-card class="card-highlighted">
         <a-card-meta :title="actor.name" :description="actor.native_name">
           <template #avatar>
             <a-avatar :src="actor.profile_url" :size="60">
@@ -159,3 +159,14 @@ defineExpose({
   onSubmit,
 })
 </script>
+
+<style>
+.card-highlighted {
+  background-color: #d2e5ff;
+  border-color: #1677ff;
+
+  /* @media (prefers-color-scheme: dark) {
+    background-color: #002159;
+  } */
+}
+</style>

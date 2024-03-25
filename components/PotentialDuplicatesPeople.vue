@@ -9,7 +9,7 @@
 
     <a-row :gutter="[8, 8]" type="flex" style="margin-top: 24px">
       <a-col v-for="people in data" :key="people.id" :xs="24" :sm="12" :md="6">
-        <nuxt-link :to="`/${people.id}`" target="_blank">
+        <nuxt-link :to="`/people/${people.id}`" target="_blank">
           <a-card hoverable>
             <a-card-meta :title="people.name" :description="people.native_name">
               <template #avatar>

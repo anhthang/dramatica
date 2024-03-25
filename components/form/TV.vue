@@ -199,7 +199,10 @@ import dayjs from 'dayjs'
 import { Form } from 'ant-design-vue'
 
 const { isEdit, metadata } = defineProps({
-  isEdit: Boolean,
+  isEdit: {
+    type: Boolean,
+    default: false,
+  },
   metadata: {
     type: Object,
     default() {

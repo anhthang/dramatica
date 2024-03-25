@@ -43,15 +43,25 @@
       <img alt="avatar" :src="drama.poster_url" :width="250" />
     </a-flex>
 
-    <a-typography-title :level="4">
-      <nuxt-link :to="`/${drama.id}/cast`"> Cast </nuxt-link>
-    </a-typography-title>
+    <a-tabs v-model:activeKey="activeKey" size="large">
+      <template v-if="activeKey === 'cast'" #rightExtra>
+        <nuxt-link :to="`/${drama.id}/cast`">
+          <a-button type="link">All Cast & Crew</a-button>
+        </nuxt-link>
+      </template>
 
-    <a-row :gutter="[8, 8]" type="flex">
-      <a-col v-for="actor in drama.cast" :key="actor.id" :xs="12" :sm="4">
-        <card-people :people="actor" />
-      </a-col>
-    </a-row>
+      <a-tab-pane key="cast" tab="Cast">
+        <a-row :gutter="[8, 8]" type="flex">
+          <a-col v-for="actor in drama.cast" :key="actor.id" :xs="12" :sm="4">
+            <card-people :people="actor" />
+          </a-col>
+        </a-row>
+      </a-tab-pane>
+
+      <a-tab-pane key="episodes" tab="Episodes" disabled></a-tab-pane>
+    </a-tabs>
+
+    <a-typography-title :level="4"> </a-typography-title>
 
     <a-modal
       v-model:open="visible"
@@ -77,6 +87,8 @@ useSeoMeta({
   title: drama.value && `${drama.value.title} (${drama.value.release_year})`,
   description: drama.value && drama.value.synopsis,
 })
+
+const activeKey = ref('cast')
 
 const visible = ref(false)
 const toggleEdit = () => {
