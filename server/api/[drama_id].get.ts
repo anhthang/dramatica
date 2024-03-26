@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
   const { data } = await client
     .from('dramas')
     .select(
-      '*, cast:drama_cast(*, people(name, name_vi, profile_url)), crew:drama_crew(*), genres:drama_genres(genre:genres(name))',
+      '*, cast:drama_cast(*, people(name, name_vi, profile_url)), crew:drama_crew(*), episodes(*), genres:drama_genres(genre:genres(name))',
     )
     .eq('id', drama_id)
     .single()

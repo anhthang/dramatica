@@ -60,12 +60,36 @@
         </a-row>
       </a-tab-pane>
 
-      <a-tab-pane key="episodes" disabled>
+      <a-tab-pane
+        key="episodes"
+        :disabled="!Array.isArray(drama.episodes) || !drama.episodes.length"
+      >
         <template #tab><youtube-outlined /> Episodes</template>
+        <a-list
+          item-layout="vertical"
+          :pagination="{ pageSize: 10 }"
+          :data-source="drama.episodes"
+        >
+          <template #renderItem="{ item }">
+            <a-list-item :key="item.id">
+              <a-row :gutter="[16, 16]">
+                <a-col :xs="24" :sm="18" :md="4">
+                  <img width="100%" :src="item.preview_img" />
+                </a-col>
+                <a-col :xs="24" :sm="16" :md="20">
+                  <a-list-item-meta
+                    :title="item.title || `Episode ${item.episode_number}`"
+                    :description="item.air_date"
+                  />
+
+                  {{ item.plot_summary }}
+                </a-col>
+              </a-row>
+            </a-list-item>
+          </template>
+        </a-list>
       </a-tab-pane>
     </a-tabs>
-
-    <a-typography-title :level="4"> </a-typography-title>
 
     <a-modal
       v-model:open="visible"
