@@ -41,7 +41,7 @@
         </a-descriptions>
       </a-flex>
 
-      <img alt="avatar" :src="drama.poster_url" :width="250" />
+      <img :alt="drama.title" :src="drama.poster_url" :width="250" />
     </a-flex>
 
     <a-tabs v-model:activeKey="activeKey" size="large">

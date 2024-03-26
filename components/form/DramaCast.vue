@@ -194,14 +194,3 @@ defineExpose({
   onSubmit,
 })
 </script>
-
-<style>
-.card-highlighted {
-  background-color: #d2e5ff;
-  border-color: #1677ff;
-
-  /* @media (prefers-color-scheme: dark) {
-    background-color: #002159;
-  } */
-}
-</style>

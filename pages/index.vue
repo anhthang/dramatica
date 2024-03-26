@@ -55,4 +55,32 @@ const { data } = await useAsyncData(() => $fetch('/api/drama'))
     }
   }
 }
+
+/** Global */
+.duplicate-alert {
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 1.5rem;
+}
+
+.card-highlighted {
+  background-color: #d2e5ff;
+  border-color: #1677ff;
+
+  /* dark mode */
+  /* background-color: #002159; */
+}
+
+.card-highlighted::after {
+  position: absolute;
+  inset-block-start: 2px;
+  inset-inline-end: 2px;
+  width: 0;
+  height: 0;
+  border: 10px solid #1677ff;
+  border-block-end: 10px solid transparent;
+  border-inline-start: 10px solid transparent;
+  border-start-end-radius: 6px;
+  content: '';
+}
 </style>

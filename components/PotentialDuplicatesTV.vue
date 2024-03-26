@@ -1,6 +1,10 @@
 <template>
-  <a-flex v-if="data.length" vertical>
-    <a-alert message="Potential Duplicates" type="warning">
+  <a-spin v-if="data.length" :spinning="pending">
+    <a-alert
+      class="duplicate-alert"
+      message="Potential Duplicates"
+      type="warning"
+    >
       <template #description>
         If the TV show or drama you are adding is listed below, it may already
         exist in our database as a duplicate entry. Please verify carefully
@@ -8,10 +12,16 @@
       </template>
     </a-alert>
 
-    <a-row :gutter="[8, 8]" type="flex" style="margin-top: 24px">
+    <a-row :gutter="[8, 8]" type="flex">
       <a-col v-for="tv in data" :key="tv.id" :xs="24" :sm="12" :md="6">
         <nuxt-link :to="`/${tv.id}`" target="_blank">
-          <a-card hoverable>
+          <a-card
+            hoverable
+            :class="
+              tv.title.toLowerCase() === props.title.toLowerCase() &&
+              'card-highlighted'
+            "
+          >
             <a-card-meta
               :title="`${tv.title} (${tv.release_year})`"
               :description="tv.title_vi"
@@ -26,8 +36,9 @@
         </nuxt-link>
       </a-col>
     </a-row>
+
     <a-divider />
-  </a-flex>
+  </a-spin>
 </template>
 
 <script setup>
@@ -40,7 +51,7 @@ const { props } = defineProps({
   },
 })
 
-const { data } = await useAsyncData(
+const { data, pending } = await useAsyncData(
   () =>
     $fetch('/api/drama', {
       params: {

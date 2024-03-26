@@ -32,7 +32,7 @@
       <form-drama-cast
         ref="dramaCastForm"
         type="cast"
-        :existing-cast-member="drama.cast.map((a) => a.people_id)"
+        :existing="drama.cast.map((a) => a.people_id)"
       />
     </a-modal>
   </a-page-header>
