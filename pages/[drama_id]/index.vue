@@ -6,8 +6,9 @@
     @back="() => $router.go(-1)"
   >
     <template #extra>
+      <a-button @click="copyUrl"><share-alt-outlined /> Share</a-button>
       <a v-if="drama.watch_link" :href="drama.watch_link" target="_blank">
-        <a-button><video-camera-outlined /> Watch </a-button>
+        <a-button><video-camera-outlined /> Watch</a-button>
       </a>
       <a-button @click="toggleEdit"><edit-outlined /> Edit</a-button>
     </template>
@@ -50,7 +51,8 @@
         </nuxt-link>
       </template>
 
-      <a-tab-pane key="cast" tab="Cast">
+      <a-tab-pane key="cast">
+        <template #tab><team-outlined /> Cast</template>
         <a-row :gutter="[8, 8]" type="flex">
           <a-col v-for="actor in drama.cast" :key="actor.id" :xs="12" :sm="4">
             <card-people :people="actor" />
@@ -58,7 +60,9 @@
         </a-row>
       </a-tab-pane>
 
-      <a-tab-pane key="episodes" tab="Episodes" disabled></a-tab-pane>
+      <a-tab-pane key="episodes" disabled>
+        <template #tab><youtube-outlined /> Episodes</template>
+      </a-tab-pane>
     </a-tabs>
 
     <a-typography-title :level="4"> </a-typography-title>
@@ -77,15 +81,30 @@
 </template>
 
 <script setup>
+import copy from 'ant-design-vue/lib/_util/copy-to-clipboard'
+
 const route = useRoute()
+const config = useRuntimeConfig()
 
 const { data: drama } = await useAsyncData(() =>
   $fetch(`/api/${route.params.drama_id}`),
 )
 
+const copyUrl = () => {
+  copy(config.public.baseUrl + route.fullPath)
+  message.success('Copied to clipboard!')
+}
+
 useSeoMeta({
   title: drama.value && `${drama.value.title} (${drama.value.release_year})`,
   description: drama.value && drama.value.synopsis,
+  ogTitle: drama.value && `${drama.value.title} (${drama.value.release_year})`,
+  ogDescription: drama.value && drama.value.synopsis,
+  ogImage: drama.value && drama.value.cover_url,
+  twitterTitle:
+    drama.value && `${drama.value.title} (${drama.value.release_year})`,
+  twitterDescription: drama.value && drama.value.synopsis,
+  twitterImage: drama.value && drama.value.cover_url,
 })
 
 const activeKey = ref('cast')

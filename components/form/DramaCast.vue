@@ -4,28 +4,47 @@
       <a-auto-complete
         v-model:value="input"
         allow-clear
-        :options="actors"
-        placeholder="Search cast member by name..."
+        :options="suggestions"
+        placeholder="Search drama or cast member by name..."
         @select="onSelect"
-        @search="fetchCast"
+        @search="fetchSuggestions"
       >
-        <template #option="item">
-          <a-flex gap="small" align="center">
-            <a-avatar :src="item.profile_url">
-              {{ item.name.charAt(0) }}
-            </a-avatar>
-            {{ item.name }} ({{ item.native_name }})
-          </a-flex>
+        <template v-if="type === 'cast'" #option="item">
+          <a-avatar :src="item.profile_url">
+            {{ item.name.charAt(0) }}
+          </a-avatar>
+          {{ item.name }} ({{ item.native_name }})
+        </template>
+        <template v-else-if="type === 'drama'" #option="item">
+          <a-avatar :src="item.poster_url">
+            {{ item.title.charAt(0) }}
+          </a-avatar>
+          {{ item.title }} ({{ item.release_year }})
         </template>
       </a-auto-complete>
     </a-form-item>
 
-    <a-form-item v-if="actor">
+    <a-form-item v-if="selection">
       <a-card class="card-highlighted">
-        <a-card-meta :title="actor.name" :description="actor.native_name">
+        <a-card-meta
+          v-if="type === 'cast'"
+          :title="selection.name"
+          :description="selection.native_name"
+        >
           <template #avatar>
-            <a-avatar :src="actor.profile_url" :size="60">
-              {{ actor.name.charAt(0) }}
+            <a-avatar :src="selection.profile_url" :size="60">
+              {{ selection.name.charAt(0) }}
+            </a-avatar>
+          </template>
+        </a-card-meta>
+        <a-card-meta
+          v-if="type === 'drama'"
+          :title="selection.title"
+          :description="selection.title_pinyin || selection.title_vi"
+        >
+          <template #avatar>
+            <a-avatar :src="selection.poster_url" :size="60">
+              {{ selection.title.charAt(0) }}
             </a-avatar>
           </template>
         </a-card-meta>
@@ -35,7 +54,7 @@
     <a-form-item
       ref="character_name"
       name="character_name"
-      label="Character Name"
+      label="Character"
       v-bind="validateInfos.character_name"
     >
       <a-input v-model:value="cast.character_name">
@@ -48,7 +67,7 @@
     <a-form-item
       ref="character_name_vi"
       name="character_name_vi"
-      label="Character Name (Vietnamese)"
+      label="Character (Vietnamese)"
       v-bind="validateInfos.character_name_vi"
     >
       <a-input v-model:value="cast.character_name_vi">
@@ -77,8 +96,12 @@
 <script setup>
 import { Form } from 'ant-design-vue'
 
-const { existingCastMember } = defineProps({
-  existingCastMember: {
+const { type, existing } = defineProps({
+  type: {
+    type: String,
+    required: true,
+  },
+  existing: {
     type: Array,
     default() {
       return []
@@ -90,20 +113,20 @@ const route = useRoute()
 
 const cast = ref({
   drama_id: Number(route.params.drama_id),
-  people_id: '',
+  people_id: Number(route.params.people_id),
 })
 
 const input = ref('')
-const actors = ref([])
+const suggestions = ref([])
 
-const fetchCast = () => {
-  $fetch('/api/cast', {
+const fetchSuggestions = () => {
+  $fetch(`/api/${type}`, {
     params: {
       query: input.value,
     },
   }).then((data) => {
-    actors.value = data
-      .filter((p) => !existingCastMember.includes(p.id))
+    suggestions.value = data
+      .filter((p) => !existing.includes(p.id))
       .map((p) => ({
         value: p.id,
         ...p,
@@ -111,13 +134,18 @@ const fetchCast = () => {
   })
 }
 
-const actor = ref()
+const selection = ref()
 const onSelect = (value, option) => {
-  cast.value.people_id = value
-  actor.value = option
+  if (type === 'cast') {
+    cast.value.people_id = value
+  } else {
+    cast.value.drama_id = value
+  }
+
+  selection.value = option
 
   input.value = ''
-  actors.value = []
+  suggestions.value = []
 }
 
 const formRef = ref()
@@ -142,9 +170,16 @@ const onSubmit = async () => {
         body: cast.value,
       })
         .then(() => {
-          message.success(
-            `[${actor.value.name}] has been successfully added to the cast!`,
-          )
+          if (type === 'cast') {
+            message.success(
+              `[${selection.value.name}] has been successfully added to the drama!`,
+            )
+          }
+          if (type === 'drama') {
+            message.success(
+              `[${selection.value.title}] has been successfully added to the cast!`,
+            )
+          }
         })
         .catch((error) => {
           message.error(error.message)

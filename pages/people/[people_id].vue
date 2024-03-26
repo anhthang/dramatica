@@ -62,7 +62,7 @@
 
         <a-card title="Drama">
           <template #extra>
-            <a-button type="primary" ghost>
+            <a-button @click="toggleAddDrama">
               <video-camera-add-outlined /> Add
             </a-button>
           </template>
@@ -102,6 +102,20 @@
     >
       <form-people ref="peopleForm" :is-edit="true" :metadata="people" />
     </a-modal>
+
+    <a-modal
+      v-model:open="open"
+      title="Add Drama"
+      destroy-on-close
+      :confirm-loading="loading"
+      @ok="onAddDrama"
+    >
+      <form-drama-cast
+        ref="dramaCastForm"
+        type="drama"
+        :existing="people.dramas.map((d) => d.id)"
+      />
+    </a-modal>
   </a-page-header>
 </template>
 
@@ -116,7 +130,7 @@ const airingColor = {
 
 const route = useRoute()
 
-const { data: people } = await useAsyncData(() =>
+const { data: people, refresh } = await useAsyncData(() =>
   $fetch(`/api/people/${route.params.people_id}`),
 )
 
@@ -127,11 +141,22 @@ const dramaByYear = computed(() =>
 useSeoMeta({
   title: people.value && people.value.name,
   description: people.value && people.value.biography,
+  ogTitle: people.value && people.value.name,
+  ogDescription: people.value && people.value.biography,
+  ogImage: people.value && people.value.profile_url,
+  twitterTitle: people.value && people.value.name,
+  twitterDescription: people.value && people.value.biography,
+  twitterImage: people.value && people.value.profile_url,
 })
 
 const visible = ref(false)
 const toggleEdit = () => {
   visible.value = !visible.value
+}
+
+const open = ref(false)
+const toggleAddDrama = () => {
+  open.value = !open.value
 }
 
 const loading = ref(false)
@@ -140,10 +165,21 @@ const peopleForm = ref()
 const onEditPeople = async () => {
   loading.value = true
 
-  await peopleForm.value.onSubmit().then(() => {
-    toggleEdit()
-  })
+  await peopleForm.value.onSubmit()
 
   loading.value = false
+  toggleEdit()
+  refresh()
+}
+
+const dramaCastForm = ref()
+const onAddDrama = async () => {
+  loading.value = true
+
+  await dramaCastForm.value.onSubmit()
+
+  loading.value = false
+  toggleAddDrama()
+  refresh()
 }
 </script>
