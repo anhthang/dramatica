@@ -68,42 +68,24 @@ watch(checked, () => {
 const loading = ref(false)
 
 const fetchMetadata = () => {
-  const { hostname } = new URL(metadata.value.watch_link)
+  loading.value = true
 
-  let source
-  if (hostname.includes('iq.com') || hostname.includes('iqiyi')) {
-    source = 'iqiyi'
-  } else if (hostname.includes('youku')) {
-    source = 'youku'
-  } else if (hostname.includes('wetv')) {
-    source = 'wetv'
-  }
-
-  if (source) {
-    loading.value = true
-
-    $fetch(`/api/metadata`, {
-      method: 'get',
-      params: {
-        source,
-        url: metadata.value.watch_link,
-      },
+  $fetch(`/api/metadata`, {
+    method: 'get',
+    params: {
+      url: metadata.value.watch_link,
+    },
+  })
+    .then((data) => {
+      Object.assign(metadata.value, data)
+      checked.value = true
     })
-      .then((data) => {
-        Object.assign(metadata.value, data)
-        checked.value = true
-      })
-      .catch((error) => {
-        message.error(error.message)
-      })
-      .finally(() => {
-        loading.value = false
-      })
-  } else {
-    message.error(
-      'This streaming service is not currently supported. Please use another link.',
-    )
-  }
+    .catch((error) => {
+      message.error(error.message)
+    })
+    .finally(() => {
+      loading.value = false
+    })
 }
 
 const toggleChecked = () => {

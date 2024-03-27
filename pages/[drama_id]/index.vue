@@ -10,6 +10,9 @@
       <a v-if="drama.watch_link" :href="drama.watch_link" target="_blank">
         <a-button><video-camera-outlined /> Watch</a-button>
       </a>
+      <a-button @click="toggleTranslation">
+        <translation-outlined /> Translation
+      </a-button>
       <a-button @click="toggleEdit"><edit-outlined /> Edit</a-button>
     </template>
 
@@ -92,7 +95,7 @@
     </a-tabs>
 
     <a-modal
-      v-model:open="visible"
+      v-model:open="visible.edit"
       title="Edit Drama"
       destroy-on-close
       :confirm-loading="loading"
@@ -100,6 +103,16 @@
       @ok="onEdit"
     >
       <form-t-v ref="tvForm" :is-edit="true" :metadata="drama" />
+    </a-modal>
+
+    <a-modal
+      v-model:open="visible.translation"
+      title="Add Translation"
+      destroy-on-close
+      :confirm-loading="loading"
+      @ok="onUpdateTranslation"
+    >
+      <form-drama-translation ref="translationForm" />
     </a-modal>
   </a-page-header>
 </template>
@@ -133,9 +146,17 @@ useSeoMeta({
 
 const activeKey = ref('cast')
 
-const visible = ref(false)
+const visible = ref({
+  edit: false,
+  translation: false,
+})
+
 const toggleEdit = () => {
-  visible.value = !visible.value
+  visible.value.edit = !visible.value.edit
+}
+
+const toggleTranslation = () => {
+  visible.value.translation = !visible.value.translation
 }
 
 const loading = ref(false)
@@ -146,6 +167,17 @@ const onEdit = async () => {
 
   await tvForm.value.onSubmit().then(() => {
     toggleEdit()
+  })
+
+  loading.value = false
+}
+
+const translationForm = ref()
+const onUpdateTranslation = async () => {
+  loading.value = true
+
+  await translationForm.value.onSubmit().then(() => {
+    toggleTranslation()
   })
 
   loading.value = false

@@ -93,7 +93,7 @@
     </a-row>
 
     <a-modal
-      v-model:open="visible"
+      v-model:open="visible.edit"
       title="Edit People"
       destroy-on-close
       width="1000px"
@@ -104,7 +104,7 @@
     </a-modal>
 
     <a-modal
-      v-model:open="open"
+      v-model:open="visible.add_drama"
       title="Add Drama"
       destroy-on-close
       :confirm-loading="loading"
@@ -149,14 +149,17 @@ useSeoMeta({
   twitterImage: people.value && people.value.profile_url,
 })
 
-const visible = ref(false)
+const visible = ref({
+  edit: false,
+  add_drama: false,
+})
+
 const toggleEdit = () => {
-  visible.value = !visible.value
+  visible.value.edit = !visible.value.edit
 }
 
-const open = ref(false)
 const toggleAddDrama = () => {
-  open.value = !open.value
+  visible.value.add_drama = !visible.value.add_drama
 }
 
 const loading = ref(false)

@@ -17,9 +17,15 @@ export default defineEventHandler(async (event) => {
       .from('dramas')
       .select()
       .textSearch('title', `${fts}`)
+      .order('release_year', { ascending: false })
+      .order('title')
       .limit(10)
   } else {
-    sqlQuery = client.from('dramas').select()
+    sqlQuery = client
+      .from('dramas')
+      .select()
+      .order('release_year', { ascending: false })
+      .order('title')
   }
 
   const { data } = await sqlQuery
