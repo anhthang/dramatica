@@ -112,7 +112,10 @@
       :confirm-loading="loading"
       @ok="onUpdateTranslation"
     >
-      <form-drama-translation ref="translationForm" />
+      <form-drama-translation
+        ref="translationForm"
+        :translations="drama.translations"
+      />
     </a-modal>
   </a-page-header>
 </template>

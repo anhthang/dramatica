@@ -56,10 +56,7 @@
       v-bind="validateInfos.synopsis"
       label="Synopsis"
     >
-      <a-textarea
-        v-model:value="translation.synopsis"
-        :auto-size="{ minRows: 3, maxRows: 6 }"
-      />
+      <a-textarea v-model:value="translation.synopsis" />
       <template #extra>
         When copying a synopsis from another source, please include a citation
         at the field below.
@@ -103,6 +100,14 @@
 
 <script setup>
 import { Form } from 'ant-design-vue'
+import pick from 'lodash.pick'
+
+const { translations } = defineProps({
+  translations: {
+    type: Array,
+    default: () => [],
+  },
+})
 
 const route = useRoute()
 
@@ -114,6 +119,15 @@ const translation = ref({
   drama_id: Number(route.params.drama_id),
   language: 'vi',
   watch_link: '',
+})
+
+onMounted(() => {
+  const translated = translations.find(
+    (t) => t.language === translation.value.language,
+  )
+  if (translated) {
+    Object.assign(translation.value, translated)
+  }
 })
 
 const loading = ref(false)
@@ -128,13 +142,14 @@ const fetchMetadata = () => {
     },
   })
     .then((data) => {
-      const { title, synopsis, synopsis_source, watch_link } = data
-      Object.assign(translation.value, {
-        title,
-        synopsis,
-        synopsis_source,
-        watch_link,
-      })
+      const translated = pick(data, [
+        'title',
+        'synopsis',
+        'synopsis_source',
+        'watch_link',
+      ])
+
+      Object.assign(translation.value, translated)
     })
     .catch((error) => {
       message.error(error.message)
