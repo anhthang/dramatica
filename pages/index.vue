@@ -64,11 +64,12 @@ const { data } = await useAsyncData(() => $fetch('/api/drama'))
 }
 
 .card-highlighted {
-  background-color: #d2e5ff;
-  border-color: #1677ff;
+  background-color: var(--card-highlighted-bg-light);
+  border-color: var(--card-highlighted-border);
+}
 
-  /* dark mode */
-  /* background-color: #002159; */
+html.dark-mode .card-highlighted {
+  background-color: var(--card-highlighted-bg-dark);
 }
 
 .card-highlighted::after {
@@ -77,7 +78,7 @@ const { data } = await useAsyncData(() => $fetch('/api/drama'))
   inset-inline-end: 2px;
   width: 0;
   height: 0;
-  border: 10px solid #1677ff;
+  border: 10px solid var(--card-highlighted-border);
   border-block-end: 10px solid transparent;
   border-inline-start: 10px solid transparent;
   border-start-end-radius: 6px;

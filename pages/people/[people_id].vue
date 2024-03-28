@@ -24,7 +24,7 @@
 
         <a-descriptions title="Personal Information" :column="1" size="small">
           <template #extra>
-            <a-button @click="toggleEdit"><edit-outlined /> Edit</a-button>
+            <a-button @click="toggle('edit')"><edit-outlined /> Edit</a-button>
           </template>
           <a-descriptions-item label="Native Name">
             {{ people.native_name }}
@@ -62,7 +62,7 @@
 
         <a-card title="Drama">
           <template #extra>
-            <a-button @click="toggleAddDrama">
+            <a-button @click="toggle('add_drama')">
               <video-camera-add-outlined /> Add
             </a-button>
           </template>
@@ -82,10 +82,12 @@
               :key="drama.id"
               :color="airingColor[drama.drama.airing_status] || 'gray'"
             >
-              <a-card-meta
-                :title="drama.drama.title"
-                :description="drama.character_name"
-              />
+              <nuxt-link :to="`/${drama.drama_id}`">
+                <a-card-meta
+                  :title="drama.drama.title"
+                  :description="drama.character_name"
+                />
+              </nuxt-link>
             </a-timeline-item>
           </a-timeline>
         </a-card>
@@ -97,7 +99,7 @@
       title="Edit People"
       destroy-on-close
       width="1000px"
-      :confirm-loading="loading"
+      :confirm-loading="visible.loading"
       @ok="onEditPeople"
     >
       <form-people ref="peopleForm" :is-edit="true" :metadata="people" />
@@ -107,7 +109,7 @@
       v-model:open="visible.add_drama"
       title="Add Drama"
       destroy-on-close
-      :confirm-loading="loading"
+      :confirm-loading="visible.loading"
       @ok="onAddDrama"
     >
       <form-drama-cast
@@ -152,37 +154,32 @@ useSeoMeta({
 const visible = ref({
   edit: false,
   add_drama: false,
+  loading: false,
 })
 
-const toggleEdit = () => {
-  visible.value.edit = !visible.value.edit
+const toggle = (key) => {
+  visible.value[key] = !visible.value[key]
 }
-
-const toggleAddDrama = () => {
-  visible.value.add_drama = !visible.value.add_drama
-}
-
-const loading = ref(false)
 
 const peopleForm = ref()
 const onEditPeople = async () => {
-  loading.value = true
+  toggle('loading')
 
   await peopleForm.value.onSubmit()
 
-  loading.value = false
-  toggleEdit()
+  toggle('loading')
+  toggle('edit')
   refresh()
 }
 
 const dramaCastForm = ref()
 const onAddDrama = async () => {
-  loading.value = true
+  toggle('loading')
 
   await dramaCastForm.value.onSubmit()
 
-  loading.value = false
-  toggleAddDrama()
+  toggle('loading')
+  toggle('add_drama')
   refresh()
 }
 </script>

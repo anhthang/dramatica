@@ -139,6 +139,7 @@ const fetchMetadata = () => {
     method: 'get',
     params: {
       url: translation.value.watch_link,
+      language: translation.value.language,
     },
   })
     .then((data) => {
@@ -147,6 +148,8 @@ const fetchMetadata = () => {
         'synopsis',
         'synopsis_source',
         'watch_link',
+        'poster_url',
+        'cover_url',
       ])
 
       Object.assign(translation.value, translated)

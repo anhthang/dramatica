@@ -54,7 +54,7 @@ const fetchMetada = async (lang: string, show_id: string) => {
   return information
 }
 
-export default async (url: string) => {
+export default async (url: string, language: string) => {
   const urlObj = new URL(url)
 
   const [, , , path] = urlObj.pathname.split('/')
@@ -64,6 +64,10 @@ export default async (url: string) => {
   const vi = await fetchMetada('vi', show_id)
 
   en.title_vi = vi && vi.title
+
+  if (language === 'vi') {
+    return vi
+  }
 
   return en
 }

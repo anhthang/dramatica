@@ -1,7 +1,7 @@
 import fetcher from '../lib'
 
 export default defineEventHandler(async (event) => {
-  const { url } = getQuery(event)
+  const { url, language } = getQuery(event)
 
   const { hostname } = new URL(url)
 
@@ -21,5 +21,5 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  return fetcher[source](url)
+  return fetcher[source](url, language)
 })

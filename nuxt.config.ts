@@ -2,7 +2,16 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
 
-  modules: ['@buianhthang/nuxt', '@nuxtjs/google-fonts', '@nuxtjs/supabase'],
+  modules: [
+    '@buianhthang/nuxt',
+    '@nuxtjs/color-mode',
+    '@nuxtjs/google-fonts',
+    '@nuxtjs/supabase',
+  ],
+
+  colorMode: {
+    preference: 'dark',
+  },
 
   googleFonts: {
     families: {

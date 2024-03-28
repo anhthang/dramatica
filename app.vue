@@ -17,6 +17,33 @@ const themeCfg = ref({
   },
 })
 
+const colorMode = useColorMode()
+
+const getAlgorithm = (preference) => {
+  switch (preference) {
+    case 'dark':
+      return theme.darkAlgorithm
+    case 'light':
+      return theme.defaultAlgorithm
+    default:
+      return colorMode.value === 'dark'
+        ? theme.darkAlgorithm
+        : theme.defaultAlgorithm
+  }
+}
+
+watch(
+  () => colorMode.value,
+  () => {
+    themeCfg.value.algorithm = getAlgorithm(colorMode.preference)
+  },
+)
+
+onMounted(() => {
+  const preference = localStorage.getItem('nuxt-color-mode')
+  themeCfg.value.algorithm = getAlgorithm(preference)
+})
+
 const config = useRuntimeConfig()
 const { appName, appDesc, baseUrl } = config.public
 
@@ -43,3 +70,11 @@ useSeoMeta({
   twitterImage: `${baseUrl}/website-card.png`,
 })
 </script>
+
+<style>
+:root {
+  --card-highlighted-bg-light: #d2e5ff;
+  --card-highlighted-bg-dark: #002159;
+  --card-highlighted-border: #1677ff;
+}
+</style>

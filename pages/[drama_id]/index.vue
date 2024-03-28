@@ -10,10 +10,10 @@
       <a v-if="drama.watch_link" :href="drama.watch_link" target="_blank">
         <a-button><video-camera-outlined /> Watch</a-button>
       </a>
-      <a-button @click="toggleTranslation">
+      <a-button @click="toggle('translation')">
         <translation-outlined /> Translation
       </a-button>
-      <a-button @click="toggleEdit"><edit-outlined /> Edit</a-button>
+      <a-button @click="toggle('edit')"><edit-outlined /> Edit</a-button>
     </template>
 
     <template #tags>
@@ -57,7 +57,15 @@
       <a-tab-pane key="cast">
         <template #tab><team-outlined /> Cast</template>
         <a-row :gutter="[8, 8]" type="flex">
-          <a-col v-for="actor in drama.cast" :key="actor.id" :xs="12" :sm="4">
+          <a-col
+            v-for="actor in sortBy(drama.cast, [
+              'billing_order',
+              'people.name',
+            ])"
+            :key="actor.id"
+            :xs="12"
+            :sm="4"
+          >
             <card-people :people="actor" />
           </a-col>
         </a-row>
@@ -98,7 +106,7 @@
       v-model:open="visible.edit"
       title="Edit Drama"
       destroy-on-close
-      :confirm-loading="loading"
+      :confirm-loading="visible.loading"
       width="1200px"
       @ok="onEdit"
     >
@@ -109,7 +117,7 @@
       v-model:open="visible.translation"
       title="Add Translation"
       destroy-on-close
-      :confirm-loading="loading"
+      :confirm-loading="visible.loading"
       @ok="onUpdateTranslation"
     >
       <form-drama-translation
@@ -122,6 +130,7 @@
 
 <script setup>
 import copy from 'ant-design-vue/lib/_util/copy-to-clipboard'
+import sortBy from 'lodash.sortby'
 
 const route = useRoute()
 const config = useRuntimeConfig()
@@ -152,37 +161,32 @@ const activeKey = ref('cast')
 const visible = ref({
   edit: false,
   translation: false,
+  loading: false,
 })
 
-const toggleEdit = () => {
-  visible.value.edit = !visible.value.edit
+const toggle = (key) => {
+  visible.value[key] = !visible.value[key]
 }
 
-const toggleTranslation = () => {
-  visible.value.translation = !visible.value.translation
-}
-
-const loading = ref(false)
 const tvForm = ref()
-
 const onEdit = async () => {
-  loading.value = true
+  toggle('loading')
 
   await tvForm.value.onSubmit().then(() => {
-    toggleEdit()
+    toggle('edit')
   })
 
-  loading.value = false
+  toggle('loading')
 }
 
 const translationForm = ref()
 const onUpdateTranslation = async () => {
-  loading.value = true
+  toggle('loading')
 
   await translationForm.value.onSubmit().then(() => {
-    toggleTranslation()
+    toggle('translation')
   })
 
-  loading.value = false
+  toggle('loading')
 }
 </script>
