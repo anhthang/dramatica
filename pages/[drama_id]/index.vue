@@ -6,10 +6,6 @@
     @back="() => $router.go(-1)"
   >
     <template #extra>
-      <a-button @click="copyUrl"><share-alt-outlined /> Share</a-button>
-      <a v-if="drama.watch_link" :href="drama.watch_link" target="_blank">
-        <a-button><video-camera-outlined /> Watch</a-button>
-      </a>
       <a-button @click="toggle('translation')">
         <translation-outlined /> Translation
       </a-button>
@@ -20,15 +16,9 @@
       <a-tag>{{ drama.release_year }}</a-tag>
     </template>
 
-    <a-flex justify="space-between" gap="middle">
-      <a-flex vertical>
-        <a-typography>
-          <a-typography-paragraph>
-            {{ drama.synopsis }}
-          </a-typography-paragraph>
-        </a-typography>
-
-        <a-descriptions title="Information" :column="1" size="small">
+    <a-row :gutter="[16, 16]" type="flex">
+      <a-col :lg="14">
+        <a-descriptions :column="2" size="small">
           <a-descriptions-item label="Status">
             {{ drama.airing_status }}
           </a-descriptions-item>
@@ -42,10 +32,35 @@
             {{ drama.genres.map(({ genre }) => genre.name).join(', ') }}
           </a-descriptions-item>
         </a-descriptions>
-      </a-flex>
 
-      <img :alt="drama.title" :src="drama.poster_url" :width="250" />
-    </a-flex>
+        <a-descriptions layout="vertical" size="small">
+          <a-descriptions-item label="Synopsis">
+            <a-typography>
+              <a-typography-paragraph>
+                {{ drama.synopsis }}
+              </a-typography-paragraph>
+            </a-typography>
+          </a-descriptions-item>
+        </a-descriptions>
+      </a-col>
+      <a-col :lg="10">
+        <a-flex vertical gap="middle">
+          <img :alt="drama.title" :src="drama.cover_url" />
+          <a-flex justify="center" gap="small">
+            <nuxt-link
+              v-if="drama.watch_link"
+              :to="drama.watch_link"
+              target="_blank"
+            >
+              <a-button size="large"><play-square-outlined /> Play</a-button>
+            </nuxt-link>
+            <a-button size="large" @click="copyUrl">
+              <share-alt-outlined /> Share
+            </a-button>
+          </a-flex>
+        </a-flex>
+      </a-col>
+    </a-row>
 
     <a-tabs v-model:activeKey="activeKey" size="large">
       <template v-if="activeKey === 'cast'" #rightExtra>

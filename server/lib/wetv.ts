@@ -11,7 +11,7 @@ const fetchMetada = async (lang: string, show_id: string) => {
     cover_url,
     synopsis_source: 'WeTV',
     airing_platform: 'WeTV',
-    watch_link,
+    watch_link: watch_link.replace('/play/', '/album/'),
   }
 
   if (Array.isArray(jsonld)) {

@@ -8,8 +8,8 @@ export default async (url: string) => {
 
   const information: { [x: string]: any } = {
     cover_url,
-    synopsis_source: 'iQiyi',
-    airing_platform: 'iQiyi',
+    synopsis_source: 'iQIYI',
+    airing_platform: 'iQIYI',
     watch_link: canonical || url,
   }
 

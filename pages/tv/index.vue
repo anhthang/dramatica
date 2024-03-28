@@ -23,7 +23,7 @@
 
       <div v-if="!checked">
         <a-typography-paragraph>
-          For new Chinese dramas streaming on WeTV, iQiyi, or Youku, you can
+          For new Chinese dramas streaming on WeTV, iQIYI, or Youku, you can
           enter the watch link below to automatically fetch information and then
           edit or update it as needed. Otherwise, you can choose to manually
           input the details.
