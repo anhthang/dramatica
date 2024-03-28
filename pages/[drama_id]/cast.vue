@@ -17,7 +17,7 @@
 
     <a-typography-title :level="4">Cast & Crew</a-typography-title>
 
-    <a-row :gutter="[8, 8]" type="flex">
+    <a-row :gutter="[16, 16]" type="flex">
       <a-col v-for="actor in drama.cast" :key="actor.id" :xs="12" :sm="4">
         <card-people :people="actor" />
       </a-col>

@@ -8,7 +8,7 @@
     :rules="formRules"
     :disabled="disabled"
   >
-    <a-row :gutter="[8, 8]" type="flex">
+    <a-row :gutter="[16, 16]" type="flex">
       <a-col :xs="24" :md="8">
         <a-form-item
           ref="name"
@@ -47,7 +47,7 @@
       </a-col>
     </a-row>
 
-    <a-row :gutter="[8, 8]" type="flex">
+    <a-row :gutter="[16, 16]" type="flex">
       <a-col :xs="24" :md="8">
         <a-form-item
           ref="gender"
@@ -93,7 +93,7 @@
       </template>
     </a-form-item>
 
-    <a-row :gutter="[8, 8]" type="flex">
+    <a-row :gutter="[16, 16]" type="flex">
       <a-col xs="24" :md="8">
         <a-form-item
           ref="weibo"

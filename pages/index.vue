@@ -1,6 +1,6 @@
 <template>
   <a-page-header title="Trending" class="container drama-container">
-    <a-row :gutter="[8, 8]" type="flex">
+    <a-row :gutter="[16, 16]" type="flex">
       <a-col
         v-for="drama in data"
         :key="drama.id"
@@ -46,11 +46,11 @@ const { data } = await useAsyncData(() => $fetch('/api/drama'))
 
 .drama-container {
   .ant-card-cover {
-    height: 320px;
+    height: var(--poster-height);
     overflow: hidden;
 
     img {
-      height: 320px;
+      height: var(--poster-height);
       object-fit: cover;
     }
   }

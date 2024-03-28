@@ -1,6 +1,6 @@
 <template>
   <nuxt-link :to="`/people/${people.people_id}`">
-    <a-card hoverable>
+    <a-card hoverable style="height: 100%">
       <a-card-meta
         :title="people.people.name"
         :description="people.character_name"

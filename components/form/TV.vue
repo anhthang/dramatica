@@ -2,7 +2,7 @@
   <potential-duplicates-t-v v-if="!isEdit && tv.title" :props="tv" />
 
   <a-form :ref="formRef" layout="vertical" :model="tv" :rules="formRules">
-    <a-row :gutter="[8, 8]" type="flex">
+    <a-row :gutter="[16, 16]" type="flex">
       <a-col :xl="8">
         <a-form-item
           ref="title"
@@ -57,7 +57,7 @@
       </template>
     </a-form-item>
 
-    <a-row :gutter="[8, 8]" type="flex">
+    <a-row :gutter="[16, 16]" type="flex">
       <a-col :xl="8">
         <a-form-item
           ref="synopsis_source"
@@ -99,7 +99,7 @@
       </a-col>
     </a-row>
 
-    <a-row :gutter="[8, 8]" type="flex">
+    <a-row :gutter="[16, 16]" type="flex">
       <a-col :xl="8">
         <a-form-item
           ref="airing_platform"
@@ -165,7 +165,7 @@
       </a-col>
     </a-row>
 
-    <a-row :gutter="[8, 8]" type="flex">
+    <a-row :gutter="[16, 16]" type="flex">
       <a-col :xl="8">
         <a-form-item
           ref="poster_url"

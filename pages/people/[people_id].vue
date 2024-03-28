@@ -1,6 +1,6 @@
 <template>
   <a-page-header v-if="people" class="container">
-    <a-row :gutter="[8, 8]" type="flex">
+    <a-row :gutter="[16, 16]" type="flex">
       <a-col :sm="6">
         <a-flex vertical gap="large" align="center">
           <a-avatar

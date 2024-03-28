@@ -56,7 +56,7 @@
 
       <a-tab-pane key="cast">
         <template #tab><team-outlined /> Cast</template>
-        <a-row :gutter="[8, 8]" type="flex">
+        <a-row :gutter="[16, 16]" type="flex">
           <a-col
             v-for="actor in sortBy(drama.cast, [
               'billing_order',
@@ -76,29 +76,39 @@
         :disabled="!Array.isArray(drama.episodes) || !drama.episodes.length"
       >
         <template #tab><youtube-outlined /> Episodes</template>
-        <a-list
-          item-layout="vertical"
-          :pagination="{ pageSize: 10 }"
-          :data-source="drama.episodes"
-        >
-          <template #renderItem="{ item }">
-            <a-list-item :key="item.id">
-              <a-row :gutter="[16, 16]">
-                <a-col :xs="24" :sm="18" :md="4">
-                  <img width="100%" :src="item.preview_img" />
-                </a-col>
-                <a-col :xs="24" :sm="16" :md="20">
-                  <a-list-item-meta
-                    :title="item.title || `Episode ${item.episode_number}`"
-                    :description="item.air_date"
-                  />
+        <a-row :gutter="[16, 16]" type="flex">
+          <a-col
+            v-for="episode in episodes"
+            :key="episode.episode_number"
+            :xs="24"
+            :md="8"
+            :lg="6"
+          >
+            <a-card style="height: 100%">
+              <template #cover>
+                <img :src="episode.preview_img" />
+              </template>
+              <a-card-meta
+                :title="episode.title || `Episode ${episode.episode_number}`"
+                :description="episode.plot_summary"
+              />
+            </a-card>
+          </a-col>
+        </a-row>
 
-                  {{ item.plot_summary }}
-                </a-col>
-              </a-row>
-            </a-list-item>
-          </template>
-        </a-list>
+        <a-flex
+          v-if="drama.episodes.length > size"
+          justify="center"
+          style="margin-top: 16px"
+        >
+          <a-pagination
+            v-model:current="page"
+            :total="drama.episodes.length"
+            :page-size="size"
+            :show-size-changer="false"
+            :show-quick-jumper="drama.episodes.length > size * 10"
+          />
+        </a-flex>
       </a-tab-pane>
     </a-tabs>
 
@@ -132,12 +142,19 @@
 import copy from 'ant-design-vue/lib/_util/copy-to-clipboard'
 import sortBy from 'lodash.sortby'
 
+const page = ref(1)
+const size = 12
+
 const route = useRoute()
 const config = useRuntimeConfig()
 
 const { data: drama } = await useAsyncData(() =>
   $fetch(`/api/${route.params.drama_id}`),
 )
+
+const episodes = computed(() => {
+  return drama.value.episodes.slice((page.value - 1) * size, page.value * size)
+})
 
 const copyUrl = () => {
   copy(config.public.baseUrl + route.fullPath)

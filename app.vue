@@ -76,5 +76,7 @@ useSeoMeta({
   --card-highlighted-bg-light: #d2e5ff;
   --card-highlighted-bg-dark: #002159;
   --card-highlighted-border: #1677ff;
+  --poster-height: 320px;
+  --cover-height: 210px;
 }
 </style>

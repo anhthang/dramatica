@@ -12,7 +12,7 @@
       </template>
     </a-alert>
 
-    <a-row :gutter="[8, 8]" type="flex">
+    <a-row :gutter="[16, 16]" type="flex">
       <a-col v-for="tv in data" :key="tv.id" :xs="24" :sm="12" :md="6">
         <nuxt-link :to="`/${tv.id}`" target="_blank">
           <a-card
@@ -21,6 +21,7 @@
               tv.title.toLowerCase() === props.title.toLowerCase() &&
               'card-highlighted'
             "
+            style="height: 100%"
           >
             <a-card-meta
               :title="`${tv.title} (${tv.release_year})`"
