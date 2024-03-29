@@ -39,6 +39,7 @@
   "dependencies": {
     "@vercel/analytics": "^1.2.2",
     "@vercel/speed-insights": "^1.0.10",
+    "lodash.get": "^4.4.2",
     "lodash.groupby": "^4.6.0",
     "lodash.pick": "^4.4.0",
     "lodash.sortby": "^4.7.0",
@@ -50,7 +51,8 @@
     "@nuxt/eslint-config": "^0.2.0",
     "@nuxtjs/color-mode": "^3.3.3",
     "@nuxtjs/google-fonts": "^3.2.0",
-    "@nuxtjs/supabase": "^1.1.7",
+    "@nuxtjs/supabase": "^1.2.0",
+    "@types/lodash.get": "^4.4.9",
     "@types/lodash.groupby": "^4.6.9",
     "@types/lodash.pick": "^4.4.9",
     "@types/lodash.sortby": "^4.7.9",

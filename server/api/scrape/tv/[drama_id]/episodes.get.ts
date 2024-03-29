@@ -1,7 +1,8 @@
-import fetcher from '../lib'
+import scrapers from '../../../../scrapers'
 
 export default defineEventHandler(async (event) => {
   const { url, language } = getQuery(event)
+  const { drama_id } = getRouterParams(event)
 
   const { hostname } = new URL(url)
 
@@ -12,6 +13,8 @@ export default defineEventHandler(async (event) => {
     source = 'youku'
   } else if (hostname.includes('wetv')) {
     source = 'wetv'
+  } else if (hostname.includes('netflix')) {
+    source = 'netflix'
   }
 
   if (!source) {
@@ -21,5 +24,5 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  return fetcher[source](url, language)
+  return scrapers[source].episodes(drama_id, url, language)
 })

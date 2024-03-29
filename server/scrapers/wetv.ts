@@ -54,7 +54,7 @@ const fetchMetada = async (lang: string, show_id: string) => {
   return information
 }
 
-export default async (url: string, language: string) => {
+export const tv = async (url: string, language: string) => {
   const urlObj = new URL(url)
 
   const [, , , path] = urlObj.pathname.split('/')

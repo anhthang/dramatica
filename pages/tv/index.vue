@@ -70,7 +70,7 @@ const loading = ref(false)
 const fetchMetadata = () => {
   loading.value = true
 
-  $fetch(`/api/metadata`, {
+  $fetch('/api/scrape/tv', {
     method: 'get',
     params: {
       url: metadata.value.watch_link,

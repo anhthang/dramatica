@@ -1,7 +1,7 @@
 import unescape from 'lodash.unescape'
 import urlMetadata from 'url-metadata'
 
-export default async (url: string) => {
+export const tv = async (url: string) => {
   const metadata = await urlMetadata(url)
 
   const {

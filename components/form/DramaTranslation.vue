@@ -135,7 +135,7 @@ const loading = ref(false)
 const fetchMetadata = () => {
   loading.value = true
 
-  $fetch(`/api/metadata`, {
+  $fetch('/api/scrape/tv', {
     method: 'get',
     params: {
       url: translation.value.watch_link,
