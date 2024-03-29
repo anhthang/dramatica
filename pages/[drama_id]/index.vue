@@ -52,7 +52,13 @@
               :to="drama.watch_link"
               target="_blank"
             >
-              <a-button size="large"><play-square-outlined /> Play</a-button>
+              <a-button
+                type="primary"
+                size="large"
+                :class="drama.airing_platform.toLowerCase()"
+              >
+                <play-circle-outlined /> Watch
+              </a-button>
             </nuxt-link>
             <a-button size="large" @click="copyUrl">
               <share-alt-outlined /> Share
@@ -99,13 +105,13 @@
             :md="8"
             :lg="6"
           >
-            <a-card style="height: 100%">
+            <a-card hoverable style="height: 100%">
               <template #cover>
                 <img :src="episode.preview_img" />
               </template>
               <a-card-meta
                 :title="episode.title || `Episode ${episode.episode_number}`"
-                :description="episode.plot_summary"
+                :description="episode.synopsis"
               />
             </a-card>
           </a-col>
@@ -163,8 +169,17 @@ const size = 12
 const route = useRoute()
 const config = useRuntimeConfig()
 
-const { data: drama } = await useAsyncData(() =>
-  $fetch(`/api/${route.params.drama_id}`),
+const { data: drama } = await useAsyncData(
+  () => $fetch(`/api/${route.params.drama_id}`),
+  {
+    /**
+     * FIXME: remove this once we have translation feature
+     */
+    transform: (data) => {
+      data.episodes = data.episodes.filter((e) => e.language === 'en')
+      return data
+    },
+  },
 )
 
 const episodes = computed(() => {
@@ -222,3 +237,17 @@ const onUpdateTranslation = async () => {
   toggle('loading')
 }
 </script>
+
+<style>
+.wetv {
+  background-color: #ff4a22;
+}
+
+.iqiyi {
+  background-color: #1cc749;
+}
+
+.youku {
+  background-color: #2584ff;
+}
+</style>

@@ -5,21 +5,27 @@
         v-model:value="input"
         allow-clear
         :options="suggestions"
-        placeholder="Search drama or cast member by name..."
         @select="onSelect"
         @search="fetchSuggestions"
       >
+        <a-input placeholder="Search drama or cast member by name...">
+          <template #prefix><search-outlined /></template>
+        </a-input>
         <template v-if="type === 'cast'" #option="item">
-          <a-avatar :src="item.profile_url">
-            {{ item.name.charAt(0) }}
-          </a-avatar>
-          {{ item.name }} ({{ item.native_name }})
+          <a-flex gap="small" align="center">
+            <a-avatar :src="item.profile_url">
+              {{ item.name.charAt(0) }}
+            </a-avatar>
+            {{ item.name }} ({{ item.native_name }})
+          </a-flex>
         </template>
         <template v-else-if="type === 'drama'" #option="item">
-          <a-avatar :src="item.poster_url">
-            {{ item.title.charAt(0) }}
-          </a-avatar>
-          {{ item.title }} ({{ item.release_year }})
+          <a-flex gap="small" align="center">
+            <a-avatar :src="item.poster_url">
+              {{ item.title.charAt(0) }}
+            </a-avatar>
+            {{ item.title }} ({{ item.release_year }})
+          </a-flex>
         </template>
       </a-auto-complete>
     </a-form-item>
@@ -78,6 +84,18 @@
       </template>
     </a-form-item>
     <a-form-item
+      ref="role"
+      name="role"
+      label="Role"
+      v-bind="validateInfos.role"
+    >
+      <a-select
+        v-model:value="cast.role"
+        :options="roles.map((role) => ({ value: role, label: role }))"
+      />
+      <template #extra>Cast member's role in the drama.</template>
+    </a-form-item>
+    <a-form-item
       ref="billing_order"
       name="billing_order"
       label="Billing Order"
@@ -108,6 +126,8 @@ const { type, existing } = defineProps({
     },
   },
 })
+
+const roles = ['Main', 'Supporting', 'Special Guess']
 
 const route = useRoute()
 
@@ -156,6 +176,9 @@ const formRules = ref({
     { required: true, type: 'string', trigger: ['change', 'blur'] },
   ],
   character_name_vi: [{ type: 'string', trigger: ['change', 'blur'] }],
+  role: [
+    { required: true, type: 'enum', enum: roles, trigger: ['change', 'blur'] },
+  ],
   billing_order: [{ type: 'number', trigger: ['change', 'blur'] }],
 })
 
