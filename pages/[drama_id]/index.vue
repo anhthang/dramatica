@@ -51,16 +51,18 @@
               v-if="drama.watch_link"
               :to="drama.watch_link"
               target="_blank"
+              style="width: 100%"
             >
               <a-button
                 type="primary"
                 size="large"
+                block
                 :class="drama.airing_platform.toLowerCase()"
               >
                 <play-circle-outlined /> Watch
               </a-button>
             </nuxt-link>
-            <a-button size="large" @click="copyUrl">
+            <a-button size="large" block @click="copyUrl">
               <share-alt-outlined /> Share
             </a-button>
           </a-flex>
@@ -72,6 +74,12 @@
       <template v-if="activeKey === 'cast'" #rightExtra>
         <nuxt-link :to="`/${drama.id}/cast`">
           <a-button type="link">All Cast & Crew</a-button>
+        </nuxt-link>
+      </template>
+
+      <template v-else-if="activeKey === 'episodes'" #rightExtra>
+        <nuxt-link :to="`/${drama.id}/episodes`">
+          <a-button type="link">All Episodes</a-button>
         </nuxt-link>
       </template>
 
@@ -92,10 +100,7 @@
         </a-row>
       </a-tab-pane>
 
-      <a-tab-pane
-        key="episodes"
-        :disabled="!Array.isArray(drama.episodes) || !drama.episodes.length"
-      >
+      <a-tab-pane key="episodes">
         <template #tab><youtube-outlined /> Episodes</template>
         <a-row :gutter="[16, 16]" type="flex">
           <a-col
@@ -130,6 +135,13 @@
             :show-quick-jumper="drama.episodes.length > size * 10"
           />
         </a-flex>
+
+        <a-result
+          v-if="!drama.episodes.length"
+          status="404"
+          title="We apologize, but episode information is currently unavailable."
+          sub-title="We're actively gathering this information and will update it soon."
+        />
       </a-tab-pane>
     </a-tabs>
 
@@ -138,7 +150,7 @@
       title="Edit Drama"
       destroy-on-close
       :confirm-loading="visible.loading"
-      width="1200px"
+      :width="1200"
       @ok="onEdit"
     >
       <form-t-v ref="tvForm" :is-edit="true" :metadata="drama" />

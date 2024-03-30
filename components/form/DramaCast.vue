@@ -127,7 +127,7 @@ const { type, existing } = defineProps({
   },
 })
 
-const roles = ['Main', 'Supporting', 'Special Guess']
+const roles = ['Main', 'Supporting', 'Special Guest']
 
 const route = useRoute()
 

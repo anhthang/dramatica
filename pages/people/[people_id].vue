@@ -98,7 +98,7 @@
       v-model:open="visible.edit"
       title="Edit People"
       destroy-on-close
-      width="1000px"
+      :width="1000"
       :confirm-loading="visible.loading"
       @ok="onEditPeople"
     >

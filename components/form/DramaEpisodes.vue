@@ -1,0 +1,125 @@
+<template>
+  <a-form layout="vertical" :model="params">
+    <a-form-item
+      ref="url"
+      name="url"
+      label="Website"
+      :rules="[{ required: true, type: 'url' }]"
+    >
+      <a-input-search
+        v-model:value="params.url"
+        enter-button
+        :loading="loading"
+        @search="scrapeEpisodes"
+      >
+        <template #prefix><link-outlined /></template>
+      </a-input-search>
+      <template #extra>
+        Provide a link to the source website to import episode synopses. Please
+        note that this feature currently only supports Netflix.
+      </template>
+    </a-form-item>
+
+    <a-form-item name="language" label="Language" :rules="[{ required: true }]">
+      <a-radio-group
+        v-model:value="params.language"
+        :options="
+          Object.entries(languages).map(([value, label]) => ({ value, label }))
+        "
+      />
+    </a-form-item>
+  </a-form>
+
+  <a-card v-if="tv">
+    <template #cover>
+      <img :src="tv.cover_url" />
+    </template>
+
+    <a-card-meta :title="tv.title" :description="tv.synopsis" />
+
+    <a-list
+      v-if="episodes.length"
+      item-layout="horizontal"
+      :data-source="episodes"
+      :pagination="{ pageSize: 5, simple: true }"
+    >
+      <template #header>
+        <a-typography-text strong> Synopses </a-typography-text>
+      </template>
+
+      <template #renderItem="{ item }">
+        <a-list-item>
+          <a-list-item-meta :title="item.title" :description="item.synopsis" />
+        </a-list-item>
+      </template>
+
+      <template #footer>
+        <a-typography-text type="warning">
+          Please verify the data carefully before inserting it to avoid
+          incorrect entries.
+        </a-typography-text>
+      </template>
+    </a-list>
+  </a-card>
+</template>
+
+<script setup>
+const route = useRoute()
+
+const params = ref({
+  url: '',
+  language: 'en',
+})
+
+const languages = {
+  en: 'English',
+  vi: 'Vietnamese',
+}
+
+const tv = ref()
+const episodes = ref([])
+const loading = ref(false)
+
+const scrapeEpisodes = () => {
+  loading.value = true
+
+  $fetch('/api/scrape/tv', { method: 'get', query: params.value })
+    .then((data) => {
+      tv.value = data
+    })
+    .catch(() => {
+      // nothing
+    })
+
+  $fetch(`/api/scrape/tv/${route.params.drama_id}/episodes`, {
+    method: 'get',
+    params: params.value,
+  })
+    .then((data) => {
+      episodes.value = data
+    })
+    .catch((error) => {
+      message.error(error.message)
+    })
+    .finally(() => {
+      loading.value = false
+    })
+}
+
+const onSubmit = async () => {
+  await $fetch(`/api/scrape/tv/${route.params.drama_id}/episodes`, {
+    method: 'post',
+    body: episodes.value,
+  })
+    .then(() => {
+      message.success('Episode synopses added successfully!')
+    })
+    .catch((error) => {
+      message.error(error.message)
+    })
+}
+
+defineExpose({
+  onSubmit,
+})
+</script>

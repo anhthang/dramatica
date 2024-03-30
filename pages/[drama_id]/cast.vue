@@ -53,7 +53,7 @@ import groupBy from 'lodash.groupby'
 
 const route = useRoute()
 
-const roles = ['Main', 'Supporting', 'Special Guess']
+const roles = ['Main', 'Supporting', 'Special Guest']
 
 const { data: drama, refresh } = await useAsyncData(() =>
   $fetch(`/api/${route.params.drama_id}`),

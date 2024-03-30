@@ -8,7 +8,7 @@ const capitalizeFirstLetters = (str: string) => {
   return words.join(' ')
 }
 
-const scrape = async (body: any, lang: string) => {
+const requester = async (body: any, lang: string) => {
   const response = await fetch('https://web.prod.cloud.netflix.com/graphql', {
     method: 'post',
     headers: {
@@ -27,11 +27,7 @@ const scrape = async (body: any, lang: string) => {
   return data
 }
 
-const tvScraper = async (titleId: string, lang: string) => {
-  const url = `https://www.netflix.com/title/${titleId}`
-
-  const unifiedEntityId = `Video:${titleId}`
-
+const tvDetail = async (unifiedEntityId: string, lang: string) => {
   const body = {
     operationName: 'DetailModal',
     variables: {
@@ -48,12 +44,19 @@ const tvScraper = async (titleId: string, lang: string) => {
     extensions: {
       persistedQuery: {
         version: 1,
-        sha256Hash: process.env.NETFLIX_QUERY_HASH,
+        sha256Hash: process.env.NETFLIX_DETAIL_MODAL_HASH,
       },
     },
   }
 
-  const data = await scrape(body, lang)
+  return await requester(body, lang)
+}
+
+const tvScraper = async (titleId: string, lang: string) => {
+  const url = `https://www.netflix.com/title/${titleId}`
+  const unifiedEntityId = `Video:${titleId}`
+
+  const data = await tvDetail(unifiedEntityId, lang)
 
   const information: { [x: string]: any } = {
     synopsis_source: 'Netflix',
@@ -116,30 +119,7 @@ export const episodes = async (
 
   const unifiedEntityId = `Video:${titleId}`
 
-  const data = await scrape(
-    {
-      operationName: 'DetailModal',
-      variables: {
-        opaqueImageFormat: 'JPG',
-        transparentImageFormat: 'PNG',
-        videoMerchEnabled: true,
-        hasPromoVideoOverride: false,
-        promoVideoId: 0,
-        videoMerchContext: 'BROWSE',
-        artworkContext: {},
-        textEvidenceUiContext: 'ODP',
-        unifiedEntityId,
-      },
-      extensions: {
-        persistedQuery: {
-          version: 1,
-          sha256Hash: process.env.NETFLIX_QUERY_HASH,
-        },
-      },
-    },
-    language,
-  )
-
+  const data = await tvDetail(unifiedEntityId, language)
   if (!Array.isArray(data.unifiedEntities)) {
     return []
   }
@@ -159,7 +139,7 @@ export const episodes = async (
     100,
   )
 
-  const season = await scrape(
+  const season = await requester(
     {
       operationName: 'PreviewModalEpisodeSelectorSeasonEpisodes',
       variables: {
@@ -171,7 +151,7 @@ export const episodes = async (
       extensions: {
         persistedQuery: {
           version: 1,
-          sha256Hash: process.env.NETFLIX_QUERY_HASH,
+          sha256Hash: process.env.NETFLIX_PREVIEW_MODAL_HASH,
         },
       },
     },
