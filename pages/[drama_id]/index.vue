@@ -122,17 +122,14 @@
           </a-col>
         </a-row>
 
-        <a-flex
-          v-if="drama.episodes.length > size"
-          justify="center"
-          style="margin-top: 16px"
-        >
+        <a-flex justify="center" style="margin-top: 16px">
           <a-pagination
             v-model:current="page"
             :total="drama.episodes.length"
             :page-size="size"
             :show-size-changer="false"
             :show-quick-jumper="drama.episodes.length > size * 10"
+            hide-on-single-page
           />
         </a-flex>
 
@@ -257,6 +254,10 @@ const onUpdateTranslation = async () => {
 
 .iqiyi {
   background-color: #1cc749;
+}
+
+.netflix {
+  background-color: #e50914;
 }
 
 .youku {

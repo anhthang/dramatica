@@ -1,7 +1,7 @@
 import unescape from 'lodash.unescape'
 import urlMetadata from 'url-metadata'
 
-const fetchMetada = async (lang: string, show_id: string) => {
+const scrape = async (lang: string, show_id: string) => {
   const watch_link = `https://wetv.vip/${lang}/play/${show_id}`
   const metadata = await urlMetadata(watch_link)
 
@@ -60,8 +60,8 @@ export const tv = async (url: string, language: string) => {
   const [, , , path] = urlObj.pathname.split('/')
   const [show_id] = path.split('-')
 
-  const en = await fetchMetada('en', show_id)
-  const vi = await fetchMetada('vi', show_id)
+  const en = await scrape('en', show_id)
+  const vi = await scrape('vi', show_id)
 
   en.title_vi = vi && vi.title
 

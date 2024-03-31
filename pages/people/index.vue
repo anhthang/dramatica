@@ -1,6 +1,6 @@
 <template>
   <a-page-header class="container" title="People">
-    <a-card title="People Information">
+    <a-card :loading="loading" title="People Information">
       <template #extra>
         <a-button type="primary" :loading="loading" @click="onSave">
           <save-outlined /> Save

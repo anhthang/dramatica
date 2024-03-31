@@ -18,7 +18,7 @@
 
     <a-row :gutter="[16, 16]" type="flex">
       <a-col
-        v-for="episode in episodes"
+        v-for="episode in drama.episodes"
         :key="episode.episode_number"
         :xs="24"
         :md="8"
@@ -36,20 +36,6 @@
       </a-col>
     </a-row>
 
-    <a-flex
-      v-if="drama.episodes.length > size"
-      justify="center"
-      style="margin-top: 16px"
-    >
-      <a-pagination
-        v-model:current="page"
-        :total="drama.episodes.length"
-        :page-size="size"
-        :show-size-changer="false"
-        :show-quick-jumper="drama.episodes.length > size * 10"
-      />
-    </a-flex>
-
     <a-modal
       v-model:open="visible"
       title="Import Episode Synopses"
@@ -65,9 +51,6 @@
 <script setup>
 const route = useRoute()
 
-const page = ref(1)
-const size = 12
-
 const { data: drama, refresh } = await useAsyncData(
   () => $fetch(`/api/${route.params.drama_id}`),
   {
@@ -80,10 +63,6 @@ const { data: drama, refresh } = await useAsyncData(
     },
   },
 )
-
-const episodes = computed(() => {
-  return drama.value.episodes.slice((page.value - 1) * size, page.value * size)
-})
 
 const visible = ref(false)
 const toggleImport = () => {

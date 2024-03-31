@@ -169,9 +169,7 @@ const genders = ['Male', 'Female', 'Other']
 const formRef = ref()
 const formRules = ref({
   name: [{ required: true, type: 'string', trigger: ['change', 'blur'] }],
-  native_name: [
-    { required: false, type: 'string', trigger: ['change', 'blur'] },
-  ],
+  native_name: [{ type: 'string', trigger: ['change', 'blur'] }],
   gender: [
     {
       required: true,
@@ -180,8 +178,8 @@ const formRules = ref({
       trigger: ['change', 'blur'],
     },
   ],
-  name_vi: [{ required: false, type: 'string', trigger: ['change', 'blur'] }],
-  dob: [{ required: false, type: 'date', trigger: ['change', 'blur'] }],
+  name_vi: [{ type: 'string', trigger: ['change', 'blur'] }],
+  dob: [{ type: 'date', trigger: ['change', 'blur'] }],
   biography: [{ type: 'string', trigger: ['change', 'blur'] }],
   weibo: [{ type: 'url', trigger: ['change', 'blur'] }],
   douyin: [{ type: 'url', trigger: ['change', 'blur'] }],
