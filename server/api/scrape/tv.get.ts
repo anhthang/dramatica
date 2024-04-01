@@ -17,10 +17,9 @@ export default defineEventHandler(async (event) => {
   }
 
   if (!source) {
-    throw createError({
-      message:
-        'This streaming service is not currently supported. Please use another link.',
-    })
+    throw createError(
+      'This streaming service is not currently supported. Please use another link.',
+    )
   }
 
   return scrapers[source].tv(url, language)

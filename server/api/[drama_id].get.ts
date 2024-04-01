@@ -9,6 +9,7 @@ export default defineEventHandler(async (event) => {
     .from('dramas')
     .select(
       `*,
+      availability:drama_availability(*),
       cast:drama_cast(*, people(name, name_vi, profile_url)),
       crew:drama_crew(*),
       episodes(*),

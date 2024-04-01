@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
   const { data, error } = await client.from('episodes').insert(body)
 
   if (error) {
-    throw createError(error)
+    throw createError(error.message)
   }
 
   return data

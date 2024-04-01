@@ -43,7 +43,10 @@
       :width="800"
       @ok="addEpisodes"
     >
-      <form-drama-episodes ref="episodesForm" />
+      <form-drama-episodes
+        ref="episodesForm"
+        :url="netflix && netflix.watch_link"
+      />
     </a-modal>
   </a-page-header>
 </template>
@@ -62,6 +65,10 @@ const { data: drama, refresh } = await useAsyncData(
       return data
     },
   },
+)
+
+const netflix = computed(() =>
+  drama.value.availability.find((a) => a.streaming_service === 'Netflix'),
 )
 
 const visible = ref(false)

@@ -106,7 +106,7 @@
           </a-input>
         </a-form-item>
       </a-col>
-      <!-- <a-col xs="24" :md="8">
+      <a-col xs="24" :md="8">
         <a-form-item
           ref="douyin"
           name="douyin"
@@ -114,10 +114,10 @@
           label="Douyin"
         >
           <a-input v-model:value="people.douyin">
-            <template #prefix><douyin-outlined /></template>
+            <template #prefix><tik-tok-outlined /></template>
           </a-input>
         </a-form-item>
-      </a-col> -->
+      </a-col>
       <a-col xs="24" :md="8">
         <a-form-item
           ref="instagram"

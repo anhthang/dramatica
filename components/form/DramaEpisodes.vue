@@ -66,10 +66,25 @@
 <script setup>
 const route = useRoute()
 
+const { url } = defineProps({
+  url: {
+    type: String,
+    default: '',
+  },
+})
+
 const params = ref({
   url: '',
   language: 'en',
 })
+
+onMounted(() => {
+  if (url) {
+    params.value.url = url
+  }
+})
+
+watch(params, () => scrapeEpisodes(), { deep: true })
 
 const languages = {
   en: 'English',
@@ -99,6 +114,7 @@ const scrapeEpisodes = () => {
       episodes.value = data
     })
     .catch((error) => {
+      episodes.value = []
       message.error(error.message)
     })
     .finally(() => {

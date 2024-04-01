@@ -17,11 +17,10 @@ export default defineEventHandler(async (event) => {
     source = 'netflix'
   }
 
-  if (!source) {
-    throw createError({
-      message:
-        'This streaming service is not currently supported. Please use another link.',
-    })
+  if (!source || source !== 'netflix') {
+    throw createError(
+      'This streaming service is not currently supported. Please use another link.',
+    )
   }
 
   return scrapers[source].episodes(drama_id, url, language)

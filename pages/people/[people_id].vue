@@ -14,10 +14,22 @@
             {{ people.name }}
           </a-typography-title>
 
-          <a-flex gap="middle">
-            <weibo-outlined style="font-size: large" />
-            <!-- <douyin-outlined style="font-size: large" /> -->
-            <instagram-outlined style="font-size: large" />
+          <a-flex>
+            <nuxt-link :to="people.weibo" target="_blank">
+              <a-button type="text" size="large" :disabled="!people.weibo">
+                <weibo-outlined />
+              </a-button>
+            </nuxt-link>
+            <nuxt-link :to="people.douyin" target="_blank">
+              <a-button type="text" size="large" :disabled="!people.douyin">
+                <tik-tok-outlined />
+              </a-button>
+            </nuxt-link>
+            <nuxt-link :to="people.instagram" target="_blank">
+              <a-button type="text" size="large" :disabled="!people.instagram">
+                <instagram-outlined />
+              </a-button>
+            </nuxt-link>
           </a-flex>
         </a-flex>
         <a-divider />
@@ -62,7 +74,7 @@
 
         <a-card title="Drama">
           <template #extra>
-            <a-button @click="toggle('add_drama')">
+            <a-button type="link" @click="toggle('add_drama')">
               <video-camera-add-outlined /> Add
             </a-button>
           </template>

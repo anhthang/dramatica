@@ -57,7 +57,7 @@
                 type="primary"
                 size="large"
                 block
-                :class="drama.airing_platform.toLowerCase()"
+                :class="drama.airing_platform?.toLowerCase()"
               >
                 <play-circle-outlined /> Watch
               </a-button>
