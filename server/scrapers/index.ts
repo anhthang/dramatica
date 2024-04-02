@@ -1,6 +1,6 @@
-import * as iqiyi from './iqiyi'
-import * as netflix from './netflix'
-import * as wetv from './wetv'
-import * as youku from './youku'
+import * as iQIYI from './iqiyi'
+import * as Netflix from './netflix'
+import * as WeTV from './wetv'
+import * as Youku from './youku'
 
-export default { iqiyi, netflix, wetv, youku }
+export default { iQIYI, Netflix, WeTV, Youku }

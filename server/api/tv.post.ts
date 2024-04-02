@@ -2,9 +2,13 @@ import { serverSupabaseClient } from '#supabase/server'
 
 export default defineEventHandler(async (event) => {
   const client = await serverSupabaseClient(event)
-  const { date, ...rest } = await readBody(event)
+  const { dates, ...rest } = await readBody(event)
 
-  const { data } = await client.from('dramas').insert(rest)
+  const { data, error } = await client.from('dramas').insert(rest)
+
+  if (error) {
+    throw createError(error.message)
+  }
 
   return data
 })

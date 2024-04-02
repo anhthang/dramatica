@@ -250,7 +250,7 @@ const dayOfWeek = [
   'Sunday',
 ]
 
-const status = ['Airing', 'Ended', 'Hiatus']
+const status = ['Upcoming', 'Airing', 'Ended', 'Hiatus']
 
 const formRef = ref()
 const formRules = ref({

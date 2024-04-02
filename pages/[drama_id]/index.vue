@@ -60,7 +60,7 @@
                 type="primary"
                 size="large"
                 block
-                :class="drama.airing_platform?.toLowerCase()"
+                :class="getStreamingService(drama.watch_link).toLowerCase()"
               >
                 <play-circle-outlined /> Watch
               </a-button>
@@ -220,7 +220,7 @@ const { data: drama } = await useAsyncData(
 
       if (data.availability.length) {
         data.availability.unshift({
-          streaming_service: data.airing_platform,
+          streaming_service: getStreamingService(data.watch_link),
           watch_link: data.watch_link,
         })
       }
