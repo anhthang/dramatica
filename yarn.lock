@@ -764,9 +764,9 @@ __metadata:
   linkType: hard
 
 "@humanwhocodes/object-schema@npm:^2.0.2":
-  version: 2.0.2
-  resolution: "@humanwhocodes/object-schema@npm:2.0.2"
-  checksum: 10c0/6fd83dc320231d71c4541d0244051df61f301817e9f9da9fd4cb7e44ec8aacbde5958c1665b0c419401ab935114fdf532a6ad5d4e7294b1af2f347dd91a6983f
+  version: 2.0.3
+  resolution: "@humanwhocodes/object-schema@npm:2.0.3"
+  checksum: 10c0/80520eabbfc2d32fe195a93557cef50dfe8c8905de447f022675aaf66abc33ae54098f5ea78548d925aa671cd4ab7c7daa5ad704fe42358c9b5e7db60f80696c
   languageName: node
   linkType: hard
 
@@ -932,15 +932,15 @@ __metadata:
   linkType: hard
 
 "@npmcli/agent@npm:^2.0.0":
-  version: 2.2.1
-  resolution: "@npmcli/agent@npm:2.2.1"
+  version: 2.2.2
+  resolution: "@npmcli/agent@npm:2.2.2"
   dependencies:
     agent-base: "npm:^7.1.0"
     http-proxy-agent: "npm:^7.0.0"
     https-proxy-agent: "npm:^7.0.1"
     lru-cache: "npm:^10.0.1"
-    socks-proxy-agent: "npm:^8.0.1"
-  checksum: 10c0/38ee5cbe8f3cde13be916e717bfc54fd1a7605c07af056369ff894e244c221e0b56b08ca5213457477f9bc15bca9e729d51a4788829b5c3cf296b3c996147f76
+    socks-proxy-agent: "npm:^8.0.3"
+  checksum: 10c0/325e0db7b287d4154ecd164c0815c08007abfb07653cc57bceded17bb7fd240998a3cbdbe87d700e30bef494885eccc725ab73b668020811d56623d145b524ae
   languageName: node
   linkType: hard
 
@@ -2124,56 +2124,56 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@unhead/dom@npm:1.9.3, @unhead/dom@npm:^1.8.20":
-  version: 1.9.3
-  resolution: "@unhead/dom@npm:1.9.3"
+"@unhead/dom@npm:1.9.4, @unhead/dom@npm:^1.8.20":
+  version: 1.9.4
+  resolution: "@unhead/dom@npm:1.9.4"
   dependencies:
-    "@unhead/schema": "npm:1.9.3"
-    "@unhead/shared": "npm:1.9.3"
-  checksum: 10c0/2bdb3a463fa76eab62aecadae5a5b4aee5579aabe1bc167df39d99d7c118fed31c11b739731d39242f0ddfa66d1249fbbec1a56645d2cd7bac2775fdb339cf31
+    "@unhead/schema": "npm:1.9.4"
+    "@unhead/shared": "npm:1.9.4"
+  checksum: 10c0/0c46a71ddf7a053f89d7cce3225d2bcf5ccb8788cab0289a58b80459d048c9c55f4ac84711ebbc9c2e591b013fcb85cce0f46775d82406d046d075f429e06830
   languageName: node
   linkType: hard
 
-"@unhead/schema@npm:1.9.3":
-  version: 1.9.3
-  resolution: "@unhead/schema@npm:1.9.3"
+"@unhead/schema@npm:1.9.4":
+  version: 1.9.4
+  resolution: "@unhead/schema@npm:1.9.4"
   dependencies:
     hookable: "npm:^5.5.3"
     zhead: "npm:^2.2.4"
-  checksum: 10c0/c3e3dfafbc2ddb0f2b323f370fcfb396dd337c6b0bb44f9ccc437d06f83fc2a05f49cb30575701666ea5d6db09188187cebcc304d0710b1a791d69361e737f90
+  checksum: 10c0/e72395829a38374ad1a43bc07baedc06582da6cbf30c77bd4fc01fbeb83d313db7de1a0e2fe8db6cc978692c4705f0047491fc955327812e04897709ca487386
   languageName: node
   linkType: hard
 
-"@unhead/shared@npm:1.9.3":
-  version: 1.9.3
-  resolution: "@unhead/shared@npm:1.9.3"
+"@unhead/shared@npm:1.9.4":
+  version: 1.9.4
+  resolution: "@unhead/shared@npm:1.9.4"
   dependencies:
-    "@unhead/schema": "npm:1.9.3"
-  checksum: 10c0/fa24782405e1b32a6de7d8e3c2ffedac28a5d0cad1ea1888248e05993bda4870a8962ec80ae4b5e66781ffe5deb7b5a29eb6d9a91cea53ae8255bb4aca6ca01a
+    "@unhead/schema": "npm:1.9.4"
+  checksum: 10c0/fbede29e730da1fa38163847d6e65209ada14ea9dc200d709331539b01c1f7a8966dde9b9e23b2a34ad2750df899307f95c11bcf95082f96b32633bde4a53e71
   languageName: node
   linkType: hard
 
 "@unhead/ssr@npm:^1.8.20":
-  version: 1.9.3
-  resolution: "@unhead/ssr@npm:1.9.3"
+  version: 1.9.4
+  resolution: "@unhead/ssr@npm:1.9.4"
   dependencies:
-    "@unhead/schema": "npm:1.9.3"
-    "@unhead/shared": "npm:1.9.3"
-  checksum: 10c0/27022dbea25b9ceaae89c1c214de923cdd2036e4cf137f37fa901a61deffaca13707773a74fd710597398b66c5ea33080fe7b136d3132c414ce2214816979a7b
+    "@unhead/schema": "npm:1.9.4"
+    "@unhead/shared": "npm:1.9.4"
+  checksum: 10c0/a2b53f70aab6d3e8a913b71b3111d85b552bd8d341ede3f650ef68bdf222a92de4abcf6f666c5aea4b3df4891aa95798dfe565d9e91e1c65f72bfb663573fca9
   languageName: node
   linkType: hard
 
 "@unhead/vue@npm:^1.8.20":
-  version: 1.9.3
-  resolution: "@unhead/vue@npm:1.9.3"
+  version: 1.9.4
+  resolution: "@unhead/vue@npm:1.9.4"
   dependencies:
-    "@unhead/schema": "npm:1.9.3"
-    "@unhead/shared": "npm:1.9.3"
+    "@unhead/schema": "npm:1.9.4"
+    "@unhead/shared": "npm:1.9.4"
     hookable: "npm:^5.5.3"
-    unhead: "npm:1.9.3"
+    unhead: "npm:1.9.4"
   peerDependencies:
     vue: ">=2.7 || >=3"
-  checksum: 10c0/03bf38708792c7fc0fac9f3a2a4260a58a7c172cd7052319f616b56f58b167c41eeb779c68ed9fa0ccf6b637a5bd900c8c8810dfd0cfeeaac0f6ef058c63202b
+  checksum: 10c0/59d629b19bfdf56ea59bd8d5e833926f93aea5974be1d9f8147f065d9776dbb2e9d8b3e5d7f7c759fb12eaae37016f9a63fddcc57dc0f3bbfd3818218d9ec99c
   languageName: node
   linkType: hard
 
@@ -3957,9 +3957,9 @@ __metadata:
   linkType: hard
 
 "electron-to-chromium@npm:^1.4.668":
-  version: 1.4.722
-  resolution: "electron-to-chromium@npm:1.4.722"
-  checksum: 10c0/6f1ebe00b6d8a4d122ee364dbf6c03772b9e141eac8a9456ee28a49e5b168ee64c0bb2608b90284a158f46caf912335360c5adbfd0e77271aff4e73279f34b84
+  version: 1.4.723
+  resolution: "electron-to-chromium@npm:1.4.723"
+  checksum: 10c0/336131ee6433df3f7f453aca872ef218ac8aed3bd1a4e3426ba940683157ece6ab5bf059c92d42d223f9a46b5137904167aa1c4525511fcfdb3b3df24b80575a
   languageName: node
   linkType: hard
 
@@ -7906,7 +7906,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"socks-proxy-agent@npm:^8.0.1":
+"socks-proxy-agent@npm:^8.0.3":
   version: 8.0.3
   resolution: "socks-proxy-agent@npm:8.0.3"
   dependencies:
@@ -8279,8 +8279,8 @@ __metadata:
   linkType: hard
 
 "terser@npm:^5.17.4":
-  version: 5.30.0
-  resolution: "terser@npm:5.30.0"
+  version: 5.30.1
+  resolution: "terser@npm:5.30.1"
   dependencies:
     "@jridgewell/source-map": "npm:^0.3.3"
     acorn: "npm:^8.8.2"
@@ -8288,7 +8288,7 @@ __metadata:
     source-map-support: "npm:~0.5.20"
   bin:
     terser: bin/terser
-  checksum: 10c0/f648e4ad775a04ea89c6f935762a78ad41adf6d65b69f793dfa8d995b12accefd261ccc06965d15ae2b62b8b6bc52029adf90d2193c5e850a230ff89ea9a7518
+  checksum: 10c0/0c4d5c1097251604fe85231f2766eb6eba5d6172b7a15175c51cdbc9df7fa5a501acf037248d667961152a1b1aeffa80980b0930b408c8bdc749e5aec8b13c61
   languageName: node
   linkType: hard
 
@@ -8489,15 +8489,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"unhead@npm:1.9.3":
-  version: 1.9.3
-  resolution: "unhead@npm:1.9.3"
+"unhead@npm:1.9.4":
+  version: 1.9.4
+  resolution: "unhead@npm:1.9.4"
   dependencies:
-    "@unhead/dom": "npm:1.9.3"
-    "@unhead/schema": "npm:1.9.3"
-    "@unhead/shared": "npm:1.9.3"
+    "@unhead/dom": "npm:1.9.4"
+    "@unhead/schema": "npm:1.9.4"
+    "@unhead/shared": "npm:1.9.4"
     hookable: "npm:^5.5.3"
-  checksum: 10c0/23dda2cd6acaf78b97d1c5c5227c547c9272cdd722530a052afdead07605e23549484628e0376b8b2193621d62064bf16ca388ffbfb9efe3e976ebe39ef47e94
+  checksum: 10c0/624cdf6f8c4f17aa80d1b6c0789e6559bddfb41b50e97283ffe5ef82216963574d2cfdd44d250d93d2f68d2acba49fc4428ed3d12b88b4e25101d5a4dde16573
   languageName: node
   linkType: hard
 

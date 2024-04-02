@@ -72,6 +72,45 @@
       </a-col>
       <a-col :xl="8">
         <a-form-item
+          ref="trailer_url"
+          name="trailer_url"
+          label="Trailer"
+          v-bind="validateInfos.trailer_url"
+        >
+          <a-input v-model:value="tv.trailer_url">
+            <template #prefix><video-camera-outlined /></template>
+          </a-input>
+        </a-form-item>
+      </a-col>
+      <a-col :xl="8">
+        <a-form-item
+          ref="watch_link"
+          name="watch_link"
+          label="Watch Link"
+          v-bind="validateInfos.watch_link"
+        >
+          <a-input v-model:value="tv.watch_link">
+            <template #prefix><link-outlined /></template>
+          </a-input>
+        </a-form-item>
+      </a-col>
+    </a-row>
+
+    <a-row :gutter="[16, 16]" type="flex">
+      <a-col :xl="8">
+        <a-form-item
+          ref="airing_platform"
+          name="airing_platform"
+          label="Airing Platform"
+          v-bind="validateInfos.airing_platform"
+        >
+          <a-input v-model:value="tv.airing_platform">
+            <template #prefix><font-size-outlined /></template>
+          </a-input>
+        </a-form-item>
+      </a-col>
+      <a-col :xl="8">
+        <a-form-item
           ref="release_year"
           name="release_year"
           label="Release Year"
@@ -97,21 +136,6 @@
           </a-input-number>
         </a-form-item>
       </a-col>
-    </a-row>
-
-    <a-row :gutter="[16, 16]" type="flex">
-      <a-col :xl="8">
-        <a-form-item
-          ref="airing_platform"
-          name="airing_platform"
-          label="Airing Platform"
-          v-bind="validateInfos.airing_platform"
-        >
-          <a-input v-model:value="tv.airing_platform">
-            <template #prefix><font-size-outlined /></template>
-          </a-input>
-        </a-form-item>
-      </a-col>
       <a-col :xl="8">
         <a-form-item
           ref="airing_status"
@@ -133,7 +157,7 @@
           v-bind="validateInfos.air_date"
         >
           <a-date-picker
-            v-model:value="tv.date"
+            v-model:value="tv.dates[0]"
             style="width: 100%"
             @change="onChangeDates"
           />
@@ -141,26 +165,16 @@
       </a-col>
       <a-col :xl="8">
         <a-form-item
-          ref="watch_link"
-          name="watch_link"
-          label="Watch Link"
-          v-bind="validateInfos.watch_link"
+          ref="end_date"
+          name="end_date"
+          label="End Date"
+          v-bind="validateInfos.end_date"
         >
-          <a-input v-model:value="tv.watch_link">
-            <template #prefix><link-outlined /></template>
-          </a-input>
-        </a-form-item>
-      </a-col>
-      <a-col :xl="8">
-        <a-form-item
-          ref="trailer_url"
-          name="trailer_url"
-          label="Trailer"
-          v-bind="validateInfos.trailer_url"
-        >
-          <a-input v-model:value="tv.trailer_url">
-            <template #prefix><video-camera-outlined /></template>
-          </a-input>
+          <a-date-picker
+            v-model:value="tv.dates[1]"
+            style="width: 100%"
+            @change="onChangeDates"
+          />
         </a-form-item>
       </a-col>
     </a-row>
@@ -213,13 +227,16 @@ const { isEdit, metadata } = defineProps({
 
 const tv = ref({
   title: '',
-  date: '',
+  dates: [],
 })
 
 onBeforeMount(() => {
   Object.assign(tv.value, metadata)
   if (metadata.air_date) {
-    tv.value.date = dayjs(metadata.air_date, 'YYYY-MM-DD')
+    tv.value.dates[0] = dayjs(metadata.air_date, 'YYYY-MM-DD')
+  }
+  if (metadata.end_date) {
+    tv.value.dates[1] = dayjs(metadata.end_date, 'YYYY-MM-DD')
   }
 })
 
@@ -281,11 +298,15 @@ const formRules = ref({
     },
   ],
   air_date: [{ type: 'date', trigger: ['change', 'blur'] }],
+  end_date: [{ type: 'date', trigger: ['change', 'blur'] }],
 })
 
 const onChangeDates = () => {
-  if (tv.value.date.isValid()) {
-    tv.value.air_date = tv.value.date.format('YYYY-MM-DD')
+  if (tv.value.dates[0] && tv.value.dates[0].isValid()) {
+    tv.value.air_date = tv.value.dates[0].format('YYYY-MM-DD')
+  }
+  if (tv.value.dates[1] && tv.value.dates[1].isValid()) {
+    tv.value.end_date = tv.value.dates[1].format('YYYY-MM-DD')
   }
 }
 

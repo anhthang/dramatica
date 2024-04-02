@@ -45,13 +45,7 @@
             {{ people.gender }}
           </a-descriptions-item>
           <a-descriptions-item label="Birthday">
-            {{
-              new Date(people.dob).toLocaleDateString('en', {
-                month: 'long',
-                day: 'numeric',
-                year: 'numeric',
-              })
-            }}
+            {{ toLocaleDate(people.dob) }}
           </a-descriptions-item>
           <!-- <a-descriptions-item label="Age">
               {{

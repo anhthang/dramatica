@@ -31,6 +31,9 @@
           <a-descriptions-item label="Genres">
             {{ drama.genres.map(({ genre }) => genre.name).join(', ') }}
           </a-descriptions-item>
+          <a-descriptions-item v-if="drama.air_date" label="Aired">
+            {{ airDate(drama) }}
+          </a-descriptions-item>
         </a-descriptions>
 
         <a-descriptions layout="vertical" size="small">
@@ -140,6 +143,32 @@
           sub-title="We're actively gathering this information and will update it soon."
         />
       </a-tab-pane>
+
+      <a-tab-pane v-if="drama.availability.length" key="where_to_watch">
+        <template #tab><desktop-outlined /> Where to Watch</template>
+        <a-flex class="where_to_watch" justify="space-evenly" align="center">
+          <nuxt-link
+            v-for="service in drama.availability"
+            :key="service"
+            :to="service.watch_link"
+          >
+            <a-image
+              v-if="themeSpecificServices.includes(service.streaming_service)"
+              :preview="false"
+              :width="200"
+              :src="`/logo/${service.streaming_service.toLowerCase()}-${$colorMode.value}.png`"
+              :alt="service.streaming_service"
+            />
+            <a-image
+              v-else
+              :preview="false"
+              :width="200"
+              :src="`/logo/${service.streaming_service.toLowerCase()}.png`"
+              :alt="service.streaming_service"
+            />
+          </nuxt-link>
+        </a-flex>
+      </a-tab-pane>
     </a-tabs>
 
     <a-modal
@@ -172,6 +201,8 @@
 import copy from 'ant-design-vue/lib/_util/copy-to-clipboard'
 import sortBy from 'lodash.sortby'
 
+const themeSpecificServices = ['WeTV', 'Youku']
+
 const page = ref(1)
 const size = 12
 
@@ -186,6 +217,13 @@ const { data: drama } = await useAsyncData(
      */
     transform: (data) => {
       data.episodes = data.episodes.filter((e) => e.language === 'en')
+
+      if (data.availability.length) {
+        data.availability.unshift({
+          streaming_service: data.airing_platform,
+          watch_link: data.watch_link,
+        })
+      }
       return data
     },
   },
@@ -194,6 +232,12 @@ const { data: drama } = await useAsyncData(
 const episodes = computed(() => {
   return drama.value.episodes.slice((page.value - 1) * size, page.value * size)
 })
+
+const airDate = ({ air_date, end_date }) => {
+  return end_date
+    ? `${toLocaleDate(air_date)} - ${toLocaleDate(end_date)}`
+    : toLocaleDate(air_date)
+}
 
 const copyUrl = () => {
   copy(config.public.baseUrl + route.fullPath)
@@ -261,6 +305,7 @@ const onUpdateTranslation = async () => {
 }
 
 .youku {
-  background-color: #2584ff;
+  background-color: #2c78ff;
+  /* background-color: #ff6400; */
 }
 </style>

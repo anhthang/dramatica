@@ -20,6 +20,7 @@ export default defineEventHandler(async (event) => {
     'cover_url',
     'watch_link',
     'air_date',
+    'end_date',
     'airing_status',
   ])
 
