@@ -7,8 +7,11 @@
     @back="() => $router.go(-1)"
   >
     <template #extra>
-      <a-button type="primary" @click="toggleAddCast">
+      <a-button type="primary" @click="toggle('cast')">
         <user-add-outlined /> Add Cast
+      </a-button>
+      <a-button type="primary" @click="toggle('crew')">
+        <user-add-outlined /> Add Crew
       </a-button>
     </template>
 
@@ -16,33 +19,69 @@
       <a-tag>{{ drama.release_year }}</a-tag>
     </template>
 
-    <div
-      v-for="role in roles"
-      v-show="castByRole[role]"
-      :key="role"
-      style="margin-bottom: 16px"
-    >
-      <a-divider orientation="left">
-        <a-typography-title :level="5">{{ role }}</a-typography-title>
-      </a-divider>
+    <a-row :gutter="[16, 16]" type="flex">
+      <a-col :sm="19">
+        <div v-for="role in roles.cast" v-show="drama.people[role]" :key="role">
+          <a-divider orientation="left">
+            <a-typography-title :level="5">{{ role }}</a-typography-title>
+          </a-divider>
 
-      <a-row :gutter="[16, 16]" type="flex">
-        <a-col v-for="cast in castByRole[role]" :key="cast.id" :xs="12" :sm="4">
-          <card-people :people="cast" />
-        </a-col>
-      </a-row>
-    </div>
+          <a-row :gutter="[16, 16]" type="flex">
+            <a-col
+              v-for="people in drama.people[role]"
+              :key="people.id"
+              :xs="12"
+              :sm="6"
+            >
+              <card-people :people="people" />
+            </a-col>
+          </a-row>
+        </div>
+      </a-col>
+      <a-col :sm="5">
+        <div v-for="role in roles.crew" v-show="drama.people[role]" :key="role">
+          <a-divider orientation="left">
+            <a-typography-title :level="5">{{ role }}</a-typography-title>
+          </a-divider>
+
+          <a-row :gutter="[16, 16]" type="flex">
+            <a-col
+              v-for="people in drama.people[role]"
+              :key="people.id"
+              :xs="24"
+            >
+              <card-people :people="people" />
+            </a-col>
+          </a-row>
+        </div>
+      </a-col>
+    </a-row>
 
     <a-modal
-      v-model:open="visible"
+      v-model:open="visible.cast"
       title="Add Cast"
       destroy-on-close
-      @ok="addCast"
+      :confirm-loading="visible.loading"
+      @ok="addDramaMember('cast')"
     >
-      <form-drama-cast
-        ref="dramaCastForm"
+      <form-drama-people
+        ref="peopleForm"
         type="cast"
         :existing="drama.cast.map((a) => a.people_id)"
+      />
+    </a-modal>
+
+    <a-modal
+      v-model:open="visible.crew"
+      title="Add Crew"
+      destroy-on-close
+      :confirm-loading="visible.loading"
+      @ok="addDramaMember('crew')"
+    >
+      <form-drama-people
+        ref="peopleForm"
+        type="crew"
+        :existing="drama.crew.map((a) => a.people_id)"
       />
     </a-modal>
   </a-page-header>
@@ -53,26 +92,35 @@ import groupBy from 'lodash.groupby'
 
 const route = useRoute()
 
-const roles = ['Main', 'Supporting', 'Special Guest']
+const { data: drama, refresh } = await useAsyncData(
+  () => $fetch(`/api/${route.params.drama_id}`),
+  {
+    transform: (data) => {
+      data.people = groupBy(data.cast.concat(data.crew), 'role')
 
-const { data: drama, refresh } = await useAsyncData(() =>
-  $fetch(`/api/${route.params.drama_id}`),
+      return data
+    },
+  },
 )
 
-const castByRole = computed(() => {
-  return drama.value && groupBy(drama.value.cast, 'role')
+const visible = ref({
+  cast: false,
+  crew: false,
+  loading: false,
 })
 
-const visible = ref(false)
-const toggleAddCast = () => {
-  visible.value = !visible.value
+const toggle = (key) => {
+  visible.value[key] = !visible.value[key]
 }
 
-const dramaCastForm = ref()
-const addCast = async () => {
-  await dramaCastForm.value.onSubmit()
+const peopleForm = ref()
+const addDramaMember = async (key) => {
+  toggle('loading')
 
-  toggleAddCast()
+  await peopleForm.value.onSubmit()
+
+  toggle('loading')
+  toggle(key)
   refresh()
 }
 

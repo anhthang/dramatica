@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
       `*,
       availability:drama_availability(*),
       cast:drama_cast(*, people(name, name_vi, profile_url)),
-      crew:drama_crew(*),
+      crew:drama_crew(*, people(name, name_vi, profile_url)),
       episodes(*),
       genres:drama_genres(genre:genres(name)),
       translations:drama_translations(*)

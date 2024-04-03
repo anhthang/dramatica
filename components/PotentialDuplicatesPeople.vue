@@ -50,7 +50,7 @@ const { props } = defineProps({
 
 const { data, pending } = await useAsyncData(
   () =>
-    $fetch('/api/cast', {
+    $fetch('/api/people', {
       params: {
         query: props.name,
       },

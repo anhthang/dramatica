@@ -1,4 +1,18 @@
-const serviceMap = {
+export const roles = {
+  cast: ['Main', 'Supporting', 'Special Guest'],
+  crew: [
+    'Director',
+    'Writer',
+    'Screenwriter',
+    'Producer',
+    'Cinematographer',
+    'Original Author',
+    'Art Director',
+    'Makeup Artist',
+  ],
+}
+
+const serviceMap: { [x: string]: string } = {
   'wetv.vip': 'WeTV',
   'www.iq.com': 'iQIYI',
   'www.netflix.com': 'Netflix',

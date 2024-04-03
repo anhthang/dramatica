@@ -91,7 +91,7 @@
               <nuxt-link :to="`/${drama.drama_id}`">
                 <a-card-meta
                   :title="drama.drama.title"
-                  :description="drama.character_name"
+                  :description="drama.character_name || drama.role"
                 />
               </nuxt-link>
             </a-timeline-item>
@@ -118,8 +118,8 @@
       :confirm-loading="visible.loading"
       @ok="onAddDrama"
     >
-      <form-drama-cast
-        ref="dramaCastForm"
+      <form-drama-people
+        ref="dramaPeopleForm"
         type="drama"
         :existing="people.dramas.map((d) => d.id)"
       />
@@ -178,11 +178,11 @@ const onEditPeople = async () => {
   refresh()
 }
 
-const dramaCastForm = ref()
+const dramaPeopleForm = ref()
 const onAddDrama = async () => {
   toggle('loading')
 
-  await dramaCastForm.value.onSubmit()
+  await dramaPeopleForm.value.onSubmit()
 
   toggle('loading')
   toggle('add_drama')
