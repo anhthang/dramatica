@@ -73,7 +73,7 @@
             </a-button>
           </template>
           <a-timeline
-            v-for="year of Object.keys(dramaByYear).reverse()"
+            v-for="year of Object.keys(people.dramas).reverse()"
             :key="year"
           >
             <a-timeline-item>
@@ -84,7 +84,7 @@
             </a-timeline-item>
 
             <a-timeline-item
-              v-for="drama in dramaByYear[year]"
+              v-for="drama in people.dramas[year]"
               :key="drama.id"
               :color="airingColor[drama.drama.airing_status] || 'gray'"
             >
@@ -138,12 +138,15 @@ const airingColor = {
 
 const route = useRoute()
 
-const { data: people, refresh } = await useAsyncData(() =>
-  $fetch(`/api/people/${route.params.people_id}`),
-)
+const { data: people, refresh } = await useAsyncData(
+  () => $fetch(`/api/people/${route.params.people_id}`),
+  {
+    transform: (data) => {
+      data.dramas = groupBy(data.dramas, 'drama.release_year')
 
-const dramaByYear = computed(() =>
-  groupBy(people.value.dramas, 'drama.release_year'),
+      return data
+    },
+  },
 )
 
 useSeoMeta({

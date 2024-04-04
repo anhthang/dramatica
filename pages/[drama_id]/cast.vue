@@ -7,12 +7,15 @@
     @back="() => $router.go(-1)"
   >
     <template #extra>
-      <a-button type="primary" @click="toggle('cast')">
-        <user-add-outlined /> Add Cast
-      </a-button>
-      <a-button type="primary" @click="toggle('crew')">
-        <user-add-outlined /> Add Crew
-      </a-button>
+      <a-dropdown>
+        <a-button type="primary"><user-add-outlined /> Add</a-button>
+        <template #overlay>
+          <a-menu @click="(e) => toggle(e.key)">
+            <a-menu-item key="cast"> Add Cast </a-menu-item>
+            <a-menu-item key="crew"> Add Crew </a-menu-item>
+          </a-menu>
+        </template>
+      </a-dropdown>
     </template>
 
     <template #tags>
@@ -89,6 +92,7 @@
 
 <script setup>
 import groupBy from 'lodash.groupby'
+import sortBy from 'lodash.sortby'
 
 const route = useRoute()
 
@@ -96,7 +100,11 @@ const { data: drama, refresh } = await useAsyncData(
   () => $fetch(`/api/${route.params.drama_id}`),
   {
     transform: (data) => {
-      data.people = groupBy(data.cast.concat(data.crew), 'role')
+      const people = data.cast.concat(data.crew)
+      data.people = groupBy(
+        sortBy(people, ['billing_order', 'people.name']),
+        'role',
+      )
 
       return data
     },

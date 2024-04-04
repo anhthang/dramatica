@@ -210,7 +210,9 @@
 
 <script setup>
 import dayjs from 'dayjs'
-import { Form } from 'ant-design-vue'
+import { Button, Form } from 'ant-design-vue'
+
+const router = useRouter()
 
 const { isEdit, metadata } = defineProps({
   isEdit: {
@@ -322,11 +324,23 @@ const onSubmit = async () => {
         method: 'post',
         body: tv.value,
       })
-        .then(() => {
+        .then((data) => {
           if (isEdit) {
             message.success(`[${tv.value.title}] updated successfully!`)
           } else {
-            message.success(`[${tv.value.title}] added successfully!`)
+            notification.success({
+              message: tv.value.title,
+              description: 'TV/Drama added successfully!',
+              btn: () =>
+                h(
+                  Button,
+                  {
+                    type: 'primary',
+                    onClick: () => router.push(`/${data.id}`),
+                  },
+                  { default: () => 'Manage TV/Drama' },
+                ),
+            })
           }
 
           resetFields()

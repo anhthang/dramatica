@@ -56,7 +56,7 @@
       v-bind="validateInfos.synopsis"
       label="Synopsis"
     >
-      <a-textarea v-model:value="translation.synopsis" />
+      <a-textarea v-model:value="translation.synopsis" auto-size />
       <template #extra>
         When copying a synopsis from another source, please include a citation
         at the field below.

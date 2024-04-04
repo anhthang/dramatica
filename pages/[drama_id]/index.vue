@@ -146,11 +146,12 @@
 
       <a-tab-pane v-if="drama.availability.length" key="where_to_watch">
         <template #tab><desktop-outlined /> Where to Watch</template>
-        <a-flex class="where_to_watch" justify="space-evenly" align="center">
+        <a-flex class="where-to-watch" justify="space-evenly" align="center">
           <nuxt-link
             v-for="service in drama.availability"
             :key="service"
             :to="service.watch_link"
+            target="_blank"
           >
             <a-image
               v-if="themeSpecificServices.includes(service.streaming_service)"
@@ -307,5 +308,23 @@ const onUpdateTranslation = async () => {
 .youku {
   background-color: #2c78ff;
   /* background-color: #ff6400; */
+}
+
+.where-to-watch {
+  .ant-image img {
+    padding: 16px;
+    transition:
+      box-shadow 0.2s,
+      border-color 0.2s;
+  }
+
+  .ant-image img:hover {
+    border-radius: 8px;
+    border-color: transparent;
+    box-shadow:
+      0 1px 2px -2px rgba(0, 0, 0, 0.16),
+      0 3px 6px 0 rgba(0, 0, 0, 0.12),
+      0 5px 12px 4px rgba(0, 0, 0, 0.09);
+  }
 }
 </style>

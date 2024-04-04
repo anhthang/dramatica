@@ -78,6 +78,17 @@
     </a-row>
 
     <a-form-item
+      ref="profile_url"
+      name="profile_url"
+      v-bind="validateInfos.profile_url"
+      label="Profile Picture"
+    >
+      <a-input v-model:value="people.profile_url">
+        <template #prefix><user-outlined /></template>
+      </a-input>
+    </a-form-item>
+
+    <a-form-item
       ref="biography"
       name="biography"
       v-bind="validateInfos.biography"
@@ -135,8 +146,10 @@
 </template>
 
 <script setup>
-import { Form } from 'ant-design-vue'
+import { Button, Form } from 'ant-design-vue'
 import dayjs from 'dayjs'
+
+const router = useRouter()
 
 const { isEdit, metadata } = defineProps({
   isEdit: {
@@ -180,6 +193,7 @@ const formRules = ref({
   ],
   name_vi: [{ type: 'string', trigger: ['change', 'blur'] }],
   dob: [{ type: 'date', trigger: ['change', 'blur'] }],
+  profile_url: [{ type: 'url', trigger: ['change', 'blur'] }],
   biography: [{ type: 'string', trigger: ['change', 'blur'] }],
   weibo: [{ type: 'url', trigger: ['change', 'blur'] }],
   douyin: [{ type: 'url', trigger: ['change', 'blur'] }],
@@ -207,11 +221,24 @@ const onSubmit = async () => {
         method: 'post',
         body: people.value,
       })
-        .then(() => {
+        .then((data) => {
           if (isEdit) {
             message.success(`[${people.value.name}] updated successfully!`)
           } else {
-            message.success(`[${people.value.name}] added successfully!`)
+            notification.success({
+              message: people.value.name,
+              description: 'People added successfully!',
+              btn: () =>
+                h(
+                  Button,
+                  {
+                    type: 'primary',
+                    // size: 'small',
+                    onClick: () => router.push(`/people/${data.id}`),
+                  },
+                  { default: () => 'Manage People' },
+                ),
+            })
           }
 
           resetFields()
