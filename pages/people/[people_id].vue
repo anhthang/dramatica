@@ -121,7 +121,7 @@
       <form-drama-people
         ref="dramaPeopleForm"
         type="drama"
-        :existing="people.dramas.map((d) => d.id)"
+        :existing="people.existing_drama_ids"
       />
     </a-modal>
   </a-page-header>
@@ -142,6 +142,7 @@ const { data: people, refresh } = await useAsyncData(
   () => $fetch(`/api/people/${route.params.people_id}`),
   {
     transform: (data) => {
+      data.existing_drama_ids = data.dramas.map((d) => d.id)
       data.dramas = groupBy(data.dramas, 'drama.release_year')
 
       return data

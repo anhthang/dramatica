@@ -74,15 +74,9 @@
     </a-row>
 
     <a-tabs v-model:activeKey="activeKey" size="large">
-      <template v-if="activeKey === 'cast'" #rightExtra>
-        <nuxt-link :to="`/${drama.id}/cast`">
-          <a-button type="link">All Cast & Crew</a-button>
-        </nuxt-link>
-      </template>
-
-      <template v-else-if="activeKey === 'episodes'" #rightExtra>
-        <nuxt-link :to="`/${drama.id}/episodes`">
-          <a-button type="link">All Episodes</a-button>
+      <template #rightExtra>
+        <nuxt-link :to="`/${drama.id}/${activeKey}`">
+          <a-button type="link">{{ rightExtras[activeKey] }}</a-button>
         </nuxt-link>
       </template>
 
@@ -144,31 +138,36 @@
         />
       </a-tab-pane>
 
-      <a-tab-pane v-if="drama.availability.length" key="where_to_watch">
+      <a-tab-pane key="streaming">
         <template #tab><desktop-outlined /> Where to Watch</template>
-        <a-flex class="where-to-watch" justify="space-evenly" align="center">
-          <nuxt-link
-            v-for="service in drama.availability"
-            :key="service"
-            :to="service.watch_link"
-            target="_blank"
-          >
-            <a-image
-              v-if="themeSpecificServices.includes(service.streaming_service)"
-              :preview="false"
-              :width="200"
-              :src="`/logo/${service.streaming_service.toLowerCase()}-${$colorMode.value}.png`"
-              :alt="service.streaming_service"
-            />
-            <a-image
-              v-else
-              :preview="false"
-              :width="200"
-              :src="`/logo/${service.streaming_service.toLowerCase()}.png`"
-              :alt="service.streaming_service"
-            />
-          </nuxt-link>
-        </a-flex>
+
+        <a-row type="flex" class="where-to-watch">
+          <a-col v-for="service in drama.availability" :key="service" :span="3">
+            <nuxt-link :to="service.watch_link" target="_blank">
+              <a-card hoverable>
+                <template
+                  v-if="
+                    themeSpecificServices.includes(service.streaming_service)
+                  "
+                  #cover
+                >
+                  <img
+                    :width="200"
+                    :src="`/logo/${service.streaming_service.toLowerCase()}-${$colorMode.value}.png`"
+                    :alt="service.streaming_service"
+                  />
+                </template>
+                <template v-else #cover>
+                  <img
+                    :width="200"
+                    :src="`/logo/${service.streaming_service.toLowerCase()}.png`"
+                    :alt="service.streaming_service"
+                  />
+                </template>
+              </a-card>
+            </nuxt-link>
+          </a-col>
+        </a-row>
       </a-tab-pane>
     </a-tabs>
 
@@ -202,8 +201,6 @@
 import copy from 'ant-design-vue/lib/_util/copy-to-clipboard'
 import sortBy from 'lodash.sortby'
 
-const themeSpecificServices = ['WeTV', 'Youku']
-
 const page = ref(1)
 const size = 12
 
@@ -219,16 +216,16 @@ const { data: drama } = await useAsyncData(
     transform: (data) => {
       data.episodes = data.episodes.filter((e) => e.language === 'en')
 
-      if (data.availability.length) {
-        data.availability.unshift({
-          streaming_service: getStreamingService(data.watch_link),
-          watch_link: data.watch_link,
-        })
-      }
       return data
     },
   },
 )
+
+const rightExtras = {
+  cast: 'All Cast & Crew',
+  episodes: 'All Episodes',
+  streaming: 'All Streaming Services',
+}
 
 const episodes = computed(() => {
   return drama.value.episodes.slice((page.value - 1) * size, page.value * size)
@@ -311,20 +308,11 @@ const onUpdateTranslation = async () => {
 }
 
 .where-to-watch {
-  .ant-image img {
-    padding: 16px;
-    transition:
-      box-shadow 0.2s,
-      border-color 0.2s;
-  }
+  justify-content: space-evenly;
+  align-items: center;
 
-  .ant-image img:hover {
-    border-radius: 8px;
-    border-color: transparent;
-    box-shadow:
-      0 1px 2px -2px rgba(0, 0, 0, 0.16),
-      0 3px 6px 0 rgba(0, 0, 0, 0.12),
-      0 5px 12px 4px rgba(0, 0, 0, 0.09);
+  .ant-card-cover img {
+    padding: 16px;
   }
 }
 </style>

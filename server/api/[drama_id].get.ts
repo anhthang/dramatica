@@ -1,4 +1,5 @@
 import { serverSupabaseClient } from '#supabase/server'
+import { getStreamingService } from '~/utils'
 
 export default defineEventHandler(async (event) => {
   const client = await serverSupabaseClient(event)
@@ -19,6 +20,13 @@ export default defineEventHandler(async (event) => {
     )
     .eq('id', drama_id)
     .single()
+
+  if (data && data.watch_link) {
+    data.availability.unshift({
+      streaming_service: getStreamingService(data.watch_link),
+      watch_link: data.watch_link,
+    })
+  }
 
   return data
 })

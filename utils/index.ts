@@ -1,3 +1,5 @@
+export const themeSpecificServices = ['WeTV', 'Youku']
+
 export const roles = {
   cast: ['Main', 'Supporting', 'Special Guest'],
   crew: [
@@ -12,7 +14,7 @@ export const roles = {
   ],
 }
 
-const serviceMap: { [x: string]: string } = {
+export const serviceMap: { [x: string]: string } = {
   'wetv.vip': 'WeTV',
   'www.iq.com': 'iQIYI',
   'www.netflix.com': 'Netflix',
