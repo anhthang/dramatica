@@ -12,8 +12,8 @@
     >
       <a-flex justify="space-between" align="center" style="width: 100%">
         <nuxt-link to="/">
-          <!-- https://www.flaticon.com/free-icon/tv-show_9393911 -->
-          <img src="/tv-show.png" alt="logo" height="40px" />
+          <!-- https://www.freepik.com/icon/television_5481937 -->
+          <img src="/tv.png" alt="logo" height="40px" />
         </nuxt-link>
 
         <layout-right-header />
