@@ -2,9 +2,7 @@
   <a-page-header
     v-if="drama"
     class="container"
-    :title="drama.title"
-    sub-title="Streaming Services"
-    @back="() => $router.go(-1)"
+    :title="`${drama.title} - Streaming Services`"
   >
     <template #tags>
       <a-tag>{{ drama.release_year }}</a-tag>
@@ -66,7 +64,7 @@
 <script setup>
 const route = useRoute()
 
-const { data: drama } = await useAsyncData(() =>
+const { data: drama, refresh } = await useAsyncData(() =>
   $fetch(`/api/${route.params.drama_id}`),
 )
 
@@ -115,5 +113,6 @@ const addStreamingService = async () => {
 
   toggle('loading')
   toggle('open')
+  refresh()
 }
 </script>

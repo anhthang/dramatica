@@ -1,4 +1,5 @@
 import { serverSupabaseClient } from '#supabase/server'
+import sortBy from 'lodash.sortby'
 import { getStreamingService } from '~/utils'
 
 export default defineEventHandler(async (event) => {
@@ -6,7 +7,7 @@ export default defineEventHandler(async (event) => {
 
   const drama_id = getRouterParam(event, 'drama_id')
 
-  const { data } = await client
+  const { data, error } = await client
     .from('dramas')
     .select(
       `*,
@@ -21,11 +22,21 @@ export default defineEventHandler(async (event) => {
     .eq('id', drama_id)
     .single()
 
-  if (data && data.watch_link) {
-    data.availability.unshift({
-      streaming_service: getStreamingService(data.watch_link),
-      watch_link: data.watch_link,
-    })
+  if (error) {
+    throw createError(error.message)
+  }
+
+  if (data) {
+    data.cast = sortBy(data.cast, ['billing_order', 'people.name'])
+
+    data.episodes = data.episodes.filter((e) => e.language === 'en')
+
+    if (data.watch_link) {
+      data.availability.unshift({
+        streaming_service: getStreamingService(data.watch_link),
+        watch_link: data.watch_link,
+      })
+    }
   }
 
   return data

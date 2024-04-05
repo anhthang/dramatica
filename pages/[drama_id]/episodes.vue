@@ -2,9 +2,7 @@
   <a-page-header
     v-if="drama"
     class="container"
-    :title="drama.title"
-    sub-title="Episodes"
-    @back="() => $router.go(-1)"
+    :title="`${drama.title} - Episodes`"
   >
     <template #extra>
       <a-button type="primary" @click="toggleImport">
@@ -54,17 +52,8 @@
 <script setup>
 const route = useRoute()
 
-const { data: drama, refresh } = await useAsyncData(
-  () => $fetch(`/api/${route.params.drama_id}`),
-  {
-    /**
-     * FIXME: remove this once we have translation feature
-     */
-    transform: (data) => {
-      data.episodes = data.episodes.filter((e) => e.language === 'en')
-      return data
-    },
-  },
+const { data: drama, refresh } = await useAsyncData(() =>
+  $fetch(`/api/${route.params.drama_id}`),
 )
 
 const netflix = computed(() =>

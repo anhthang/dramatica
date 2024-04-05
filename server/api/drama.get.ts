@@ -28,7 +28,11 @@ export default defineEventHandler(async (event) => {
       .order('title')
   }
 
-  const { data } = await sqlQuery
+  const { data, error } = await sqlQuery
+
+  if (error) {
+    throw createError(error.message)
+  }
 
   return data
 })

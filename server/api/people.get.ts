@@ -11,11 +11,15 @@ export default defineEventHandler(async (event) => {
     .split(/[\s,\t,\n]+/) // split and remove more than 1 space
     .join(' | ')
 
-  const { data } = await client
+  const { data, error } = await client
     .from('people')
     .select()
     .textSearch('name', `${fts}`)
     .limit(10)
+
+  if (error) {
+    throw createError(error.message)
+  }
 
   return data
 })

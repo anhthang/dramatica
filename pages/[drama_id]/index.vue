@@ -1,10 +1,5 @@
 <template>
-  <a-page-header
-    v-if="drama"
-    class="container"
-    :title="drama.title"
-    @back="() => $router.go(-1)"
-  >
+  <a-page-header v-if="drama" class="container" :title="drama.title">
     <template #extra>
       <a-button @click="toggle('translation')">
         <translation-outlined /> Translation
@@ -83,15 +78,7 @@
       <a-tab-pane key="cast">
         <template #tab><team-outlined /> Cast</template>
         <a-row :gutter="[16, 16]" type="flex">
-          <a-col
-            v-for="actor in sortBy(drama.cast, [
-              'billing_order',
-              'people.name',
-            ])"
-            :key="actor.id"
-            :xs="12"
-            :sm="4"
-          >
+          <a-col v-for="actor in drama.cast" :key="actor.id" :xs="12" :sm="4">
             <card-people :people="actor" />
           </a-col>
         </a-row>
@@ -207,18 +194,8 @@ const size = 12
 const route = useRoute()
 const config = useRuntimeConfig()
 
-const { data: drama } = await useAsyncData(
-  () => $fetch(`/api/${route.params.drama_id}`),
-  {
-    /**
-     * FIXME: remove this once we have translation feature
-     */
-    transform: (data) => {
-      data.episodes = data.episodes.filter((e) => e.language === 'en')
-
-      return data
-    },
-  },
+const { data: drama, refresh } = await useAsyncData(() =>
+  $fetch(`/api/${route.params.drama_id}`),
 )
 
 const rightExtras = {
@@ -275,6 +252,7 @@ const onEdit = async () => {
   })
 
   toggle('loading')
+  refresh()
 }
 
 const translationForm = ref()

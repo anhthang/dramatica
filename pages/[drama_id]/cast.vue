@@ -2,9 +2,7 @@
   <a-page-header
     v-if="drama"
     class="container"
-    :title="drama.title"
-    sub-title="Cast & Crew"
-    @back="() => $router.go(-1)"
+    :title="`${drama.title} - Cast & Crew`"
   >
     <template #extra>
       <a-dropdown>
@@ -92,7 +90,6 @@
 
 <script setup>
 import groupBy from 'lodash.groupby'
-import sortBy from 'lodash.sortby'
 
 const route = useRoute()
 
@@ -101,10 +98,7 @@ const { data: drama, refresh } = await useAsyncData(
   {
     transform: (data) => {
       const people = data.cast.concat(data.crew)
-      data.people = groupBy(
-        sortBy(people, ['billing_order', 'people.name']),
-        'role',
-      )
+      data.people = groupBy(people, 'role')
 
       return data
     },

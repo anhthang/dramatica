@@ -24,7 +24,14 @@ export default defineEventHandler(async (event) => {
     'airing_status',
   ])
 
-  const { data } = await client.from('dramas').update(tv).eq('id', body.id)
+  const { data, error } = await client
+    .from('dramas')
+    .update(tv)
+    .eq('id', body.id)
+
+  if (error) {
+    throw createError(error.message)
+  }
 
   return data
 })

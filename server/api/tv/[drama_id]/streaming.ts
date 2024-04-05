@@ -11,7 +11,11 @@ export default defineEventHandler(async (event) => {
     query = client.from('drama_availability').insert(rest)
   }
 
-  const { data } = await query
+  const { data, error } = await query
+
+  if (error) {
+    throw createError(error.message)
+  }
 
   return data
 })
