@@ -11,10 +11,11 @@
         />
       </template>
 
-      <a-tab-pane v-for="tab in tabs" :key="tab">
+      <a-tab-pane v-for="tab in Object.keys(tabKeyMap)" :key="tab">
         <template #tab>
           <notification-outlined v-if="tab === 'Airing'" />
           <rise-outlined v-if="tab === 'Trending'" />
+          <alert-outlined v-if="tab === 'Upcoming'" />
           {{ tab }}
         </template>
 
@@ -22,8 +23,7 @@
           <a-col
             v-for="drama in currentPage"
             :key="drama.id"
-            :xs="12"
-            :sm="12"
+            :xs="24"
             :md="8"
             :lg="6"
             :xl="4"
@@ -53,11 +53,11 @@
 
 <script setup>
 const activeKey = ref('Airing')
-const tabs = ['Airing', 'Trending']
 
 const tabKeyMap = {
   Airing: 'Airing',
   Trending: 'Ended',
+  Upcoming: 'Upcoming',
 }
 
 const { data } = await useAsyncData(() => $fetch('/api/drama'))

@@ -21,7 +21,7 @@
     </template>
 
     <a-row :gutter="[16, 16]" type="flex">
-      <a-col :sm="19">
+      <a-col :xs="24" :sm="16" :lg="18">
         <div v-for="role in roles.cast" v-show="drama.people[role]" :key="role">
           <a-divider orientation="left">
             <a-typography-title :level="5">{{ role }}</a-typography-title>
@@ -31,16 +31,22 @@
             <a-col
               v-for="people in drama.people[role]"
               :key="people.id"
-              :xs="12"
-              :sm="6"
+              :xs="24"
+              :md="12"
+              :lg="8"
             >
               <card-people :people="people" />
             </a-col>
           </a-row>
         </div>
       </a-col>
-      <a-col :sm="5">
-        <div v-for="role in roles.crew" v-show="drama.people[role]" :key="role">
+      <a-col :xs="24" :sm="8" :lg="6">
+        <div
+          v-for="role in roles.crew"
+          v-show="drama.people[role]"
+          :key="role"
+          class="drama-crew"
+        >
           <a-divider orientation="left">
             <a-typography-title :level="5">{{ role }}</a-typography-title>
           </a-divider>
@@ -133,3 +139,10 @@ useSeoMeta({
   description: drama.value && drama.value.synopsis,
 })
 </script>
+
+<style>
+.drama-crew .ant-card-meta-detail {
+  display: flex;
+  align-items: center;
+}
+</style>

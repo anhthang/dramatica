@@ -78,7 +78,13 @@
       <a-tab-pane key="cast">
         <template #tab><team-outlined /> Cast</template>
         <a-row :gutter="[16, 16]" type="flex">
-          <a-col v-for="actor in drama.cast" :key="actor.id" :xs="12" :sm="4">
+          <a-col
+            v-for="actor in drama.cast"
+            :key="actor.id"
+            :xs="24"
+            :md="8"
+            :lg="6"
+          >
             <card-people :people="actor" />
           </a-col>
         </a-row>
@@ -186,7 +192,6 @@
 
 <script setup>
 import copy from 'ant-design-vue/lib/_util/copy-to-clipboard'
-import sortBy from 'lodash.sortby'
 
 const page = ref(1)
 const size = 12
