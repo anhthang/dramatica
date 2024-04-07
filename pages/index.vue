@@ -1,58 +1,65 @@
 <template>
   <a-page-header class="container drama-container">
-    <a-tabs v-model:activeKey="activeKey" size="large">
-      <template #rightExtra>
-        <a-pagination
-          v-model:current="page"
-          :page-size="size"
-          :total="tabShows.length"
-          simple
-          hide-on-single-page
-        />
-      </template>
-
-      <a-tab-pane v-for="tab in Object.keys(tabKeyMap)" :key="tab">
-        <template #tab>
+    <div
+      v-for="(tab, tIdx) in Object.keys(tabKeyMap)"
+      :key="tab"
+      style="margin-bottom: 24px"
+    >
+      <a-flex justify="space-between">
+        <a-typography-title :level="4">
           <notification-outlined v-if="tab === 'Airing'" />
           <rise-outlined v-if="tab === 'Trending'" />
           <alert-outlined v-if="tab === 'Upcoming'" />
           {{ tab }}
-        </template>
+        </a-typography-title>
+        <a-flex v-if="Array.isArray(tabList[tab]) && tabList[tab].length > 1">
+          <a-button type="text" @click="prev(tIdx)">
+            <left-outlined />
+          </a-button>
+          <a-button type="text" @click="next(tIdx)">
+            <right-outlined />
+          </a-button>
+        </a-flex>
+      </a-flex>
 
-        <a-row :gutter="[16, 16]" type="flex">
-          <a-col
-            v-for="drama in currentPage"
-            :key="drama.id"
-            :xs="24"
-            :md="8"
-            :lg="6"
-            :xl="4"
-          >
-            <nuxt-link :to="`/${drama.id}`">
-              <a-card hoverable>
-                <template #cover>
-                  <a-image
-                    :preview="false"
-                    :alt="drama.title"
-                    :src="drama.poster_url"
+      <a-carousel ref="slider" arrows>
+        <div v-for="(dramas, idx) in tabList[tab]" :key="idx">
+          <a-row :gutter="[16, 16]" type="flex">
+            <a-col
+              v-for="drama in dramas"
+              :key="drama.id"
+              :xs="24"
+              :md="8"
+              :lg="6"
+              :xl="4"
+            >
+              <nuxt-link :to="`/${drama.id}`">
+                <a-card hoverable>
+                  <template #cover>
+                    <a-image
+                      :preview="false"
+                      :alt="drama.title"
+                      :src="drama.poster_url"
+                    />
+                  </template>
+
+                  <a-card-meta
+                    :title="drama.title"
+                    :description="`${drama.number_of_episodes} episodes`"
                   />
-                </template>
-
-                <a-card-meta
-                  :title="drama.title"
-                  :description="`${drama.number_of_episodes} episodes`"
-                />
-              </a-card>
-            </nuxt-link>
-          </a-col>
-        </a-row>
-      </a-tab-pane>
-    </a-tabs>
+                </a-card>
+              </nuxt-link>
+            </a-col>
+          </a-row>
+        </div>
+      </a-carousel>
+    </div>
   </a-page-header>
 </template>
 
 <script setup>
-const activeKey = ref('Airing')
+import chunk from 'lodash.chunk'
+import groupBy from 'lodash.groupby'
 
 const tabKeyMap = {
   Airing: 'Airing',
@@ -62,16 +69,23 @@ const tabKeyMap = {
 
 const { data } = await useAsyncData(() => $fetch('/api/drama'))
 
-const page = ref(1)
-const size = 12
+const tabList = computed(() => {
+  const tvs = groupBy(data.value, 'airing_status')
 
-const tabShows = computed(() =>
-  data.value.filter((tv) => tv.airing_status === tabKeyMap[activeKey.value]),
-)
+  return Object.entries(tabKeyMap).reduce((out, [tab, status]) => {
+    out[tab] = chunk(tvs[status], 6)
 
-const currentPage = computed(() =>
-  tabShows.value.slice((page.value - 1) * size, page.value * size),
-)
+    return out
+  }, {})
+})
+
+const slider = ref()
+const next = (idx) => {
+  slider.value[idx].next()
+}
+const prev = (idx) => {
+  slider.value[idx].next()
+}
 </script>
 
 <style>
