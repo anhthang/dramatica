@@ -1,11 +1,16 @@
 <template>
-  <a-page-header
-    v-if="drama"
-    class="container"
-    :title="`${drama.title} - Streaming Services`"
-  >
-    <template #tags>
-      <a-tag>{{ drama.release_year }}</a-tag>
+  <a-page-header v-if="drama" class="container" title="Streaming Services">
+    <template #breadcrumb>
+      <a-breadcrumb>
+        <a-breadcrumb-item>
+          <nuxt-link to="/"> Home </nuxt-link>
+        </a-breadcrumb-item>
+        <a-breadcrumb-item>
+          <nuxt-link :to="`/${drama.id}`">
+            {{ drama.title }} ({{ drama.release_year }})
+          </nuxt-link>
+        </a-breadcrumb-item>
+      </a-breadcrumb>
     </template>
 
     <template #extra>

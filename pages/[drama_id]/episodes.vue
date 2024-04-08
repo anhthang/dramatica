@@ -1,17 +1,22 @@
 <template>
-  <a-page-header
-    v-if="drama"
-    class="container"
-    :title="`${drama.title} - Episodes`"
-  >
+  <a-page-header v-if="drama" class="container" title="Episodes">
+    <template #breadcrumb>
+      <a-breadcrumb>
+        <a-breadcrumb-item>
+          <nuxt-link to="/"> Home </nuxt-link>
+        </a-breadcrumb-item>
+        <a-breadcrumb-item>
+          <nuxt-link :to="`/${drama.id}`">
+            {{ drama.title }} ({{ drama.release_year }})
+          </nuxt-link>
+        </a-breadcrumb-item>
+      </a-breadcrumb>
+    </template>
+
     <template #extra>
       <a-button type="primary" @click="toggleImport">
         <import-outlined /> Import
       </a-button>
-    </template>
-
-    <template #tags>
-      <a-tag>{{ drama.release_year }}</a-tag>
     </template>
 
     <a-row :gutter="[16, 16]" type="flex">

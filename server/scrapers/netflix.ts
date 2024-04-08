@@ -166,8 +166,9 @@ export const episodes = async (
       episode_number: e.node.number,
       title: e.node.title,
       preview_img: e.node.artwork.url,
-      synopsis: e.node.contextualSynopsis.text,
+      synopsis: e.node.contextualSynopsis.text.trim(),
       synopsis_source: 'Netflix',
+      runtime: e.node.runtimeSec || e.node.displayRuntimeSec,
       drama_id: Number(drama_id),
     }
   })

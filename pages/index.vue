@@ -84,7 +84,7 @@ const next = (idx) => {
   slider.value[idx].next()
 }
 const prev = (idx) => {
-  slider.value[idx].next()
+  slider.value[idx].prev()
 }
 </script>
 

@@ -199,8 +199,15 @@ const size = 12
 const route = useRoute()
 const config = useRuntimeConfig()
 
-const { data: drama, refresh } = await useAsyncData(() =>
-  $fetch(`/api/${route.params.drama_id}`),
+const { data: drama, refresh } = await useAsyncData(
+  () => $fetch(`/api/${route.params.drama_id}`),
+  {
+    transform: (data) => {
+      data.episodes = data.episodes.filter((e) => e.synopsis)
+
+      return data
+    },
+  },
 )
 
 const rightExtras = {

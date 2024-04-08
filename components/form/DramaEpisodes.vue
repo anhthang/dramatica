@@ -49,7 +49,14 @@
 
       <template #renderItem="{ item }">
         <a-list-item>
-          <a-list-item-meta :title="item.title" :description="item.synopsis" />
+          <a-list-item-meta :description="item.synopsis">
+            <template #title>
+              <a-flex justify="space-between">
+                <span>{{ item.title }}</span>
+                <span>{{ runtime2Duration(item.runtime) }}</span>
+              </a-flex>
+            </template>
+          </a-list-item-meta>
         </a-list-item>
       </template>
 
