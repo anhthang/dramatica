@@ -5,14 +5,14 @@
       :key="tab"
       style="margin-bottom: 24px"
     >
-      <a-flex justify="space-between">
+      <a-flex v-if="Array.isArray(tabList[tab])" justify="space-between">
         <a-typography-title :level="4">
           <notification-outlined v-if="tab === 'Airing'" />
           <rise-outlined v-if="tab === 'Trending'" />
           <alert-outlined v-if="tab === 'Upcoming'" />
           {{ tab }}
         </a-typography-title>
-        <a-flex v-if="Array.isArray(tabList[tab]) && tabList[tab].length > 1">
+        <a-flex v-if="tabList[tab].length > 1">
           <a-button type="text" @click="prev(tIdx)">
             <left-outlined />
           </a-button>

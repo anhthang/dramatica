@@ -19,9 +19,7 @@
 const { people } = defineProps({
   people: {
     type: Object,
-    default() {
-      return {}
-    },
+    default: () => ({}),
   },
 })
 </script>

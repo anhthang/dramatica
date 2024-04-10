@@ -3,10 +3,12 @@ import duration from 'dayjs/plugin/duration'
 
 dayjs.extend(duration)
 
-export const runtime2Duration = (seconds: number) => {
+export const runtime2Duration = (seconds?: number) => {
+  if (!seconds) return ''
+
   return seconds > 3600
-    ? dayjs.duration(seconds * 1000).format('H[h]mm[m]')
-    : dayjs.duration(seconds * 1000).format('mm[m]')
+    ? dayjs.duration(seconds * 1000).format('H[h]m[m]')
+    : dayjs.duration(seconds * 1000).format('m[m]')
 }
 
 export const themeSpecificServices = ['WeTV', 'Youku']

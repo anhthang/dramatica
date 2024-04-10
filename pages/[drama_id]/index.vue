@@ -34,8 +34,11 @@
         <a-descriptions layout="vertical" size="small">
           <a-descriptions-item label="Synopsis">
             <a-typography>
-              <a-typography-paragraph>
-                {{ drama.synopsis }}
+              <a-typography-paragraph
+                v-for="(line, idx) in drama.synopsis.split('\n')"
+                :key="idx"
+              >
+                {{ line }}
               </a-typography-paragraph>
             </a-typography>
           </a-descriptions-item>
@@ -88,6 +91,13 @@
             <card-people :people="actor" />
           </a-col>
         </a-row>
+
+        <a-result
+          v-if="!drama.cast.length"
+          status="404"
+          title="We apologize, but cast & crew is currently unavailable."
+          sub-title="We're actively gathering this information and will update it soon."
+        />
       </a-tab-pane>
 
       <a-tab-pane key="episodes">
@@ -100,15 +110,7 @@
             :md="8"
             :lg="6"
           >
-            <a-card hoverable style="height: 100%">
-              <template #cover>
-                <img :src="episode.preview_img" />
-              </template>
-              <a-card-meta
-                :title="episode.title || `Episode ${episode.episode_number}`"
-                :description="episode.synopsis"
-              />
-            </a-card>
+            <card-episode :episode="episode" />
           </a-col>
         </a-row>
 
@@ -199,15 +201,8 @@ const size = 12
 const route = useRoute()
 const config = useRuntimeConfig()
 
-const { data: drama, refresh } = await useAsyncData(
-  () => $fetch(`/api/${route.params.drama_id}`),
-  {
-    transform: (data) => {
-      data.episodes = data.episodes.filter((e) => e.synopsis)
-
-      return data
-    },
-  },
+const { data: drama, refresh } = await useAsyncData(() =>
+  $fetch(`/api/${route.params.drama_id}`),
 )
 
 const rightExtras = {

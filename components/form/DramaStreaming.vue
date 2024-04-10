@@ -33,7 +33,7 @@ import { Form } from 'ant-design-vue'
 const { metadata } = defineProps({
   metadata: {
     type: Object,
-    default: () => {},
+    default: () => ({}),
   },
 })
 

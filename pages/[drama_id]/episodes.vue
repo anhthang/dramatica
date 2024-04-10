@@ -27,15 +27,7 @@
         :md="8"
         :lg="6"
       >
-        <a-card hoverable style="height: 100%">
-          <template #cover>
-            <img :src="episode.preview_img" />
-          </template>
-          <a-card-meta
-            :title="episode.title || `Episode ${episode.episode_number}`"
-            :description="episode.synopsis"
-          />
-        </a-card>
+        <card-episode :episode="episode" />
       </a-col>
     </a-row>
 

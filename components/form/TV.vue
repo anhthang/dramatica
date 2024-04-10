@@ -221,9 +221,7 @@ const { isEdit, metadata } = defineProps({
   },
   metadata: {
     type: Object,
-    default() {
-      return {}
-    },
+    default: () => ({}),
   },
 })
 
