@@ -14,8 +14,8 @@
     </template>
 
     <template #extra>
-      <a-button type="primary" @click="toggleImport">
-        <import-outlined /> Import
+      <a-button type="primary" @click="toggleSync">
+        <sync-outlined /> Sync
       </a-button>
     </template>
 
@@ -33,7 +33,7 @@
 
     <a-modal
       v-model:open="visible"
-      title="Import Episode Synopses"
+      title="Sync Episode Synopses"
       destroy-on-close
       :width="800"
       @ok="addEpisodes"
@@ -58,7 +58,7 @@ const netflix = computed(() =>
 )
 
 const visible = ref(false)
-const toggleImport = () => {
+const toggleSync = () => {
   visible.value = !visible.value
 }
 
@@ -66,7 +66,7 @@ const episodesForm = ref()
 const addEpisodes = async () => {
   await episodesForm.value.onSubmit()
 
-  toggleImport()
+  toggleSync()
   refresh()
 }
 

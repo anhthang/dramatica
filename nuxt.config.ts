@@ -4,8 +4,9 @@ export default defineNuxtConfig({
 
   modules: [
     '@buianhthang/nuxt',
+    '@nuxt/eslint',
+    '@nuxt/fonts',
     '@nuxtjs/color-mode',
-    '@nuxtjs/google-fonts',
     '@nuxtjs/supabase',
   ],
 
@@ -13,10 +14,8 @@ export default defineNuxtConfig({
     preference: 'dark',
   },
 
-  googleFonts: {
-    families: {
-      Cabin: true,
-    },
+  fonts: {
+    families: [{ name: 'Cabin', provider: 'google' }],
   },
 
   supabase: {

@@ -5,7 +5,7 @@
       :key="tab"
       style="margin-bottom: 24px"
     >
-      <a-flex v-if="Array.isArray(tabList[tab])" justify="space-between">
+      <a-flex v-if="tabList[tab].length" justify="space-between">
         <a-typography-title :level="4">
           <notification-outlined v-if="tab === 'Airing'" />
           <rise-outlined v-if="tab === 'Trending'" />

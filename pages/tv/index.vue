@@ -9,7 +9,7 @@
           :loading="loading"
           @click="fetchMetadata"
         >
-          <import-outlined /> Import
+          <sync-outlined /> Sync
         </a-button>
         <a-flex v-else gap="small">
           <a-button @click="toggleChecked">

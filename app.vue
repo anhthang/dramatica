@@ -78,5 +78,6 @@ useSeoMeta({
   --card-highlighted-border: #1677ff;
   --poster-height: 320px;
   --cover-height: 210px;
+  font-family: Cabin, sans-serif;
 }
 </style>
