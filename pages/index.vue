@@ -43,10 +43,20 @@
                     />
                   </template>
 
-                  <a-card-meta
-                    :title="drama.title"
-                    :description="`${drama.number_of_episodes} episodes`"
-                  />
+                  <a-card-meta :title="drama.title">
+                    <template #description>
+                      <a-flex justify="space-between">
+                        <span
+                          ><calendar-outlined />
+                          {{ toLocaleDate(drama.air_date) }}</span
+                        >
+                        <span
+                          ><number-outlined />
+                          {{ drama.number_of_episodes }}</span
+                        >
+                      </a-flex>
+                    </template>
+                  </a-card-meta>
                 </a-card>
               </nuxt-link>
             </a-col>

@@ -9,7 +9,11 @@
       <a-select
         v-model:value="service.streaming_service"
         :options="
-          Object.values(serviceMap).map((value) => ({ value, label: value }))
+          Object.values(serviceMap).map((value) => ({
+            value,
+            label: value,
+            disabled: existing.includes(value),
+          }))
         "
       />
     </a-form-item>
@@ -30,7 +34,11 @@
 <script setup>
 import { Form } from 'ant-design-vue'
 
-const { metadata } = defineProps({
+const { metadata, existing } = defineProps({
+  existing: {
+    type: Array,
+    default: () => [],
+  },
   metadata: {
     type: Object,
     default: () => ({}),

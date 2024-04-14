@@ -35,11 +35,13 @@ export const serviceMap: { [x: string]: string } = {
 }
 
 export const toLocaleDate = (str: string, locale: string = 'en') => {
-  return new Date(str).toLocaleDateString(locale, {
-    month: 'long',
-    day: 'numeric',
-    year: 'numeric',
-  })
+  return str
+    ? new Date(str).toLocaleDateString(locale, {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric',
+      })
+    : ''
 }
 
 export const getStreamingService = (url: string) => {

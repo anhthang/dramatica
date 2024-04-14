@@ -142,7 +142,7 @@ const { data: people, refresh } = await useAsyncData(
   () => $fetch(`/api/people/${route.params.people_id}`),
   {
     transform: (data) => {
-      data.existing_drama_ids = data.dramas.map((d) => d.id)
+      data.existing_drama_ids = data.dramas.map((d) => d.drama_id)
       data.dramas = groupBy(data.dramas, 'drama.release_year')
 
       return data

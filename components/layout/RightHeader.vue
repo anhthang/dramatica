@@ -1,5 +1,7 @@
 <template>
   <a-flex gap="middle">
+    <layout-locale />
+
     <layout-add-new />
 
     <a-dropdown>

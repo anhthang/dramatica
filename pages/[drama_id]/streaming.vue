@@ -47,7 +47,7 @@
         </template>
 
         <template v-if="column.key === 'action'">
-          <a-button @click="toggle('open', record)">
+          <a-button :disabled="!record.id" @click="toggle('open', record)">
             <edit-outlined /> Edit
           </a-button>
         </template>
@@ -61,7 +61,11 @@
       :confirm-loading="visible.loading"
       @ok="addStreamingService"
     >
-      <form-drama-streaming ref="streamingForm" :metadata="selection" />
+      <form-drama-streaming
+        ref="streamingForm"
+        :metadata="selection"
+        :existing="drama.availability.map((s) => s.streaming_service)"
+      />
     </a-modal>
   </a-page-header>
 </template>
