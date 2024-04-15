@@ -8,6 +8,7 @@ export default defineNuxtConfig({
     '@nuxt/fonts',
     '@nuxtjs/color-mode',
     '@nuxtjs/supabase',
+    '@nuxtjs/i18n',
   ],
 
   colorMode: {
@@ -16,6 +17,29 @@ export default defineNuxtConfig({
 
   fonts: {
     families: [{ name: 'Cabin', provider: 'google' }],
+  },
+
+  i18n: {
+    detectBrowserLanguage: {
+      useCookie: true,
+      fallbackLocale: 'en',
+    },
+    strategy: 'no_prefix',
+    locales: [
+      {
+        code: 'en',
+        name: 'English',
+        file: 'en.json',
+      },
+      {
+        code: 'vi',
+        name: 'Tiếng Việt',
+        file: 'vi.json',
+      },
+    ],
+    // lazy: true,
+    langDir: 'internationalization',
+    defaultLocale: 'en',
   },
 
   supabase: {

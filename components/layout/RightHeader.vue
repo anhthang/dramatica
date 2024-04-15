@@ -1,8 +1,8 @@
 <template>
   <a-flex gap="middle">
-    <layout-locale />
-
     <layout-add-new />
+
+    <layout-language-switcher />
 
     <a-dropdown>
       <a-avatar>

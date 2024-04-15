@@ -10,7 +10,7 @@
           <notification-outlined v-if="tab === 'Airing'" />
           <rise-outlined v-if="tab === 'Trending'" />
           <alert-outlined v-if="tab === 'Upcoming'" />
-          {{ tab }}
+          {{ $t(tab) }}
         </a-typography-title>
         <a-flex v-if="tabList[tab].length > 1">
           <a-button type="text" @click="prev(tIdx)">

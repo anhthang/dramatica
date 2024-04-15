@@ -1,3 +1,16 @@
+<br><p align="center">
+<img height="100px" src="./public/tv.png" />
+
+</p>
+
+<h1 align="center">Dramapedia</h1>
+<br>
+
+## Screenshots
+
+![TV](./public/screenshots/tv.png)
+![Episodes](./public/screenshots/tv-episodes.png)
+
 # Nuxt 3 Minimal Starter
 
 Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
