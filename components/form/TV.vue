@@ -27,18 +27,6 @@
           </a-input>
         </a-form-item>
       </a-col>
-      <a-col :xl="8">
-        <a-form-item
-          ref="title_vi"
-          name="title_vi"
-          label="Vietnamese Title"
-          v-bind="validateInfos.title_vi"
-        >
-          <a-input v-model:value="tv.title_vi">
-            <template #prefix><font-size-outlined /></template>
-          </a-input>
-        </a-form-item>
-      </a-col>
     </a-row>
 
     <a-form-item
@@ -256,7 +244,6 @@ const formRef = ref()
 const formRules = ref({
   title: [{ required: true, type: 'string', trigger: ['change', 'blur'] }],
   title_pinyin: [{ type: 'string', trigger: ['change', 'blur'] }],
-  title_vi: [{ type: 'string', trigger: ['change', 'blur'] }],
   release_year: [
     {
       required: false,

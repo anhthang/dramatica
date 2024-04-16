@@ -11,7 +11,7 @@
           </a-avatar>
 
           <a-typography-title :level="3">
-            {{ people.name }}
+            {{ peopleName }}
           </a-typography-title>
 
           <a-flex>
@@ -34,20 +34,24 @@
         </a-flex>
         <a-divider />
 
-        <a-descriptions title="Personal Information" :column="1" size="small">
+        <a-descriptions
+          :title="$t('Personal Information')"
+          :column="1"
+          size="small"
+        >
           <template #extra>
             <a-button @click="toggle('edit')"><edit-outlined /> Edit</a-button>
           </template>
-          <a-descriptions-item label="Native Name">
+          <a-descriptions-item :label="$t('Native Name')">
             {{ people.native_name }}
           </a-descriptions-item>
-          <a-descriptions-item label="Gender">
+          <a-descriptions-item :label="$t('Gender')">
             {{ people.gender }}
           </a-descriptions-item>
-          <a-descriptions-item label="Birthday">
-            {{ toLocaleDate(people.dob) }}
+          <a-descriptions-item :label="$t('Birthday')">
+            {{ toLocaleDate(people.dob, $i18n.locale) }}
           </a-descriptions-item>
-          <!-- <a-descriptions-item label="Age">
+          <!-- <a-descriptions-item :label="$t('Age')">
               {{
                 Math.floor(
                   (new Date() - new Date(people.dob).getTime()) / 3.15576e10,
@@ -57,12 +61,12 @@
         </a-descriptions>
       </a-col>
       <a-col :sm="18">
-        <a-descriptions title="Biography" :column="1">
+        <a-descriptions :title="$t('Biography')" :column="1">
           <a-typography-text v-if="people.biography">
             {{ people.biography }}
           </a-typography-text>
           <a-typography-text v-else>
-            We don't have a biography for {{ people.name }}
+            We don't have a biography for {{ peopleName }}
           </a-typography-text>
         </a-descriptions>
 
@@ -91,7 +95,9 @@
               <nuxt-link :to="`/${drama.drama_id}`">
                 <a-card-meta
                   :title="drama.drama.title"
-                  :description="drama.character_name || drama.role"
+                  :description="
+                    toLocaleCharacterName(drama, locale) || drama.role
+                  "
                 />
               </nuxt-link>
             </a-timeline-item>
@@ -136,10 +142,14 @@ const airingColor = {
   Hiatus: 'orange',
 }
 
+const { locale } = useI18n()
 const route = useRoute()
 
 const { data: people, refresh } = await useAsyncData(
-  () => $fetch(`/api/people/${route.params.people_id}`),
+  () =>
+    $fetch(`/api/people/${route.params.people_id}`, {
+      params: { language: locale.value },
+    }),
   {
     transform: (data) => {
       data.existing_drama_ids = data.dramas.map((d) => d.drama_id)
@@ -147,16 +157,21 @@ const { data: people, refresh } = await useAsyncData(
 
       return data
     },
+    watch: [locale],
   },
 )
 
+const peopleName = computed(() =>
+  toLocalePeopleName(people.value, locale.value),
+)
+
 useSeoMeta({
-  title: people.value && people.value.name,
+  title: peopleName,
   description: people.value && people.value.biography,
-  ogTitle: people.value && people.value.name,
+  ogTitle: peopleName,
   ogDescription: people.value && people.value.biography,
   ogImage: people.value && people.value.profile_url,
-  twitterTitle: people.value && people.value.name,
+  twitterTitle: peopleName,
   twitterDescription: people.value && people.value.biography,
   twitterImage: people.value && people.value.profile_url,
 })

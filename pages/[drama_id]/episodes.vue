@@ -21,7 +21,7 @@
 
     <a-row :gutter="[16, 16]" type="flex">
       <a-col
-        v-for="episode in drama.episodes"
+        v-for="episode in episodes"
         :key="episode.episode_number"
         :xs="24"
         :md="8"
@@ -49,8 +49,14 @@
 <script setup>
 const route = useRoute()
 
+const { locale } = useI18n()
+
 const { data: drama, refresh } = await useAsyncData(() =>
   $fetch(`/api/${route.params.drama_id}`),
+)
+
+const episodes = computed(() =>
+  drama.value.episodes.filter((e) => e.language === locale.value),
 )
 
 const netflix = computed(() =>

@@ -1,5 +1,23 @@
 {
-  "Airing": "Mới lên sóng",
+  "Airing": "Đang phát sóng",
   "Trending": "Thịnh hành",
-  "Upcoming": "Sắp lên sóng"
+  "Upcoming": "Sắp lên sóng",
+  "Ended": "Đã kết thúc",
+
+  "Status": "Trạng thái",
+  "Episodes": "Số tập",
+  "Airing Platform": "Nền tảng phát sóng",
+  "Aired": "Ngày phát sóng",
+  "Genres": "Thể loại",
+  "Synopsis": "Nội dung",
+  "Cast": "Diễn viên",
+  "Watch": "Xem phim",
+  "Share": "Chia sẻ",
+
+  "Personal Information": "Thông tin cá nhân",
+  "Native Name": "Native Name",
+  "Birthday": "Ngày sinh",
+  "Age": "Tuổi",
+  "Gender": "Giới tính",
+  "Biography": "Tiểu sử"
 }

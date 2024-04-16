@@ -1,10 +1,16 @@
 <template>
-  <a-page-header v-if="drama" class="container" :title="drama.title">
+  <a-page-header v-if="drama" class="container" :title="translation.title">
     <template #extra>
-      <a-button @click="toggle('translation')">
-        <translation-outlined /> Translation
-      </a-button>
-      <a-button @click="toggle('edit')"><edit-outlined /> Edit</a-button>
+      <a-dropdown-button @click="toggle('edit')">
+        Edit
+        <template #overlay>
+          <a-menu @click="toggle('translation')">
+            <a-menu-item key="translation">
+              <template #icon><translation-outlined /> </template> Translation
+            </a-menu-item>
+          </a-menu>
+        </template>
+      </a-dropdown-button>
     </template>
 
     <template #tags>
@@ -14,28 +20,28 @@
     <a-row :gutter="[16, 16]" type="flex">
       <a-col :lg="14">
         <a-descriptions :column="2" size="small">
-          <a-descriptions-item label="Status">
-            {{ drama.airing_status }}
+          <a-descriptions-item :label="$t('Status')">
+            {{ $t(drama.airing_status) }}
           </a-descriptions-item>
-          <a-descriptions-item label="Episodes">
+          <a-descriptions-item :label="$t('Episodes')">
             {{ drama.number_of_episodes }}
           </a-descriptions-item>
-          <a-descriptions-item label="Airing Platform">
+          <a-descriptions-item :label="$t('Airing Platform')">
             {{ drama.airing_platform }}
           </a-descriptions-item>
-          <a-descriptions-item label="Genres">
+          <a-descriptions-item :label="$t('Genres')">
             {{ drama.genres.map(({ genre }) => genre.name).join(', ') }}
           </a-descriptions-item>
-          <a-descriptions-item v-if="drama.air_date" label="Aired">
+          <a-descriptions-item v-if="drama.air_date" :label="$t('Aired')">
             {{ airDate(drama) }}
           </a-descriptions-item>
         </a-descriptions>
 
         <a-descriptions layout="vertical" size="small">
-          <a-descriptions-item label="Synopsis">
+          <a-descriptions-item :label="$t('Synopsis')">
             <a-typography>
               <a-typography-paragraph
-                v-for="(line, idx) in drama.synopsis.split('\n')"
+                v-for="(line, idx) in translation.synopsis.split('\n')"
                 :key="idx"
               >
                 {{ line }}
@@ -46,11 +52,11 @@
       </a-col>
       <a-col :lg="10">
         <a-flex vertical gap="middle">
-          <img :alt="drama.title" :src="drama.cover_url" />
+          <img :alt="translation.title" :src="translation.cover_url" />
           <a-flex justify="center" gap="small">
             <nuxt-link
-              v-if="drama.watch_link"
-              :to="drama.watch_link"
+              v-if="translation.watch_link"
+              :to="translation.watch_link"
               target="_blank"
               style="width: 100%"
             >
@@ -58,13 +64,15 @@
                 type="primary"
                 size="large"
                 block
-                :class="getStreamingService(drama.watch_link).toLowerCase()"
+                :class="
+                  getStreamingService(translation.watch_link).toLowerCase()
+                "
               >
-                <play-circle-outlined /> Watch
+                <play-circle-outlined /> {{ $t('Watch') }}
               </a-button>
             </nuxt-link>
             <a-button size="large" block @click="copyUrl">
-              <share-alt-outlined /> Share
+              <share-alt-outlined /> {{ $t('Share') }}
             </a-button>
           </a-flex>
         </a-flex>
@@ -79,7 +87,7 @@
       </template>
 
       <a-tab-pane key="cast">
-        <template #tab><team-outlined /> Cast</template>
+        <template #tab><team-outlined /> {{ $t('Cast') }}</template>
         <a-row :gutter="[16, 16]" type="flex">
           <a-col
             v-for="actor in drama.cast"
@@ -117,16 +125,16 @@
         <a-flex justify="center" style="margin-top: 16px">
           <a-pagination
             v-model:current="page"
-            :total="drama.episodes.length"
+            :total="localeEpisodes.length"
             :page-size="size"
             :show-size-changer="false"
-            :show-quick-jumper="drama.episodes.length > size * 10"
+            :show-quick-jumper="localeEpisodes.length > size * 10"
             hide-on-single-page
           />
         </a-flex>
 
         <a-result
-          v-if="!drama.episodes.length"
+          v-if="!localeEpisodes.length"
           status="404"
           title="We apologize, but episode information is currently unavailable."
           sub-title="We're actively gathering this information and will update it soon."
@@ -194,12 +202,15 @@
 
 <script setup>
 import copy from 'ant-design-vue/lib/_util/copy-to-clipboard'
+import keyBy from 'lodash.keyby'
 
 const page = ref(1)
 const size = 12
 
 const route = useRoute()
 const config = useRuntimeConfig()
+
+const { locale } = useI18n()
 
 const { data: drama, refresh } = await useAsyncData(() =>
   $fetch(`/api/${route.params.drama_id}`),
@@ -211,14 +222,24 @@ const rightExtras = {
   streaming: 'All Streaming Services',
 }
 
+const translation = computed(() => {
+  const translationMap = keyBy(drama.value.translations, 'language')
+
+  return translationMap[locale.value] || translationMap.en
+})
+
+const localeEpisodes = computed(() =>
+  drama.value.episodes.filter((e) => e.language === locale.value),
+)
+
 const episodes = computed(() => {
-  return drama.value.episodes.slice((page.value - 1) * size, page.value * size)
+  return localeEpisodes.value.slice((page.value - 1) * size, page.value * size)
 })
 
 const airDate = ({ air_date, end_date }) => {
   return end_date
-    ? `${toLocaleDate(air_date)} - ${toLocaleDate(end_date)}`
-    : toLocaleDate(air_date)
+    ? `${toLocaleDate(air_date, locale.value)} - ${toLocaleDate(end_date, locale.value)}`
+    : toLocaleDate(air_date, locale.value)
 }
 
 const copyUrl = () => {

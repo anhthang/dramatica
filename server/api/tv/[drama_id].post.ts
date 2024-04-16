@@ -14,7 +14,6 @@ export default defineEventHandler(async (event) => {
     'airing_platform',
     'poster_url',
     'air_day',
-    'title_vi',
     'trailer_url',
     'synopsis_source',
     'cover_url',

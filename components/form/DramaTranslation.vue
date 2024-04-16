@@ -14,7 +14,7 @@
       <a-radio-group
         v-model:value="translation.language"
         :options="
-          Object.entries(languages).map(([value, label]) => ({ value, label }))
+          allowedLocales.map(({ code, name }) => ({ value: code, label: name }))
         "
       />
     </a-form-item>
@@ -110,14 +110,13 @@ const { translations } = defineProps({
 })
 
 const route = useRoute()
+const { locale, locales } = useI18n()
 
-const languages = {
-  vi: 'Vietnamese',
-}
+const allowedLocales = locales.value.filter(({ code }) => code !== 'en')
 
 const translation = ref({
   drama_id: Number(route.params.drama_id),
-  language: 'vi',
+  language: locale.value !== 'en' ? locale.value : allowedLocales[0].code,
   watch_link: '',
 })
 
@@ -129,6 +128,18 @@ onMounted(() => {
     Object.assign(translation.value, translated)
   }
 })
+
+watch(
+  () => translation.value.language,
+  () => {
+    const translated = translations.find(
+      (t) => t.language === translation.value.language,
+    )
+    if (translated) {
+      Object.assign(translation.value, translated)
+    }
+  },
+)
 
 const loading = ref(false)
 

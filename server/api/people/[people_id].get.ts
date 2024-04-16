@@ -4,13 +4,14 @@ export default defineEventHandler(async (event) => {
   const client = await serverSupabaseClient(event)
 
   const { people_id } = event.context.params
+  const { language } = getQuery(event)
 
   const { data, error } = await client
     .from('people')
     .select(
       `*,
-      dramas:drama_cast(*, drama:dramas(title, title_vi, release_year, poster_url, airing_status)),
-      drama_crew(*, drama:dramas(title, title_vi, release_year, poster_url, airing_status))
+      dramas:drama_cast(*, drama:dramas(*, translations:drama_translations(*))),
+      drama_crew(*, drama:dramas(*, translations:drama_translations(*)))
       `,
     )
     .eq('id', people_id)
@@ -22,6 +23,19 @@ export default defineEventHandler(async (event) => {
 
   if (data) {
     data.dramas = data.dramas.concat(data.drama_crew)
+
+    data.dramas.forEach(({ drama }) => {
+      const translation = drama.translations.find(
+        (t) => t.language === language,
+      )
+      if (translation) {
+        const { id, ...rest } = translation
+        Object.assign(drama, rest)
+      }
+
+      delete drama.translations
+    })
+
     delete data.drama_crew
   }
 

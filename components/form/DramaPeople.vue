@@ -35,7 +35,7 @@
         <a-card-meta
           v-if="type === 'drama'"
           :title="selection.title"
-          :description="selection.title_pinyin || selection.title_vi"
+          :description="selection.title_pinyin"
         >
           <template #avatar>
             <a-avatar :src="selection.poster_url" :size="60">

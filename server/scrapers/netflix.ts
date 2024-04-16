@@ -93,19 +93,13 @@ export const tv = async (url: string, language: string) => {
 
   const [, , titleId] = urlObj.pathname.split('/')
 
-  const en = await tvScraper(titleId, 'en')
-  const vi = await tvScraper(titleId, 'vi')
-
-  if (vi && vi.title) {
-    vi.title = capitalizeFirstLetters(vi.title)
-    en.title_vi = vi.title
-  }
+  const tv = await tvScraper(titleId, language)
 
   if (language === 'vi') {
-    return vi
+    tv.title = capitalizeFirstLetters(tv.title)
   }
 
-  return en
+  return tv
 }
 
 export const episodes = async (

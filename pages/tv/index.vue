@@ -74,6 +74,7 @@ const fetchMetadata = () => {
     method: 'get',
     params: {
       url: metadata.value.watch_link,
+      language: 'en',
     },
   })
     .then((data) => {

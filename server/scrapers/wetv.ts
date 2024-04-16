@@ -1,8 +1,13 @@
 import unescape from 'lodash.unescape'
 import urlMetadata from 'url-metadata'
 
-const scrape = async (lang: string, show_id: string) => {
-  const watch_link = `https://wetv.vip/${lang}/play/${show_id}`
+export const tv = async (url: string, language: string) => {
+  const urlObj = new URL(url)
+
+  const [, , , path] = urlObj.pathname.split('/')
+  const [show_id] = path.split('-')
+
+  const watch_link = `https://wetv.vip/${language}/play/${show_id}`
   const metadata = await urlMetadata(watch_link)
 
   const { 'og:image': cover_url, jsonld } = metadata
@@ -39,7 +44,7 @@ const scrape = async (lang: string, show_id: string) => {
               }
             }
 
-            if (lang === 'en') {
+            if (language === 'en') {
               const [synopsis] = description.split(' | ')
               information.synopsis = unescape(synopsis)
             }
@@ -52,22 +57,4 @@ const scrape = async (lang: string, show_id: string) => {
   }
 
   return information
-}
-
-export const tv = async (url: string, language: string) => {
-  const urlObj = new URL(url)
-
-  const [, , , path] = urlObj.pathname.split('/')
-  const [show_id] = path.split('-')
-
-  const en = await scrape('en', show_id)
-  const vi = await scrape('vi', show_id)
-
-  en.title_vi = vi && vi.title
-
-  if (language === 'vi') {
-    return vi
-  }
-
-  return en
 }

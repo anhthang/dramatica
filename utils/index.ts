@@ -34,6 +34,14 @@ export const serviceMap: { [x: string]: string } = {
   'www.youku.tv': 'Youku',
 }
 
+export const toLocalePeopleName = (people: any, locale: string = 'en') => {
+  return people[`name_${locale}`] || people.name
+}
+
+export const toLocaleCharacterName = (cast: any, locale: string = 'en') => {
+  return cast[`character_name_${locale}`] || cast.character_name
+}
+
 export const toLocaleDate = (str: string, locale: string = 'en') => {
   return str
     ? new Date(str).toLocaleDateString(locale, {

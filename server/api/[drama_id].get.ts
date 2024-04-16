@@ -1,4 +1,5 @@
 import { serverSupabaseClient } from '#supabase/server'
+import pick from 'lodash.pick'
 import sortBy from 'lodash.sortby'
 import { getStreamingService } from '~/utils'
 
@@ -27,9 +28,23 @@ export default defineEventHandler(async (event) => {
   }
 
   if (data) {
-    data.cast = sortBy(data.cast, ['billing_order', 'people.name'])
+    const en: any = pick(data, [
+      'title',
+      'drama_id',
+      'language',
+      'synopsis',
+      'synopsis_source',
+      'cover_url',
+      'poster_url',
+      'watch_link',
+      'created_at',
+    ])
 
-    data.episodes = data.episodes.filter((e) => e.language === 'en')
+    en.language = 'en'
+    en.drama_id = Number(drama_id)
+
+    data.translations.unshift(en)
+    data.cast = sortBy(data.cast, ['billing_order', 'people.name'])
 
     if (data.watch_link) {
       data.availability.unshift({

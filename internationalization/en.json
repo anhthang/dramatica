@@ -1,5 +1,23 @@
 {
   "Airing": "Airing",
   "Trending": "Trending",
-  "Upcoming": "Upcoming"
+  "Upcoming": "Upcoming",
+  "Ended": "Ended",
+
+  "Status": "Status",
+  "Episodes": "Episodes",
+  "Airing Platform": "Airing Platform",
+  "Aired": "Aired",
+  "Genres": "Genres",
+  "Synopsis": "Synopsis",
+  "Cast": "Cast",
+  "Watch": "Watch",
+  "Share": "Share",
+
+  "Personal Information": "Personal Information",
+  "Native Name": "Native Name",
+  "Birthday": "Birthday",
+  "Age": "Age",
+  "Gender": "Gender",
+  "Biography": "Biography"
 }

@@ -23,10 +23,7 @@
             "
             style="height: 100%"
           >
-            <a-card-meta
-              :title="`${tv.title} (${tv.release_year})`"
-              :description="tv.title_vi"
-            >
+            <a-card-meta :title="`${tv.title} (${tv.release_year})`">
               <template #avatar>
                 <a-avatar :src="tv.poster_url" :size="60">
                   {{ tv.title.charAt(0) }}

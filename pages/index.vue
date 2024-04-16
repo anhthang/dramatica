@@ -48,7 +48,7 @@
                       <a-flex justify="space-between">
                         <span
                           ><calendar-outlined />
-                          {{ toLocaleDate(drama.air_date) }}</span
+                          {{ toLocaleDate(drama.air_date, locale) }}</span
                         >
                         <span
                           ><number-outlined />
@@ -77,7 +77,12 @@ const tabKeyMap = {
   Upcoming: 'Upcoming',
 }
 
-const { data } = await useAsyncData(() => $fetch('/api/drama'))
+const { locale } = useI18n()
+
+const { data } = await useAsyncData(
+  () => $fetch('/api/drama', { params: { language: locale.value } }),
+  { watch: [locale] },
+)
 
 const tabList = computed(() => {
   const tvs = groupBy(data.value, 'airing_status')

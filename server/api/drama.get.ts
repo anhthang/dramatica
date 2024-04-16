@@ -3,7 +3,7 @@ import { serverSupabaseClient } from '#supabase/server'
 export default defineEventHandler(async (event) => {
   const client = await serverSupabaseClient(event)
 
-  const { query } = getQuery(event)
+  const { query, language } = getQuery(event)
 
   let sqlQuery
   if (query) {
@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
 
     sqlQuery = client
       .from('dramas')
-      .select()
+      .select('*, translations:drama_translations(*)')
       .textSearch('title', `${fts}`)
       .order('release_year', { ascending: false })
       .order('title')
@@ -23,7 +23,7 @@ export default defineEventHandler(async (event) => {
   } else {
     sqlQuery = client
       .from('dramas')
-      .select()
+      .select('*, translations:drama_translations(*)')
       .order('release_year', { ascending: false })
       .order('title')
   }
@@ -33,6 +33,16 @@ export default defineEventHandler(async (event) => {
   if (error) {
     throw createError(error.message)
   }
+
+  data.forEach((drama) => {
+    const translation = drama.translations.find((t) => t.language === language)
+    if (translation) {
+      const { id, ...rest } = translation
+      Object.assign(drama, rest)
+    }
+
+    delete drama.translations
+  })
 
   return data
 })
