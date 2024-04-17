@@ -24,7 +24,7 @@
       <a-radio-group
         v-model:value="params.language"
         :options="
-          Object.entries(languages).map(([value, label]) => ({ value, label }))
+          locales.map(({ code, name }) => ({ value: code, label: name }))
         "
       />
     </a-form-item>
@@ -72,6 +72,7 @@
 
 <script setup>
 const route = useRoute()
+const { locale, locales } = useI18n()
 
 const { url } = defineProps({
   url: {
@@ -82,7 +83,7 @@ const { url } = defineProps({
 
 const params = ref({
   url: '',
-  language: 'en',
+  language: locale.value,
 })
 
 onMounted(() => {
@@ -92,11 +93,6 @@ onMounted(() => {
 })
 
 watch(params, () => scrapeEpisodes(), { deep: true })
-
-const languages = {
-  en: 'English',
-  vi: 'Vietnamese',
-}
 
 const tv = ref()
 const episodes = ref([])

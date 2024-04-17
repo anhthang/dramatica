@@ -34,8 +34,8 @@
               :xl="4"
             >
               <nuxt-link :to="`/${drama.id}`">
-                <a-card hoverable>
-                  <template #cover>
+                <a-card hoverable :loading="pending">
+                  <template v-if="!pending" #cover>
                     <a-image
                       :preview="false"
                       :alt="drama.title"
@@ -79,7 +79,7 @@ const tabKeyMap = {
 
 const { locale } = useI18n()
 
-const { data } = await useAsyncData(
+const { data, pending } = await useAsyncData(
   () => $fetch('/api/drama', { params: { language: locale.value } }),
   { watch: [locale] },
 )

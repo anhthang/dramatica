@@ -81,7 +81,7 @@ const onSubmit = async () => {
       })
         .then(() => {
           message.success(
-            `[${languages[service.value.streaming_service]}] added/updated successfully!`,
+            `[${service.value.streaming_service}] updated successfully!`,
           )
         })
         .catch((error) => {

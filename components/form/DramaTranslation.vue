@@ -195,9 +195,7 @@ const onSubmit = async () => {
         body: translation.value,
       })
         .then(() => {
-          message.success(
-            `[${languages[translation.value.language]}] added successfully!`,
-          )
+          message.success(`Translation updated successfully!`)
         })
         .catch((error) => {
           console.error(error)

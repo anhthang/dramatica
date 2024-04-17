@@ -70,7 +70,7 @@
           </a-typography-text>
         </a-descriptions>
 
-        <a-card title="Drama">
+        <a-card :title="$t('Drama')" :loading="pending">
           <template #extra>
             <a-button type="link" @click="toggle('add_drama')">
               <video-camera-add-outlined /> Add
@@ -88,17 +88,43 @@
             </a-timeline-item>
 
             <a-timeline-item
-              v-for="drama in people.dramas[year]"
-              :key="drama.id"
-              :color="airingColor[drama.drama.airing_status] || 'gray'"
+              v-for="{ drama, ...rest } in people.dramas[year]"
+              :key="rest.id"
+              :color="airingColor[drama.airing_status] || 'gray'"
             >
               <nuxt-link :to="`/${drama.drama_id}`">
-                <a-card-meta
-                  :title="drama.drama.title"
-                  :description="
-                    toLocaleCharacterName(drama, locale) || drama.role
-                  "
-                />
+                <a-popover>
+                  <a-card-meta
+                    :title="drama.title"
+                    :description="
+                      toLocaleCharacterName(rest, locale) || rest.role
+                    "
+                  />
+                  <template #content>
+                    <a-card style="width: 400px">
+                      <template #cover>
+                        <a-image
+                          :preview="false"
+                          :alt="drama.title"
+                          :src="drama.cover_url"
+                        />
+                      </template>
+
+                      <a-card-meta :title="drama.title">
+                        <template #description>
+                          <a-typography>
+                            <a-typography-paragraph
+                              v-for="(line, idx) in drama.synopsis.split('\n')"
+                              :key="idx"
+                            >
+                              {{ line }}
+                            </a-typography-paragraph>
+                          </a-typography>
+                        </template>
+                      </a-card-meta>
+                    </a-card>
+                  </template>
+                </a-popover>
               </nuxt-link>
             </a-timeline-item>
           </a-timeline>
@@ -145,7 +171,11 @@ const airingColor = {
 const { locale } = useI18n()
 const route = useRoute()
 
-const { data: people, refresh } = await useAsyncData(
+const {
+  data: people,
+  pending,
+  refresh,
+} = await useAsyncData(
   () =>
     $fetch(`/api/people/${route.params.people_id}`, {
       params: { language: locale.value },
