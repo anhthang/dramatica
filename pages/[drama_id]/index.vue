@@ -1,5 +1,9 @@
 <template>
-  <a-page-header v-if="drama" class="container" :title="translation.title">
+  <a-page-header
+    v-if="drama"
+    class="container"
+    :title="`${translation.title} (${drama.release_year})`"
+  >
     <template #extra>
       <a-dropdown-button @click="toggle('edit')">
         Edit
@@ -13,17 +17,13 @@
       </a-dropdown-button>
     </template>
 
-    <template #tags>
-      <a-tag>{{ drama.release_year }}</a-tag>
-    </template>
-
     <a-row :gutter="[16, 16]" type="flex">
       <a-col :lg="14">
         <a-descriptions :column="2" size="small">
           <a-descriptions-item :label="$t('Status')">
             {{ $t(drama.airing_status) }}
           </a-descriptions-item>
-          <a-descriptions-item :label="$t('Episodes')">
+          <a-descriptions-item :label="$t('Number of episodes')">
             {{ drama.number_of_episodes }}
           </a-descriptions-item>
           <a-descriptions-item :label="$t('Airing Platform')">
@@ -109,7 +109,7 @@
       </a-tab-pane>
 
       <a-tab-pane key="episodes">
-        <template #tab><youtube-outlined /> Episodes</template>
+        <template #tab><youtube-outlined /> {{ $t('Episodes') }}</template>
         <a-row :gutter="[16, 16]" type="flex">
           <a-col
             v-for="episode in episodes"
@@ -142,7 +142,9 @@
       </a-tab-pane>
 
       <a-tab-pane key="streaming">
-        <template #tab><desktop-outlined /> Where to Watch</template>
+        <template #tab>
+          <desktop-outlined /> {{ $t('Where to Watch') }}
+        </template>
 
         <a-row type="flex" class="where-to-watch">
           <a-col v-for="service in drama.availability" :key="service" :span="3">
@@ -247,16 +249,22 @@ const copyUrl = () => {
   message.success('Copied to clipboard!')
 }
 
+const seoTitle = computed(
+  () =>
+    drama.value && `${translation.value.title} (${drama.value.release_year})`,
+)
+const seoDescription = computed(() => drama.value && translation.value.synopsis)
+const seoImage = computed(() => drama.value && translation.value.cover_url)
+
 useSeoMeta({
-  title: drama.value && `${drama.value.title} (${drama.value.release_year})`,
-  description: drama.value && drama.value.synopsis,
-  ogTitle: drama.value && `${drama.value.title} (${drama.value.release_year})`,
-  ogDescription: drama.value && drama.value.synopsis,
-  ogImage: drama.value && drama.value.cover_url,
-  twitterTitle:
-    drama.value && `${drama.value.title} (${drama.value.release_year})`,
-  twitterDescription: drama.value && drama.value.synopsis,
-  twitterImage: drama.value && drama.value.cover_url,
+  title: seoTitle,
+  description: seoDescription,
+  ogTitle: seoTitle,
+  ogDescription: seoDescription,
+  ogImage: seoImage,
+  twitterTitle: seoTitle,
+  twitterDescription: seoDescription,
+  twitterImage: seoImage,
 })
 
 const activeKey = ref('cast')

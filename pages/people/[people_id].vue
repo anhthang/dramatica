@@ -46,7 +46,7 @@
             {{ people.native_name }}
           </a-descriptions-item>
           <a-descriptions-item :label="$t('Gender')">
-            {{ people.gender }}
+            {{ $t(people.gender) }}
           </a-descriptions-item>
           <a-descriptions-item :label="$t('Birthday')">
             {{ toLocaleDate(people.dob, $i18n.locale) }}
@@ -66,7 +66,7 @@
             {{ people.biography }}
           </a-typography-text>
           <a-typography-text v-else>
-            We don't have a biography for {{ peopleName }}
+            {{ $t('No Biography', { peopleName }) }}
           </a-typography-text>
         </a-descriptions>
 
@@ -92,7 +92,7 @@
               :key="rest.id"
               :color="airingColor[drama.airing_status] || 'gray'"
             >
-              <nuxt-link :to="`/${drama.drama_id}`">
+              <nuxt-link :to="`/${rest.drama_id}`">
                 <a-popover>
                   <a-card-meta
                     :title="drama.title"
@@ -101,8 +101,8 @@
                     "
                   />
                   <template #content>
-                    <a-card style="width: 400px">
-                      <template #cover>
+                    <a-card style="width: 450px">
+                      <template v-if="drama.cover_url" #cover>
                         <a-image
                           :preview="false"
                           :alt="drama.title"
@@ -112,14 +112,15 @@
 
                       <a-card-meta :title="drama.title">
                         <template #description>
-                          <a-typography>
-                            <a-typography-paragraph
-                              v-for="(line, idx) in drama.synopsis.split('\n')"
-                              :key="idx"
-                            >
-                              {{ line }}
-                            </a-typography-paragraph>
-                          </a-typography>
+                          <a-typography-paragraph
+                            :ellipsis="{
+                              rows: 6,
+                              expandable: true,
+                              symbol: $t('more'),
+                            }"
+                            :content="drama.synopsis"
+                          >
+                          </a-typography-paragraph>
                         </template>
                       </a-card-meta>
                     </a-card>

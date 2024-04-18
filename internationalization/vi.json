@@ -5,20 +5,26 @@
   "Ended": "Đã kết thúc",
 
   "Status": "Trạng thái",
-  "Episodes": "Số tập",
+  "Number of episodes": "Số tập",
   "Airing Platform": "Nền tảng phát sóng",
   "Aired": "Ngày phát sóng",
   "Genres": "Thể loại",
   "Synopsis": "Nội dung",
   "Cast": "Diễn viên",
+  "Episodes": "Danh sách tập",
+  "Where to Watch": "Nơi phát sóng",
   "Watch": "Xem phim",
   "Share": "Chia sẻ",
 
   "Personal Information": "Thông tin cá nhân",
-  "Native Name": "Native Name",
+  "Native Name": "Tên gốc",
   "Birthday": "Ngày sinh",
   "Age": "Tuổi",
   "Gender": "Giới tính",
   "Biography": "Tiểu sử",
-  "Drama": "Phim truyền hình"
+  "Drama": "Phim truyền hình",
+  "more": "thêm",
+  "No Biography": "Hiện tại chưa có tiểu sử cho { peopleName }",
+  "Male": "Nam",
+  "Female": "Nữ"
 }

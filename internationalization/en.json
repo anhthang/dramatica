@@ -5,12 +5,14 @@
   "Ended": "Ended",
 
   "Status": "Status",
-  "Episodes": "Episodes",
+  "Number of episodes": "Episodes",
   "Airing Platform": "Airing Platform",
   "Aired": "Aired",
   "Genres": "Genres",
   "Synopsis": "Synopsis",
   "Cast": "Cast",
+  "Episodes": "Episodes",
+  "Where to Watch": "Where to Watch",
   "Watch": "Watch",
   "Share": "Share",
 
@@ -20,5 +22,9 @@
   "Age": "Age",
   "Gender": "Gender",
   "Biography": "Biography",
-  "Drama": "Drama"
+  "Drama": "Drama",
+  "more": "more",
+  "No Biography": "We don't have a biography for { peopleName }",
+  "Male": "Male",
+  "Female": "Female"
 }
