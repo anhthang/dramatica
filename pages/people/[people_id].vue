@@ -119,6 +119,7 @@
                               symbol: $t('more'),
                             }"
                             :content="drama.synopsis"
+                            type="secondary"
                           >
                           </a-typography-paragraph>
                         </template>

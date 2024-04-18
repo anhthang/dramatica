@@ -1786,15 +1786,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nuxtjs/supabase@npm:^1.2.0":
-  version: 1.2.0
-  resolution: "@nuxtjs/supabase@npm:1.2.0"
+"@nuxtjs/supabase@npm:^1.2.1":
+  version: 1.2.1
+  resolution: "@nuxtjs/supabase@npm:1.2.1"
   dependencies:
-    "@nuxt/kit": "npm:^3.11.1"
-    "@supabase/supabase-js": "npm:2.41.1"
+    "@nuxt/kit": "npm:^3.11.2"
+    "@supabase/supabase-js": "npm:2.42.4"
     defu: "npm:^6.1.4"
     pathe: "npm:^1.1.2"
-  checksum: 10c0/6a231b1ee44354ed80c7ab582f5de2ce1de40af42d1787fe56fad3fac1600cc17f33c088ac82db4e79820fe2c5bf55bef6243775d0b1dd39cedd386e7617cda7
+  checksum: 10c0/d3c0418e90260883ec8130c7cfdaefbc23512217f596fce9778b11fd21470703622ddbf8d628f677d6da5c68245966cdb83ee8579ead2a7676a7011a055b1c25
   languageName: node
   linkType: hard
 
@@ -2389,12 +2389,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@supabase/functions-js@npm:2.2.2":
-  version: 2.2.2
-  resolution: "@supabase/functions-js@npm:2.2.2"
+"@supabase/functions-js@npm:2.3.0":
+  version: 2.3.0
+  resolution: "@supabase/functions-js@npm:2.3.0"
   dependencies:
     "@supabase/node-fetch": "npm:^2.6.14"
-  checksum: 10c0/3390190776cdf684ccbc240146e5c4c534f859fd0befb00707e35b1de0437fd93105f27511a90ec59799c006948f84cb5dea81ee39b1d7aa7add9ba9819bd389
+  checksum: 10c0/d0284cf2d4bcfe92f260006787afd02a96965ec52a6111d27a36a21330f701b9e78fc93ab7d397bb29ae5f90bdf7051acb5236f9cb4946c044545cecc6007d33
   languageName: node
   linkType: hard
 
@@ -2407,24 +2407,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@supabase/postgrest-js@npm:1.9.2":
-  version: 1.9.2
-  resolution: "@supabase/postgrest-js@npm:1.9.2"
+"@supabase/postgrest-js@npm:1.15.2":
+  version: 1.15.2
+  resolution: "@supabase/postgrest-js@npm:1.15.2"
   dependencies:
     "@supabase/node-fetch": "npm:^2.6.14"
-  checksum: 10c0/dab4144b54010f4d332f892d03529b3b5525f3a2bb164bbf254be7e6faaccbd0a6e25732b91808f7ec6987600ddc79508ffcb15a3ef037b646639b04eb969121
+  checksum: 10c0/a7dd2ef25a9b73f6fcd374b84c45ce610cfd9c2e565cb7a1c978601b62a6ec6cffa32751ef0857f850dc212acc9971aa6f0612aa9f8c0c0cb54cfb8b4d9a3cdb
   languageName: node
   linkType: hard
 
-"@supabase/realtime-js@npm:2.9.3":
-  version: 2.9.3
-  resolution: "@supabase/realtime-js@npm:2.9.3"
+"@supabase/realtime-js@npm:2.9.4":
+  version: 2.9.4
+  resolution: "@supabase/realtime-js@npm:2.9.4"
   dependencies:
     "@supabase/node-fetch": "npm:^2.6.14"
     "@types/phoenix": "npm:^1.5.4"
     "@types/ws": "npm:^8.5.10"
     ws: "npm:^8.14.2"
-  checksum: 10c0/321c98237e3255cad221ed16b54739ce327d395b80faba1416ba81577f043681ae0dde10e0ac1b7e3427412d1dbb35cb4b66d8466c21239932aa3dca6b9cc87c
+  checksum: 10c0/2c8499ef332d1214c8dda2cabac362034d3e0a38c5941b8a8ffc9bc4666b40d4525c0b5064c17a05468cc4472aa5507c14cb69581a1077f902ece0493ef92cd3
   languageName: node
   linkType: hard
 
@@ -2437,17 +2437,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@supabase/supabase-js@npm:2.41.1":
-  version: 2.41.1
-  resolution: "@supabase/supabase-js@npm:2.41.1"
+"@supabase/supabase-js@npm:2.42.4":
+  version: 2.42.4
+  resolution: "@supabase/supabase-js@npm:2.42.4"
   dependencies:
     "@supabase/auth-js": "npm:2.63.0"
-    "@supabase/functions-js": "npm:2.2.2"
+    "@supabase/functions-js": "npm:2.3.0"
     "@supabase/node-fetch": "npm:2.6.15"
-    "@supabase/postgrest-js": "npm:1.9.2"
-    "@supabase/realtime-js": "npm:2.9.3"
+    "@supabase/postgrest-js": "npm:1.15.2"
+    "@supabase/realtime-js": "npm:2.9.4"
     "@supabase/storage-js": "npm:2.5.5"
-  checksum: 10c0/8b1e3166435cb213c49eaecc3e6f15cce5e132b8f32f76dd5faba45e458ef51e1b610210e338e97b45d0ccc94af275d6562a534321f5e2a8d330f5e69e0308da
+  checksum: 10c0/6077ba797dea77acf571110eb6c48d7beddebe6affab0b84bd9eb482169841fbb8658a93a7823737932227c96ae47b0af155680941327344142e88ace8938f48
   languageName: node
   linkType: hard
 
@@ -3947,9 +3947,9 @@ __metadata:
   linkType: hard
 
 "caniuse-lite@npm:^1.0.0, caniuse-lite@npm:^1.0.30001587, caniuse-lite@npm:^1.0.30001599":
-  version: 1.0.30001610
-  resolution: "caniuse-lite@npm:1.0.30001610"
-  checksum: 10c0/015956a0bf2e3e233da3dc00c5632bbb4d416bcd6ced2f839e33e45b197a856234f97cb046e7427b83d7e3a3d6df314dfab1c86eb9d970970e00ad85a50b4933
+  version: 1.0.30001611
+  resolution: "caniuse-lite@npm:1.0.30001611"
+  checksum: 10c0/e6d6549a42b811212f6c4ef2798c45ab5a19484aaee0fa550ec20632a49638d3e53b64e088664d2efab0c5a278d1f8d1dec4654fbce11194e6ec1dc4ba5df466
   languageName: node
   linkType: hard
 
@@ -4271,7 +4271,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"confbox@npm:^0.1.3":
+"confbox@npm:^0.1.3, confbox@npm:^0.1.7":
   version: 0.1.7
   resolution: "confbox@npm:0.1.7"
   checksum: 10c0/18b40c2f652196a833f3f1a5db2326a8a579cd14eacabfe637e4fc8cb9b68d7cf296139a38c5e7c688ce5041bf46f9adce05932d43fde44cf7e012840b5da111
@@ -4899,7 +4899,7 @@ __metadata:
     "@nuxt/fonts": "npm:^0.6.1"
     "@nuxtjs/color-mode": "npm:^3.4.0"
     "@nuxtjs/i18n": "npm:^8.3.0"
-    "@nuxtjs/supabase": "npm:^1.2.0"
+    "@nuxtjs/supabase": "npm:^1.2.1"
     "@types/lodash.chunk": "npm:^4.2.9"
     "@types/lodash.get": "npm:^4.4.9"
     "@types/lodash.groupby": "npm:^4.6.9"
@@ -6867,13 +6867,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jsonc-parser@npm:^3.2.0":
-  version: 3.2.1
-  resolution: "jsonc-parser@npm:3.2.1"
-  checksum: 10c0/ada66dec143d7f9cb0e2d0d29c69e9ce40d20f3a4cb96b0c6efb745025ac7f9ba647d7ac0990d0adfc37a2d2ae084a12009a9c833dbdbeadf648879a99b9df89
-  languageName: node
-  linkType: hard
-
 "jsonfile@npm:^6.0.1":
   version: 6.1.0
   resolution: "jsonfile@npm:6.1.0"
@@ -8559,7 +8552,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pathe@npm:^1.0.0, pathe@npm:^1.1.0, pathe@npm:^1.1.1, pathe@npm:^1.1.2":
+"pathe@npm:^1.0.0, pathe@npm:^1.1.1, pathe@npm:^1.1.2":
   version: 1.1.2
   resolution: "pathe@npm:1.1.2"
   checksum: 10c0/64ee0a4e587fb0f208d9777a6c56e4f9050039268faaaaecd50e959ef01bf847b7872785c36483fa5cdcdbdfdb31fef2ff222684d4fc21c330ab60395c681897
@@ -8611,13 +8604,13 @@ __metadata:
   linkType: hard
 
 "pkg-types@npm:^1.0.3":
-  version: 1.0.3
-  resolution: "pkg-types@npm:1.0.3"
+  version: 1.1.0
+  resolution: "pkg-types@npm:1.1.0"
   dependencies:
-    jsonc-parser: "npm:^3.2.0"
-    mlly: "npm:^1.2.0"
-    pathe: "npm:^1.1.0"
-  checksum: 10c0/7f692ff2005f51b8721381caf9bdbc7f5461506ba19c34f8631660a215c8de5e6dca268f23a319dd180b8f7c47a0dc6efea14b376c485ff99e98d810b8f786c4
+    confbox: "npm:^0.1.7"
+    mlly: "npm:^1.6.1"
+    pathe: "npm:^1.1.2"
+  checksum: 10c0/b350da13d2dab7dc2fa9d65a08a2038d841d8d8c94bf3878dd911a522e20da50d6662bab510fa329e363e403892374b3b847ebf7b3e10011805cdefb00f228fd
   languageName: node
   linkType: hard
 
@@ -11062,13 +11055,13 @@ __metadata:
   linkType: hard
 
 "vue-router@npm:^4.2.5, vue-router@npm:^4.3.0":
-  version: 4.3.1
-  resolution: "vue-router@npm:4.3.1"
+  version: 4.3.2
+  resolution: "vue-router@npm:4.3.2"
   dependencies:
     "@vue/devtools-api": "npm:^6.5.1"
   peerDependencies:
     vue: ^3.2.0
-  checksum: 10c0/f8c148f365c7298511fe2b0273bb62b07fe87620d44a037f41ca0be5e84ef87015b13e1a614ad000b22e304ac527b5b04e03e7d317c09a59e74e3fa90f2fc64e
+  checksum: 10c0/63d5be4a983622e130c1ebe6e26dd17dee2346d77b35ef3f09ee0d8693fd38ad2387551c2db87a5cb258348dbc24dd815f48b4a55cc3ccb680c81aa4837ca88e
   languageName: node
   linkType: hard
 

@@ -33,32 +33,7 @@
               :lg="6"
               :xl="4"
             >
-              <nuxt-link :to="`/${drama.id}`">
-                <a-card hoverable :loading="pending">
-                  <template v-if="!pending" #cover>
-                    <a-image
-                      :preview="false"
-                      :alt="drama.title"
-                      :src="drama.poster_url"
-                    />
-                  </template>
-
-                  <a-card-meta :title="drama.title">
-                    <template #description>
-                      <a-flex justify="space-between">
-                        <span
-                          ><calendar-outlined />
-                          {{ toLocaleDate(drama.air_date, locale) }}</span
-                        >
-                        <span
-                          ><number-outlined />
-                          {{ drama.number_of_episodes }}</span
-                        >
-                      </a-flex>
-                    </template>
-                  </a-card-meta>
-                </a-card>
-              </nuxt-link>
+              <card-t-v-poster :tv="drama" :loading="pending" />
             </a-col>
           </a-row>
         </div>

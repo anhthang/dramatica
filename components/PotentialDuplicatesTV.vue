@@ -15,22 +15,10 @@
     <a-row :gutter="[16, 16]" type="flex">
       <a-col v-for="tv in data" :key="tv.id" :xs="24" :sm="12" :md="6">
         <nuxt-link :to="`/${tv.id}`" target="_blank">
-          <a-card
-            hoverable
-            :class="
-              tv.title.toLowerCase() === props.title.toLowerCase() &&
-              'card-highlighted'
-            "
-            style="height: 100%"
-          >
-            <a-card-meta :title="`${tv.title} (${tv.release_year})`">
-              <template #avatar>
-                <a-avatar :src="tv.poster_url" :size="60">
-                  {{ tv.title.charAt(0) }}
-                </a-avatar>
-              </template>
-            </a-card-meta>
-          </a-card>
+          <card-t-v
+            :tv="tv"
+            :highlight="tv.title.toLowerCase() === props.title.toLowerCase()"
+          />
         </nuxt-link>
       </a-col>
     </a-row>

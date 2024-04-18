@@ -31,30 +31,8 @@
     </a-form-item>
 
     <a-form-item v-if="selection">
-      <a-card class="card-highlighted">
-        <a-card-meta
-          v-if="type === 'drama'"
-          :title="selection.title"
-          :description="selection.title_pinyin"
-        >
-          <template #avatar>
-            <a-avatar :src="selection.poster_url" :size="60">
-              {{ selection.title.charAt(0) }}
-            </a-avatar>
-          </template>
-        </a-card-meta>
-        <a-card-meta
-          v-else
-          :title="selection.name"
-          :description="selection.native_name"
-        >
-          <template #avatar>
-            <a-avatar :src="selection.profile_url" :size="60">
-              {{ selection.name.charAt(0) }}
-            </a-avatar>
-          </template>
-        </a-card-meta>
-      </a-card>
+      <card-t-v v-if="type === 'drama'" :tv="selection" :highlight="true" />
+      <card-person v-else :person="selection" :highlight="true" />
     </a-form-item>
 
     <a-form-item

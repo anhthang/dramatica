@@ -14,22 +14,10 @@
     <a-row :gutter="[16, 16]" type="flex">
       <a-col v-for="people in data" :key="people.id" :xs="24" :sm="12" :md="6">
         <nuxt-link :to="`/people/${people.id}`" target="_blank">
-          <a-card
-            hoverable
-            :class="
-              people.name.toLowerCase() === props.name.toLowerCase() &&
-              'card-highlighted'
-            "
-            style="height: 100%"
-          >
-            <a-card-meta :title="people.name" :description="people.native_name">
-              <template #avatar>
-                <a-avatar :src="people.profile_url" :size="60">
-                  {{ people.name.charAt(0) }}
-                </a-avatar>
-              </template>
-            </a-card-meta>
-          </a-card>
+          <card-person
+            :person="people"
+            :highlight="people.name.toLowerCase() === props.name.toLowerCase()"
+          />
         </nuxt-link>
       </a-col>
     </a-row>
