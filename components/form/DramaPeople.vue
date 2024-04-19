@@ -1,37 +1,42 @@
 <template>
   <a-form :ref="formRef" layout="vertical" :model="member" :rules="formRules">
-    <a-form-item>
+    <a-form-item v-if="edit">
+      <a-select
+        v-if="isDrama"
+        v-model:value="member.drama_id"
+        @change="onSelect"
+      >
+        <a-select-option v-for="{ drama } in metadata" :key="drama.id">
+          <select-option-t-v :item="drama" />
+        </a-select-option>
+      </a-select>
+      <a-select v-else v-model:value="member.people_id" @change="onSelect">
+        <a-select-option v-for="{ people } in metadata" :key="people.id">
+          <select-option-people :item="people" />
+        </a-select-option>
+      </a-select>
+    </a-form-item>
+    <a-form-item v-else>
       <a-auto-complete
         v-model:value="input"
         allow-clear
         :options="suggestions"
-        @select="onSelect"
+        @select="onSelectSuggestion"
         @search="fetchSuggestions"
       >
         <a-input placeholder="Search drama or cast/crew member by name...">
           <template #prefix><search-outlined /></template>
         </a-input>
-        <template v-if="type === 'drama'" #option="item">
-          <a-flex gap="small" align="center">
-            <a-avatar :src="item.poster_url">
-              {{ item.title.charAt(0) }}
-            </a-avatar>
-            {{ item.title }} ({{ item.release_year }})
-          </a-flex>
-        </template>
-        <template v-else #option="item">
-          <a-flex gap="small" align="center">
-            <a-avatar :src="item.profile_url">
-              {{ item.name.charAt(0) }}
-            </a-avatar>
-            {{ item.name }} ({{ item.native_name }})
-          </a-flex>
+
+        <template #option="item">
+          <select-option-t-v v-if="isDrama" :item="item" />
+          <select-option-people v-else />
         </template>
       </a-auto-complete>
     </a-form-item>
 
-    <a-form-item v-if="selection">
-      <card-t-v v-if="type === 'drama'" :tv="selection" :highlight="true" />
+    <a-form-item v-if="!edit && selection">
+      <card-t-v v-if="isDrama" :tv="selection" :highlight="true" />
       <card-person v-else :person="selection" :highlight="true" />
     </a-form-item>
 
@@ -95,7 +100,9 @@
 import { Form } from 'ant-design-vue'
 import pick from 'lodash.pick'
 
-const { type, existing } = defineProps({
+const route = useRoute()
+
+const { type, edit, existing, metadata } = defineProps({
   type: {
     type: String,
     required: true,
@@ -106,34 +113,46 @@ const { type, existing } = defineProps({
       return []
     },
   },
+  edit: {
+    type: Boolean,
+  },
+  metadata: {
+    type: Object,
+    default: () => ({}),
+  },
 })
 
-const selectOpts =
-  type === 'drama'
-    ? Object.entries(roles).map(([group, roles]) => ({
-        label: group.charAt(0).toUpperCase() + group.slice(1), // capitalize first letter
-        options: roles.map((role) => ({ label: role, value: role })),
-      }))
-    : roles[type].map((role) => ({ label: role, value: role }))
+const selectOpts = Object.entries(roles).map(([group, roles]) => ({
+  label: group.charAt(0).toUpperCase() + group.slice(1), // capitalize first letter
+  options: roles.map((role) => ({ label: role, value: role })),
+}))
 
-const enumRoles = type === 'drama' ? Object.values(roles).flat() : roles[type]
+const enumRoles = Object.values(roles).flat()
 
-const route = useRoute()
+const isDrama = type === 'drama'
+const isCast = computed(() => roles.cast.includes(member.value.role))
 
 const member = ref({
   drama_id: Number(route.params.drama_id),
   people_id: Number(route.params.people_id),
 })
 
-const isCast = computed(() => {
-  return type === 'cast' || roles.cast.includes(member.value.role)
+onMounted(() => {
+  if (edit) {
+    const { drama, people, ...rest } = metadata[0]
+
+    selection.value = isDrama ? drama : people
+    Object.assign(member.value, rest)
+  }
 })
+
+const selection = ref()
 
 const input = ref('')
 const suggestions = ref([])
 
 const fetchSuggestions = () => {
-  const url = type === 'drama' ? '/api/drama' : '/api/people'
+  const url = isDrama ? '/api/drama' : '/api/people'
 
   $fetch(url, {
     params: {
@@ -149,9 +168,17 @@ const fetchSuggestions = () => {
   })
 }
 
-const selection = ref()
-const onSelect = (value, option) => {
-  if (type === 'drama') {
+const onSelect = (value) => {
+  const { drama, people, ...rest } = isDrama
+    ? metadata.find((d) => d.drama_id === value)
+    : metadata.find((p) => p.people_id === value)
+
+  selection.value = isDrama ? drama : people
+  Object.assign(member.value, rest)
+}
+
+const onSelectSuggestion = (value, option) => {
+  if (isDrama) {
     member.value.drama_id = value
   } else {
     member.value.people_id = value
@@ -175,13 +202,7 @@ const formRules = ref({
       trigger: ['change', 'blur'],
     },
   ],
-  character_name: [
-    {
-      required: type === 'crew' ? false : true,
-      type: 'string',
-      trigger: ['change', 'blur'],
-    },
-  ],
+  character_name: [{ type: 'string', trigger: ['change', 'blur'] }],
   character_name_vi: [{ type: 'string', trigger: ['change', 'blur'] }],
   billing_order: [{ type: 'number', trigger: ['change', 'blur'] }],
 })
@@ -201,7 +222,7 @@ const onSubmit = async () => {
         body,
       })
         .then(() => {
-          if (type === 'drama') {
+          if (isDrama) {
             message.success(
               `[${selection.value.title}] has been successfully added to the people!`,
             )

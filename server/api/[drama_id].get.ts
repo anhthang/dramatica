@@ -13,8 +13,8 @@ export default defineEventHandler(async (event) => {
     .select(
       `*,
       availability:drama_availability(*),
-      cast:drama_cast(*, people(name, name_vi, profile_url)),
-      crew:drama_crew(*, people(name, name_vi, profile_url)),
+      cast:drama_cast(*, people(*)),
+      crew:drama_crew(*, people(*)),
       episodes(*),
       genres:drama_genres(genre:genres(name)),
       translations:drama_translations(*)

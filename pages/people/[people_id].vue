@@ -72,12 +72,18 @@
 
         <a-card :title="$t('Drama')" :loading="pending">
           <template #extra>
-            <a-button type="link" @click="toggle('add_drama')">
-              <video-camera-add-outlined /> Add
-            </a-button>
+            <a-flex gap="small">
+              <a-button type="primary" @click="toggle('add_drama')">
+                <video-camera-add-outlined /> Add
+              </a-button>
+
+              <a-button @click="toggle('edit_drama')">
+                <form-outlined /> Edit
+              </a-button>
+            </a-flex>
           </template>
           <a-timeline
-            v-for="year of Object.keys(people.dramas).reverse()"
+            v-for="year of Object.keys(dramaByYear).reverse()"
             :key="year"
           >
             <a-timeline-item>
@@ -88,7 +94,7 @@
             </a-timeline-item>
 
             <a-timeline-item
-              v-for="{ drama, ...rest } in people.dramas[year]"
+              v-for="{ drama, ...rest } in dramaByYear[year]"
               :key="rest.id"
               :color="airingColor[drama.airing_status] || 'gray'"
             >
@@ -147,15 +153,30 @@
 
     <a-modal
       v-model:open="visible.add_drama"
-      title="Add Drama"
+      title="Add Drama People"
       destroy-on-close
       :confirm-loading="visible.loading"
-      @ok="onAddDrama"
+      @ok="onUpdatePeopleDrama('add_drama')"
     >
       <form-drama-people
         ref="dramaPeopleForm"
         type="drama"
-        :existing="people.existing_drama_ids"
+        :existing="people.dramas.map((d) => d.drama_id)"
+      />
+    </a-modal>
+
+    <a-modal
+      v-model:open="visible.edit_drama"
+      title="Edit Drama People"
+      destroy-on-close
+      :confirm-loading="visible.loading"
+      @ok="onUpdatePeopleDrama('edit_drama')"
+    >
+      <form-drama-people
+        ref="dramaPeopleForm"
+        type="drama"
+        :edit="true"
+        :metadata="people.dramas"
       />
     </a-modal>
   </a-page-header>
@@ -183,15 +204,11 @@ const {
       params: { language: locale.value },
     }),
   {
-    transform: (data) => {
-      data.existing_drama_ids = data.dramas.map((d) => d.drama_id)
-      data.dramas = groupBy(data.dramas, 'drama.release_year')
-
-      return data
-    },
     watch: [locale],
   },
 )
+
+const dramaByYear = people && groupBy(people.value.dramas, 'drama.release_year')
 
 const peopleName = computed(() =>
   toLocalePeopleName(people.value, locale.value),
@@ -211,6 +228,7 @@ useSeoMeta({
 const visible = ref({
   edit: false,
   add_drama: false,
+  edit_drama: false,
   loading: false,
 })
 
@@ -230,13 +248,13 @@ const onEditPeople = async () => {
 }
 
 const dramaPeopleForm = ref()
-const onAddDrama = async () => {
+const onUpdatePeopleDrama = async (key) => {
   toggle('loading')
 
   await dramaPeopleForm.value.onSubmit()
 
   toggle('loading')
-  toggle('add_drama')
+  toggle(key)
   refresh()
 }
 </script>

@@ -14,27 +14,23 @@
     </template>
 
     <template #extra>
-      <a-dropdown>
-        <a-button type="primary"><user-add-outlined /> Add</a-button>
-        <template #overlay>
-          <a-menu @click="(e) => toggle(e.key)">
-            <a-menu-item key="cast"> Add Cast </a-menu-item>
-            <a-menu-item key="crew"> Add Crew </a-menu-item>
-          </a-menu>
-        </template>
-      </a-dropdown>
+      <a-button type="primary" @click="toggle('add')">
+        <user-add-outlined /> Add
+      </a-button>
+
+      <a-button @click="toggle('edit')"><form-outlined /> Edit</a-button>
     </template>
 
     <a-row :gutter="[16, 16]" type="flex">
       <a-col :xs="24" :sm="16" :lg="18">
-        <div v-for="role in roles.cast" v-show="drama.people[role]" :key="role">
+        <div v-for="role in roles.cast" v-show="peopleByRole[role]" :key="role">
           <a-divider orientation="left">
             <a-typography-title :level="5">{{ role }}</a-typography-title>
           </a-divider>
 
           <a-row :gutter="[16, 16]" type="flex">
             <a-col
-              v-for="people in drama.people[role]"
+              v-for="people in peopleByRole[role]"
               :key="people.id"
               :xs="24"
               :md="12"
@@ -48,7 +44,7 @@
       <a-col :xs="24" :sm="8" :lg="6">
         <div
           v-for="role in roles.crew"
-          v-show="drama.people[role]"
+          v-show="peopleByRole[role]"
           :key="role"
           class="drama-crew"
         >
@@ -58,7 +54,7 @@
 
           <a-row :gutter="[16, 16]" type="flex">
             <a-col
-              v-for="people in drama.people[role]"
+              v-for="people in peopleByRole[role]"
               :key="people.id"
               :xs="24"
             >
@@ -70,31 +66,27 @@
     </a-row>
 
     <a-modal
-      v-model:open="visible.cast"
-      title="Add Cast"
+      v-model:open="visible.add"
+      title="Add Cast & Crew"
       destroy-on-close
       :confirm-loading="visible.loading"
-      @ok="addDramaMember('cast')"
+      @ok="addDramaMember('add')"
     >
       <form-drama-people
         ref="peopleForm"
-        type="cast"
-        :existing="drama.cast.map((a) => a.people_id)"
+        type="people"
+        :existing="drama.people.map((a) => a.people_id)"
       />
     </a-modal>
 
     <a-modal
-      v-model:open="visible.crew"
-      title="Add Crew"
+      v-model:open="visible.edit"
+      title="Edit Cast & Crew"
       destroy-on-close
       :confirm-loading="visible.loading"
-      @ok="addDramaMember('crew')"
+      @ok="addDramaMember('edit')"
     >
-      <form-drama-people
-        ref="peopleForm"
-        type="crew"
-        :existing="drama.crew.map((a) => a.people_id)"
-      />
+      <form-drama-people type="people" :edit="true" :metadata="drama.people" />
     </a-modal>
   </a-page-header>
 </template>
@@ -109,16 +101,18 @@ const { data: drama, refresh } = await useAsyncData(
   {
     transform: (data) => {
       const people = data.cast.concat(data.crew)
-      data.people = groupBy(people, 'role')
+      data.people = people
 
       return data
     },
   },
 )
 
+const peopleByRole = drama && groupBy(drama.value.people, 'role')
+
 const visible = ref({
-  cast: false,
-  crew: false,
+  add: false,
+  edit: false,
   loading: false,
 })
 
