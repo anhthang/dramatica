@@ -114,6 +114,7 @@ import groupBy from 'lodash.groupby'
 import pick from 'lodash.pick'
 
 const route = useRoute()
+const { locale } = useI18n()
 
 const { type, edit, existing, metadata } = defineProps({
   type: {
@@ -173,6 +174,7 @@ const fetchSuggestions = () => {
   $fetch(url, {
     params: {
       query: input.value,
+      language: locale.value,
     },
   }).then((data) => {
     suggestions.value = data

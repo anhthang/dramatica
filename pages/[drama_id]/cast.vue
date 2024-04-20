@@ -86,7 +86,12 @@
       :confirm-loading="visible.loading"
       @ok="addDramaMember('edit')"
     >
-      <form-drama-people type="people" :edit="true" :metadata="drama.people" />
+      <form-drama-people
+        ref="peopleForm"
+        type="people"
+        :edit="true"
+        :metadata="drama.people"
+      />
     </a-modal>
   </a-page-header>
 </template>
@@ -108,7 +113,9 @@ const { data: drama, refresh } = await useAsyncData(
   },
 )
 
-const peopleByRole = drama && groupBy(drama.value.people, 'role')
+const peopleByRole = computed(
+  () => drama && groupBy(drama.value.people, 'role'),
+)
 
 const visible = ref({
   add: false,
@@ -126,9 +133,9 @@ const addDramaMember = async (key) => {
 
   await peopleForm.value.onSubmit()
 
+  refresh()
   toggle('loading')
   toggle(key)
-  refresh()
 }
 
 useSeoMeta({

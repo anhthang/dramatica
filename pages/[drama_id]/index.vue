@@ -287,8 +287,8 @@ const onEdit = async () => {
     toggle('edit')
   })
 
-  toggle('loading')
   refresh()
+  toggle('loading')
 }
 
 const translationForm = ref()
@@ -299,6 +299,7 @@ const onUpdateTranslation = async () => {
     toggle('translation')
   })
 
+  refresh()
   toggle('loading')
 }
 </script>
