@@ -4,10 +4,10 @@
     :class="highlight && 'card-highlighted'"
     style="height: 100%"
   >
-    <a-card-meta :title="person.name" :description="person.native_name">
+    <a-card-meta :title="personName" :description="person.native_name">
       <template #avatar>
         <a-avatar :src="person.profile_url" :size="60">
-          {{ person.name.charAt(0) }}
+          {{ personName.charAt(0) }}
         </a-avatar>
       </template>
     </a-card-meta>
@@ -22,4 +22,7 @@ const { person, highlight } = defineProps({
   },
   highlight: Boolean,
 })
+
+const { locale } = useI18n()
+const personName = computed(() => toLocalePeopleName(person, locale.value))
 </script>

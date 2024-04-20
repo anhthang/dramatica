@@ -3,7 +3,7 @@
     <a-avatar :src="item.poster_url" size="small">
       {{ item.title.charAt(0) }}
     </a-avatar>
-    {{ item.title }} ({{ item.release_year }})
+    {{ item.title }}
   </a-flex>
 </template>
 

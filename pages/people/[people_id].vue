@@ -208,7 +208,9 @@ const {
   },
 )
 
-const dramaByYear = people && groupBy(people.value.dramas, 'drama.release_year')
+const dramaByYear = computed(() =>
+  groupBy(people.value.dramas, 'drama.release_year'),
+)
 
 const peopleName = computed(() =>
   toLocalePeopleName(people.value, locale.value),

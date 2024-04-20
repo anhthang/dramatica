@@ -6,14 +6,26 @@
         v-model:value="member.drama_id"
         @change="onSelect"
       >
-        <a-select-option v-for="{ drama } in metadata" :key="drama.id">
-          <select-option-t-v :item="drama" />
-        </a-select-option>
+        <a-select-opt-group
+          v-for="(group, label) in groupBy(metadata, 'drama.release_year')"
+          :key="label"
+          :label="label"
+        >
+          <a-select-option v-for="{ drama } in group" :key="drama.id">
+            <select-option-t-v :item="drama" />
+          </a-select-option>
+        </a-select-opt-group>
       </a-select>
       <a-select v-else v-model:value="member.people_id" @change="onSelect">
-        <a-select-option v-for="{ people } in metadata" :key="people.id">
-          <select-option-people :item="people" />
-        </a-select-option>
+        <a-select-opt-group
+          v-for="(group, label) in groupBy(metadata, 'role')"
+          :key="label"
+          :label="label"
+        >
+          <a-select-option v-for="{ people } in group" :key="people.id">
+            <select-option-people :item="people" />
+          </a-select-option>
+        </a-select-opt-group>
       </a-select>
     </a-form-item>
     <a-form-item v-else>
@@ -30,7 +42,7 @@
 
         <template #option="item">
           <select-option-t-v v-if="isDrama" :item="item" />
-          <select-option-people v-else />
+          <select-option-people v-else :item="item" />
         </template>
       </a-auto-complete>
     </a-form-item>
@@ -98,6 +110,7 @@
 
 <script setup>
 import { Form } from 'ant-design-vue'
+import groupBy from 'lodash.groupby'
 import pick from 'lodash.pick'
 
 const route = useRoute()
@@ -132,10 +145,13 @@ const enumRoles = Object.values(roles).flat()
 const isDrama = type === 'drama'
 const isCast = computed(() => roles.cast.includes(member.value.role))
 
-const member = ref({
-  drama_id: Number(route.params.drama_id),
-  people_id: Number(route.params.people_id),
-})
+const member = isDrama
+  ? ref({
+      people_id: Number(route.params.people_id),
+    })
+  : ref({
+      drama_id: Number(route.params.drama_id),
+    })
 
 onMounted(() => {
   if (edit) {
