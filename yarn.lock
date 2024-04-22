@@ -4937,6 +4937,7 @@ __metadata:
     prettier: "npm:^3.2.5"
     typescript: "npm:^5.4.5"
     url-metadata: "npm:^4.1.0"
+    xpath-html: "npm:^1.0.3"
   languageName: unknown
   linkType: soft
 
@@ -7133,7 +7134,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash.get@npm:^4.4.2":
+"lodash.get@npm:4.4.2, lodash.get@npm:^4.4.2":
   version: 4.4.2
   resolution: "lodash.get@npm:4.4.2"
   checksum: 10c0/48f40d471a1654397ed41685495acb31498d5ed696185ac8973daef424a749ca0c7871bf7b665d5c14f5cc479394479e0307e781f61d5573831769593411be6e
@@ -8475,6 +8476,13 @@ __metadata:
     domhandler: "npm:^5.0.2"
     parse5: "npm:^7.0.0"
   checksum: 10c0/e820cacb8486e6f7ede403327d18480df086d70e32ede2f6654d8c3a8b4b8dc4a4d5c21c03c18a92ba2466c513b93ca63be4a138dd73cd0995f384eb3b9edf11
+  languageName: node
+  linkType: hard
+
+"parse5@npm:6.0.0":
+  version: 6.0.0
+  resolution: "parse5@npm:6.0.0"
+  checksum: 10c0/fba87040b6b64192911381378cd2b7a0a3e8cd4e89309acaa26b3a5c8b8f732c5f07d76a5de31a22866ff8db1f288dbb14322e3abdf5522cd8b1cae502b17783
   languageName: node
   linkType: hard
 
@@ -11263,6 +11271,40 @@ __metadata:
   version: 4.0.0
   resolution: "xml-name-validator@npm:4.0.0"
   checksum: 10c0/c1bfa219d64e56fee265b2bd31b2fcecefc063ee802da1e73bad1f21d7afd89b943c9e2c97af2942f60b1ad46f915a4c81e00039c7d398b53cf410e29d3c30bd
+  languageName: node
+  linkType: hard
+
+"xmldom@npm:0.6.0":
+  version: 0.6.0
+  resolution: "xmldom@npm:0.6.0"
+  checksum: 10c0/93cbb4854f73f431a402e7942baa87a59e8445fd0b4ae6bf6af3a1007809e849da8ac70bbe1509242212bce5d19e30b55ea282cbd9d87281701d1bdc13b74623
+  languageName: node
+  linkType: hard
+
+"xmlserializer@npm:0.6.1":
+  version: 0.6.1
+  resolution: "xmlserializer@npm:0.6.1"
+  checksum: 10c0/3bd35dbea1c3c56c30dfda2ec98942a5d02aae238ab46f54cfb2a6f18ab6e4b727812c597e830269de181d00f5ddf5bbe32611da84c5eec26aa67ff7438c3db3
+  languageName: node
+  linkType: hard
+
+"xpath-html@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "xpath-html@npm:1.0.3"
+  dependencies:
+    lodash.get: "npm:4.4.2"
+    parse5: "npm:6.0.0"
+    xmldom: "npm:0.6.0"
+    xmlserializer: "npm:0.6.1"
+    xpath: "npm:0.0.27"
+  checksum: 10c0/e10b85adf6e4a385310820c21eba294a305916918805cce83bf9485fc492b77771f65d39d2129e8ac85e416300df2253b736f6730a5c4b9953961514c2b4452a
+  languageName: node
+  linkType: hard
+
+"xpath@npm:0.0.27":
+  version: 0.0.27
+  resolution: "xpath@npm:0.0.27"
+  checksum: 10c0/d51bc49435e807b640f6187f7aabd3e0c93073408c0636273c948d0d1a02243cb07d434a74d7b12509547053ee4bcc944c31c1afc6e0e6e9417d5312f5e58e5c
   languageName: node
   linkType: hard
 

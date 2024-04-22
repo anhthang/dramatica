@@ -84,6 +84,7 @@ const { url } = defineProps({
 const params = ref({
   url: '',
   language: locale.value,
+  drama_id: route.params.drama_id,
 })
 
 onMounted(() => {
@@ -101,20 +102,15 @@ const loading = ref(false)
 const scrapeEpisodes = () => {
   loading.value = true
 
-  $fetch('/api/scrape/tv', { method: 'get', query: params.value })
-    .then((data) => {
-      tv.value = data
-    })
-    .catch(() => {
-      // nothing
-    })
-
   $fetch(`/api/scrape/tv/${route.params.drama_id}/episodes`, {
     method: 'get',
     params: params.value,
   })
     .then((data) => {
-      episodes.value = data
+      const { episodes: tvEpisodes, ...rest } = data
+
+      tv.value = rest
+      episodes.value = tvEpisodes
     })
     .catch((error) => {
       episodes.value = []

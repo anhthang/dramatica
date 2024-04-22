@@ -52,13 +52,16 @@ const tvDetail = async (unifiedEntityId: string, lang: string) => {
   return await requester(body, lang)
 }
 
-const tvScraper = async (titleId: string, lang: string) => {
-  const url = `https://www.netflix.com/title/${titleId}`
+export const tv = async (url: string, language: string) => {
+  const urlObj = new URL(url)
+
+  const [, , titleId] = urlObj.pathname.split('/')
+
   const unifiedEntityId = `Video:${titleId}`
 
-  const data = await tvDetail(unifiedEntityId, lang)
+  const data = await tvDetail(unifiedEntityId, language)
 
-  const information: { [x: string]: any } = {
+  const tv: { [x: string]: any } = {
     synopsis_source: 'Netflix',
     watch_link: url,
   }
@@ -79,21 +82,12 @@ const tvScraper = async (titleId: string, lang: string) => {
         ),
         // rating: get(video, 'contentAdvisory.certificationValue'),
         cover_url: get(video, 'boxartHighRes.url'), // might be included "Recently Added" text
+        season_id: get(video, 'currentEpisode.parentSeason.videoId'),
       }
 
-      Object.assign(information, detail)
+      Object.assign(tv, detail)
     }
   }
-
-  return information
-}
-
-export const tv = async (url: string, language: string) => {
-  const urlObj = new URL(url)
-
-  const [, , titleId] = urlObj.pathname.split('/')
-
-  const tv = await tvScraper(titleId, language)
 
   if (language === 'vi') {
     tv.title = capitalizeFirstLetters(tv.title)
@@ -103,42 +97,18 @@ export const tv = async (url: string, language: string) => {
 }
 
 export const episodes = async (
-  drama_id: string,
+  drama_id: number,
   url: string,
   language: string,
 ) => {
-  const urlObj = new URL(url)
-
-  const [, , titleId] = urlObj.pathname.split('/')
-
-  const unifiedEntityId = `Video:${titleId}`
-
-  const data = await tvDetail(unifiedEntityId, language)
-  if (!Array.isArray(data.unifiedEntities)) {
-    return []
-  }
-
-  const video = data.unifiedEntities.find(
-    (e: any) => e.unifiedEntityId === unifiedEntityId,
-  )
-
-  if (!video) {
-    return []
-  }
-
-  const seasonId = get(video, 'currentEpisode.parentSeason.videoId')
-  const count = get(
-    video,
-    'currentEpisode.parentSeason.episodes.totalCount',
-    100,
-  )
+  const info = await tv(url, language)
 
   const season = await requester(
     {
       operationName: 'PreviewModalEpisodeSelectorSeasonEpisodes',
       variables: {
-        seasonId,
-        count,
+        seasonId: info.season_id,
+        count: info.number_of_episodes,
         opaqueImageFormat: 'JPG',
         artworkContext: {},
       },
@@ -154,7 +124,7 @@ export const episodes = async (
 
   const edges = get(season, 'videos[0].episodes.edges', [])
 
-  return edges.map((e: any) => {
+  info.episodes = edges.map((e: any) => {
     return {
       language,
       episode_number: e.node.number,
@@ -163,7 +133,9 @@ export const episodes = async (
       synopsis: e.node.contextualSynopsis.text.trim(),
       synopsis_source: 'Netflix',
       runtime: e.node.runtimeSec || e.node.displayRuntimeSec,
-      drama_id: Number(drama_id),
+      drama_id,
     }
   })
+
+  return info
 }
