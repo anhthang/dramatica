@@ -30,7 +30,7 @@
             {{ drama.airing_platform }}
           </a-descriptions-item>
           <a-descriptions-item :label="$t('Genres')">
-            {{ drama.genres.map(({ genre }) => genre.name).join(', ') }}
+            {{ drama.genres.map(({ name }) => name).join(', ') }}
           </a-descriptions-item>
           <a-descriptions-item v-if="drama.air_date" :label="$t('Aired')">
             {{ airDate(drama) }}

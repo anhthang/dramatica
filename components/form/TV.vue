@@ -167,6 +167,22 @@
       </a-col>
     </a-row>
 
+    <a-form-item
+      ref="genres"
+      name="genres"
+      label="Genres"
+      v-bind="validateInfos.tv_genres"
+    >
+      <a-select
+        v-model:value="tv.tv_genres"
+        show-search
+        mode="multiple"
+        :options="tvGenres"
+        :filter-option="true"
+        option-filter-prop="label"
+      />
+    </a-form-item>
+
     <a-row :gutter="[16, 16]" type="flex">
       <a-col :xl="8">
         <a-form-item
@@ -216,6 +232,7 @@ const { isEdit, metadata } = defineProps({
 const tv = ref({
   title: '',
   dates: [],
+  tv_genres: [],
 })
 
 onBeforeMount(() => {
@@ -226,6 +243,16 @@ onBeforeMount(() => {
   if (metadata.end_date) {
     tv.value.dates[1] = dayjs(metadata.end_date, 'YYYY-MM-DD')
   }
+
+  if (Array.isArray(metadata.genres)) {
+    tv.value.tv_genres = metadata.genres.map(({ id }) => id)
+  }
+})
+
+const { data: tvGenres } = useAsyncData(() => $fetch('/api/genre'), {
+  transform: (data) => {
+    return data.map(({ id, name }) => ({ value: id, label: name }))
+  },
 })
 
 const dayOfWeek = [

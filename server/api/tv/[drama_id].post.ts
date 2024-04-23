@@ -32,5 +32,22 @@ export default defineEventHandler(async (event) => {
     throw createError(error.message)
   }
 
+  if (Array.isArray(body.tv_genres) && body.tv_genres.length) {
+    await client
+      .from('drama_genres')
+      .delete()
+      .eq('drama_id', body.id)
+      .neq('genre_id', body.tv_genres)
+
+    const toInsert = body.tv_genres.map((genre_id: number) => ({
+      drama_id: body.id,
+      genre_id,
+    }))
+
+    await client
+      .from('drama_genres')
+      .upsert(toInsert, { ignoreDuplicates: true })
+  }
+
   return data
 })

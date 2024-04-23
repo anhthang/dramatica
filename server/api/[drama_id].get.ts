@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
       cast:drama_cast(*, people(*)),
       crew:drama_crew(*, people(*)),
       episodes(*),
-      genres:drama_genres(genre:genres(name)),
+      genres:drama_genres(genre:genres(id, name)),
       translations:drama_translations(*)
       `,
     )
@@ -45,6 +45,8 @@ export default defineEventHandler(async (event) => {
 
     data.translations.unshift(en)
     data.cast = sortBy(data.cast, ['billing_order', 'people.name'])
+
+    data.genres = data.genres.map(({ genre }) => genre)
 
     if (data.watch_link) {
       data.availability.unshift({
