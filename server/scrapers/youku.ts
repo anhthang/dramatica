@@ -1,50 +1,8 @@
 import get from 'lodash.get'
 import unescape from 'lodash.unescape'
-import urlMetadata from 'url-metadata'
 import xpath from 'xpath-html'
 
-export const tv = async (url: string) => {
-  const metadata = await urlMetadata(url)
-
-  const {
-    datePublished,
-    irAlbumName: title,
-    jsonld,
-    url: watch_link,
-  } = metadata
-
-  const information: { [x: string]: any } = {
-    title,
-    synopsis_source: 'Youku',
-    airing_platform: 'Youku',
-    watch_link,
-  }
-
-  if (datePublished) {
-    information.air_date = datePublished.substring(0, 10)
-    information.release_year = Number(datePublished.substring(0, 4))
-  }
-
-  if (Array.isArray(jsonld)) {
-    jsonld.forEach((data: any) => {
-      switch (data['@type']) {
-        case 'TVSeries':
-          information.synopsis = unescape(data.description)
-          break
-        default:
-          break
-      }
-    })
-  }
-
-  return information
-}
-
-export const episodes = async (
-  drama_id: number,
-  url: string,
-  language: string,
-) => {
+const scraper = async (url: string) => {
   const html = await fetch(url).then((res) => res.text())
 
   const nodes = xpath.fromPageSource(html).findElements('//script')
@@ -78,6 +36,13 @@ export const episodes = async (
       runtime: get(data, 'data.data.extra.duration'),
       cover_url: get(data, 'data.data.extra.showImg'),
       poster_url: get(data, 'data.data.extra.showImgV'),
+      episodes: [],
+    }
+
+    const publishTime = get(data, 'data.data.extra.videoPublishTime')
+    if (publishTime) {
+      tv.air_date = publishTime.substring(0, 10)
+      tv.release_year = Number(publishTime.substring(0, 4))
     }
 
     const nodes = get(data, 'data.nodes[0].nodes', [])
@@ -94,7 +59,9 @@ export const episodes = async (
         switch (typeName) {
           case '播放页简介组件': // tv information
             if (data && data.title === '简介') {
-              tv.synopsis = get(nodes[0], 'data.desc')
+              tv.synopsis = unescape(get(nodes[0], 'data.desc'))
+              tv.synopsis_source = 'Youku'
+              tv.airing_platform = 'Youku'
             }
             break
           case 'Web播放页选集组件': // tv episodes
@@ -102,8 +69,8 @@ export const episodes = async (
               .filter((n) => get(n, 'data.videoType') === '正片')
               .map((node) => {
                 return {
-                  drama_id,
-                  language,
+                  // drama_id,
+                  // language,
                   title: get(node, 'data.title'),
                   episode_number: get(node, 'data.stage'),
                   preview_img: get(node, 'data.img'),
@@ -124,4 +91,21 @@ export const episodes = async (
       episodes: [],
     }
   }
+}
+
+export const tv = async (url: string) => {
+  const { episodes, ...rest } = await scraper(url)
+
+  return rest
+}
+
+export const episodes = async (
+  drama_id: number,
+  url: string,
+  language: string,
+) => {
+  const tv = await scraper(url)
+  tv.episodes.forEach((episode: any) => {
+    Object.assign(episode, { drama_id, language })
+  })
 }

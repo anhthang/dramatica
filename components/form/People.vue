@@ -16,7 +16,7 @@
           label="Stage Name"
           v-bind="validateInfos.name"
         >
-          <a-input v-model:value="people.name">
+          <a-input v-model:value.trim="people.name">
             <template #prefix><font-size-outlined /></template>
           </a-input>
         </a-form-item>
@@ -28,7 +28,7 @@
           label="Native Name"
           v-bind="validateInfos.native_name"
         >
-          <a-input v-model:value="people.native_name">
+          <a-input v-model:value.trim="people.native_name">
             <template #prefix><font-size-outlined /></template>
           </a-input>
         </a-form-item>
@@ -40,7 +40,7 @@
           label="Vietnamese Name"
           v-bind="validateInfos.name_vi"
         >
-          <a-input v-model:value="people.name_vi">
+          <a-input v-model:value.trim="people.name_vi">
             <template #prefix><font-size-outlined /></template>
           </a-input>
         </a-form-item>
@@ -83,7 +83,7 @@
       v-bind="validateInfos.profile_url"
       label="Profile Picture"
     >
-      <a-input v-model:value="people.profile_url">
+      <a-input v-model:value.trim="people.profile_url">
         <template #prefix><user-outlined /></template>
       </a-input>
     </a-form-item>
@@ -95,7 +95,7 @@
       label="Biography"
     >
       <a-textarea
-        v-model:value="people.biography"
+        v-model:value.trim="people.biography"
         :auto-size="{ minRows: 3, maxRows: 6 }"
       />
       <template #extra>
@@ -112,7 +112,7 @@
           v-bind="validateInfos.weibo"
           label="Weibo"
         >
-          <a-input v-model:value="people.weibo">
+          <a-input v-model:value.trim="people.weibo">
             <template #prefix><weibo-outlined /></template>
           </a-input>
         </a-form-item>
@@ -124,7 +124,7 @@
           v-bind="validateInfos.douyin"
           label="Douyin"
         >
-          <a-input v-model:value="people.douyin">
+          <a-input v-model:value.trim="people.douyin">
             <template #prefix><tik-tok-outlined /></template>
           </a-input>
         </a-form-item>
@@ -136,7 +136,7 @@
           v-bind="validateInfos.instagram"
           label="Instagram"
         >
-          <a-input v-model:value="people.instagram">
+          <a-input v-model:value.trim="people.instagram">
             <template #prefix><instagram-outlined /></template>
           </a-input>
         </a-form-item>

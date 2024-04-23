@@ -10,7 +10,7 @@
           label="Title"
           v-bind="validateInfos.title"
         >
-          <a-input v-model:value="tv.title">
+          <a-input v-model:value.trim="tv.title">
             <template #prefix><font-size-outlined /></template>
           </a-input>
         </a-form-item>
@@ -22,7 +22,7 @@
           label="Title Pinyin"
           v-bind="validateInfos.title_pinyin"
         >
-          <a-input v-model:value="tv.title_pinyin">
+          <a-input v-model:value.trim="tv.title_pinyin">
             <template #prefix><font-size-outlined /></template>
           </a-input>
         </a-form-item>
@@ -36,7 +36,7 @@
       label="Synopsis"
     >
       <a-textarea
-        v-model:value="tv.synopsis"
+        v-model:value.trim="tv.synopsis"
         :auto-size="{ minRows: 3, maxRows: 6 }"
       />
       <template #extra>
@@ -53,7 +53,7 @@
           label="Source"
           v-bind="validateInfos.synopsis_source"
         >
-          <a-input v-model:value="tv.synopsis_source">
+          <a-input v-model:value.trim="tv.synopsis_source">
             <template #prefix><font-size-outlined /></template>
           </a-input>
         </a-form-item>
@@ -65,7 +65,7 @@
           label="Trailer"
           v-bind="validateInfos.trailer_url"
         >
-          <a-input v-model:value="tv.trailer_url">
+          <a-input v-model:value.trim="tv.trailer_url">
             <template #prefix><video-camera-outlined /></template>
           </a-input>
         </a-form-item>
@@ -77,7 +77,7 @@
           label="Watch Link"
           v-bind="validateInfos.watch_link"
         >
-          <a-input v-model:value="tv.watch_link">
+          <a-input v-model:value.trim="tv.watch_link">
             <template #prefix><link-outlined /></template>
           </a-input>
         </a-form-item>
@@ -92,7 +92,7 @@
           label="Airing Platform"
           v-bind="validateInfos.airing_platform"
         >
-          <a-input v-model:value="tv.airing_platform">
+          <a-input v-model:value.trim="tv.airing_platform">
             <template #prefix><font-size-outlined /></template>
           </a-input>
         </a-form-item>
@@ -175,7 +175,7 @@
           label="Poster"
           v-bind="validateInfos.poster_url"
         >
-          <a-input v-model:value="tv.poster_url">
+          <a-input v-model:value.trim="tv.poster_url">
             <template #prefix><file-image-outlined /></template>
           </a-input>
         </a-form-item>
@@ -187,7 +187,7 @@
           label="Cover"
           v-bind="validateInfos.cover_url"
         >
-          <a-input v-model:value="tv.cover_url">
+          <a-input v-model:value.trim="tv.cover_url">
             <template #prefix><file-image-outlined /></template>
           </a-input>
         </a-form-item>

@@ -18,6 +18,7 @@ export default defineEventHandler(async (event) => {
       .select('*, translations:drama_translations(*)')
       .textSearch('title', `${fts}`)
       .order('release_year', { ascending: false })
+      .order('air_date', { ascending: false })
       .order('title')
       .limit(10)
   } else {
@@ -25,6 +26,7 @@ export default defineEventHandler(async (event) => {
       .from('dramas')
       .select('*, translations:drama_translations(*)')
       .order('release_year', { ascending: false })
+      .order('air_date', { ascending: false })
       .order('title')
   }
 

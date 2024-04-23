@@ -69,7 +69,7 @@
       label="Character"
       v-bind="validateInfos.character_name"
     >
-      <a-input v-model:value="member.character_name">
+      <a-input v-model:value.trim="member.character_name">
         <template #prefix><font-size-outlined /></template>
       </a-input>
       <template #extra>
@@ -83,7 +83,7 @@
       label="Character (Vietnamese)"
       v-bind="validateInfos.character_name_vi"
     >
-      <a-input v-model:value="member.character_name_vi">
+      <a-input v-model:value.trim="member.character_name_vi">
         <template #prefix><font-size-outlined /></template>
       </a-input>
       <template #extra>

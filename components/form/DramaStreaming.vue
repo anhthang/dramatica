@@ -24,7 +24,7 @@
       label="Watch Link"
       v-bind="validateInfos.watch_link"
     >
-      <a-input v-model:value="service.watch_link">
+      <a-input v-model:value.trim="service.watch_link">
         <template #prefix><link-outlined /></template>
       </a-input>
     </a-form-item>

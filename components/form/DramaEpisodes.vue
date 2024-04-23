@@ -7,7 +7,7 @@
       :rules="[{ required: true, type: 'url' }]"
     >
       <a-input-search
-        v-model:value="params.url"
+        v-model:value.trim="params.url"
         enter-button
         :loading="loading"
         @search="scrapeEpisodes"

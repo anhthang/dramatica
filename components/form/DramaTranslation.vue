@@ -26,7 +26,7 @@
       v-bind="validateInfos.watch_link"
     >
       <a-input-search
-        v-model:value="translation.watch_link"
+        v-model:value.trim="translation.watch_link"
         enter-button
         :loading="loading"
         @search="fetchMetadata"
@@ -45,7 +45,7 @@
       label="Title"
       v-bind="validateInfos.title"
     >
-      <a-input v-model:value="translation.title">
+      <a-input v-model:value.trim="translation.title">
         <template #prefix><font-size-outlined /></template>
       </a-input>
     </a-form-item>
@@ -56,7 +56,7 @@
       v-bind="validateInfos.synopsis"
       label="Synopsis"
     >
-      <a-textarea v-model:value="translation.synopsis" auto-size />
+      <a-textarea v-model:value.trim="translation.synopsis" auto-size />
       <template #extra>
         When copying a synopsis from another source, please include a citation
         at the field below.
@@ -69,7 +69,7 @@
       label="Source"
       v-bind="validateInfos.synopsis_source"
     >
-      <a-input v-model:value="translation.synopsis_source">
+      <a-input v-model:value.trim="translation.synopsis_source">
         <template #prefix><font-size-outlined /></template>
       </a-input>
     </a-form-item>
@@ -80,7 +80,7 @@
       label="Poster"
       v-bind="validateInfos.poster_url"
     >
-      <a-input v-model:value="translation.poster_url">
+      <a-input v-model:value.trim="translation.poster_url">
         <template #prefix><file-image-outlined /></template>
       </a-input>
     </a-form-item>
@@ -91,7 +91,7 @@
       label="Cover"
       v-bind="validateInfos.cover_url"
     >
-      <a-input v-model:value="translation.cover_url">
+      <a-input v-model:value.trim="translation.cover_url">
         <template #prefix><file-image-outlined /></template>
       </a-input>
     </a-form-item>
