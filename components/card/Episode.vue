@@ -3,18 +3,21 @@
     <template #cover>
       <img :src="episode.preview_img" />
     </template>
-    <a-card-meta :description="episode.synopsis">
-      <template #title>
-        <a-flex justify="space-between">
-          <span class="ant-card-meta-title">
-            {{ episode.title || `Episode ${episode.episode_number}` }}
-          </span>
-          <span style="font-weight: 600; font-size: 16px">
-            {{ runtime2Duration(episode.runtime) }}
-          </span>
-        </a-flex>
-      </template>
-    </a-card-meta>
+
+    <a-card-meta
+      :title="episode.title || `Episode ${episode.episode_number}`"
+      :description="episode.synopsis"
+    />
+
+    <template #actions>
+      <span v-if="episode.air_date">
+        <calendar-outlined />
+        {{ toLocaleDate(episode.air_date, $i18n.locale) }}
+      </span>
+      <span v-if="episode.runtime">
+        <clock-circle-outlined /> {{ runtime2Duration(episode.runtime) }}
+      </span>
+    </template>
   </a-card>
 </template>
 

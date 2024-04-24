@@ -39,7 +39,7 @@
 
     <a-list
       v-if="episodes.length"
-      item-layout="horizontal"
+      item-layout="vertical"
       :data-source="episodes"
       :pagination="{ pageSize: 5, simple: true }"
     >
@@ -49,14 +49,20 @@
 
       <template #renderItem="{ item }">
         <a-list-item>
-          <a-list-item-meta :description="item.synopsis">
-            <template #title>
-              <a-flex justify="space-between">
-                <span>{{ item.title }}</span>
-                <span>{{ runtime2Duration(item.runtime) }}</span>
-              </a-flex>
-            </template>
-          </a-list-item-meta>
+          <a-list-item-meta :title="item.title" :description="item.synopsis" />
+
+          <template #extra>
+            <img :width="240" :alt="item.title" :src="item.preview_img" />
+          </template>
+
+          <template #actions>
+            <span v-if="item.air_date">
+              <calendar-outlined /> {{ item.air_date }}
+            </span>
+            <span v-if="item.runtime">
+              <clock-circle-outlined /> {{ runtime2Duration(item.runtime) }}
+            </span>
+          </template>
         </a-list-item>
       </template>
 

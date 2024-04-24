@@ -6,7 +6,7 @@ import pick from 'lodash.pick'
 const columns = [
   'title',
   'episode_number',
-  // 'air_date',
+  'air_date',
   'preview_img',
   'runtime',
   'synopsis_source',
