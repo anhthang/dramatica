@@ -1,9 +1,5 @@
 <template>
-  <a-page-header
-    v-if="drama"
-    class="container"
-    :title="`${translation.title} (${drama.release_year})`"
-  >
+  <a-page-header v-if="drama" class="container" :title="translation.title_year">
     <template #extra>
       <a-dropdown-button @click="toggle('edit')">
         Edit
@@ -249,10 +245,7 @@ const copyUrl = () => {
   message.success('Copied to clipboard!')
 }
 
-const seoTitle = computed(
-  () =>
-    drama.value && `${translation.value.title} (${drama.value.release_year})`,
-)
+const seoTitle = computed(() => drama.value && translation.value.title_year)
 const seoDescription = computed(() => drama.value && translation.value.synopsis)
 const seoImage = computed(() => drama.value && translation.value.cover_url)
 

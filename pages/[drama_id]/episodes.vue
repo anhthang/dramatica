@@ -7,7 +7,7 @@
         </a-breadcrumb-item>
         <a-breadcrumb-item>
           <nuxt-link :to="`/${drama.id}`">
-            {{ drama.title }} ({{ drama.release_year }})
+            {{ drama.title_year }}
           </nuxt-link>
         </a-breadcrumb-item>
       </a-breadcrumb>
@@ -79,9 +79,7 @@ const addEpisodes = async () => {
 }
 
 useSeoMeta({
-  title:
-    drama.value &&
-    `Episodes - ${drama.value.title} (${drama.value.release_year})`,
+  title: drama.value && `Episodes - ${drama.value.title_year}`,
   description: drama.value && drama.value.synopsis,
 })
 </script>

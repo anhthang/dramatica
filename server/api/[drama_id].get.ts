@@ -44,6 +44,16 @@ export default defineEventHandler(async (event) => {
     en.drama_id = Number(drama_id)
 
     data.translations.unshift(en)
+    data.translations.forEach((d: any) => {
+      d.title_year = data.release_year
+        ? `${d.title} (${data.release_year})`
+        : d.title
+    })
+
+    data.title_year = data.release_year
+      ? `${data.title} (${data.release_year})`
+      : data.title
+
     data.cast = sortBy(data.cast, ['billing_order', 'people.name'])
 
     data.genres = data.genres.map(({ genre }) => genre)

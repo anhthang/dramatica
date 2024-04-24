@@ -5,7 +5,7 @@
     style="height: 100%"
   >
     <a-card-meta
-      :title="`${tv.title} (${tv.release_year})`"
+      :title="tv.release_year ? `${tv.title} (${tv.release_year})` : tv.title"
       :description="tv.title_pinyin"
     >
       <template #avatar>

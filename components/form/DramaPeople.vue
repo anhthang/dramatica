@@ -7,7 +7,10 @@
         @change="onSelect"
       >
         <a-select-opt-group
-          v-for="(group, label) in groupBy(metadata, 'drama.release_year')"
+          v-for="(group, label) in groupBy(
+            metadata,
+            (i) => i.drama.release_year || 'TBA',
+          )"
           :key="label"
           :label="label"
         >

@@ -209,7 +209,7 @@ const {
 )
 
 const dramaByYear = computed(() =>
-  groupBy(people.value.dramas, 'drama.release_year'),
+  groupBy(people.value.dramas, (i) => i.drama.release_year || 'TBA'),
 )
 
 const peopleName = computed(() =>
