@@ -199,6 +199,7 @@ const {
   pending,
   refresh,
 } = await useAsyncData(
+  `people-${route.params.people_id}-${locale.value}`,
   () =>
     $fetch(`/api/people/${route.params.people_id}`, {
       params: { language: locale.value },

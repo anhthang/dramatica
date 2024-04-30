@@ -7,7 +7,7 @@
         </a-breadcrumb-item>
         <a-breadcrumb-item>
           <nuxt-link :to="`/${drama.id}`">
-            {{ drama.title_year }}
+            {{ translation.title_year }}
           </nuxt-link>
         </a-breadcrumb-item>
       </a-breadcrumb>
@@ -73,13 +73,20 @@
 <script setup>
 const route = useRoute()
 
-const { data: drama, refresh } = await useAsyncData(() =>
-  $fetch(`/api/${route.params.drama_id}`),
+const { data: drama, refresh } = await useAsyncData(
+  `drama-${route.params.drama_id}`,
+  () => $fetch(`/api/${route.params.drama_id}`),
 )
 
+const translation = computed(() => {
+  const translationMap = keyBy(drama.value.translations, 'language')
+
+  return translationMap[locale.value] || translationMap.en
+})
+
 useSeoMeta({
-  title: drama.value && `Streaming Services - ${drama.value.title_year}`,
-  description: drama.value && drama.value.synopsis,
+  title: drama.value && `Streaming Services - ${translation.value.title_year}`,
+  description: drama.value && translation.value.synopsis,
 })
 
 const columns = [

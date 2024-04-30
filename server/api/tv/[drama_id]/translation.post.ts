@@ -2,7 +2,7 @@ import { serverSupabaseClient } from '#supabase/server'
 
 export default defineEventHandler(async (event) => {
   const client = await serverSupabaseClient(event)
-  const { id, ...rest } = await readBody(event)
+  const { id, title_year, ...rest } = await readBody(event)
 
   let query
   if (id) {

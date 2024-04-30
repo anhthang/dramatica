@@ -210,8 +210,9 @@ const config = useRuntimeConfig()
 
 const { locale } = useI18n()
 
-const { data: drama, refresh } = await useAsyncData(() =>
-  $fetch(`/api/${route.params.drama_id}`),
+const { data: drama, refresh } = await useAsyncData(
+  `drama-${route.params.drama_id}`,
+  () => $fetch(`/api/${route.params.drama_id}`),
 )
 
 const rightExtras = {

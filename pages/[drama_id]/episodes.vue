@@ -7,7 +7,7 @@
         </a-breadcrumb-item>
         <a-breadcrumb-item>
           <nuxt-link :to="`/${drama.id}`">
-            {{ drama.title_year }}
+            {{ translation.title_year }}
           </nuxt-link>
         </a-breadcrumb-item>
       </a-breadcrumb>
@@ -47,13 +47,21 @@
 </template>
 
 <script setup>
-const route = useRoute()
+import keyBy from 'lodash.keyby'
 
+const route = useRoute()
 const { locale } = useI18n()
 
-const { data: drama, refresh } = await useAsyncData(() =>
-  $fetch(`/api/${route.params.drama_id}`),
+const { data: drama, refresh } = await useAsyncData(
+  `drama-${route.params.drama_id}`,
+  () => $fetch(`/api/${route.params.drama_id}`),
 )
+
+const translation = computed(() => {
+  const translationMap = keyBy(drama.value.translations, 'language')
+
+  return translationMap[locale.value] || translationMap.en
+})
 
 const episodes = computed(() =>
   drama.value.episodes.filter((e) => e.language === locale.value),
@@ -79,7 +87,7 @@ const addEpisodes = async () => {
 }
 
 useSeoMeta({
-  title: drama.value && `Episodes - ${drama.value.title_year}`,
-  description: drama.value && drama.value.synopsis,
+  title: drama.value && `Episodes - ${translation.value.title_year}`,
+  description: drama.value && translation.value.synopsis,
 })
 </script>

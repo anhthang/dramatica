@@ -41,8 +41,8 @@ const parser = (data: any) => {
   const tv = {
     title: get(data, 'data.extra.showName'),
     number_of_episodes: get(data, 'data.extra.episodeTotal'),
-    cover_url: get(data, 'data.extra.showImg'),
-    poster_url: get(data, 'data.extra.showImgV'),
+    cover_url: get(data, 'data.extra.showImg').replace('http://', 'https://'),
+    poster_url: get(data, 'data.extra.showImgV').replace('http://', 'https://'),
     watch_link: `https://www.youku.tv/v_nextstage/id_${get(data, 'data.extra.showId')}.html`,
     airing_status: get(data, 'data.extra.completed') ? 'Ended' : 'Airing',
     episodes: [],
