@@ -4,20 +4,32 @@
       <img :src="episode.preview_img" />
     </template>
 
-    <a-card-meta
-      :title="episode.title || `Episode ${episode.episode_number}`"
-      :description="episode.synopsis"
-    />
+    <a-flex vertical gap="middle">
+      <a-card-meta
+        :title="episode.title || `Episode ${episode.episode_number}`"
+      >
+        <template #avatar>
+          <a-avatar>{{ episode.episode_number }}</a-avatar>
+        </template>
+      </a-card-meta>
 
-    <template #actions>
-      <span v-if="episode.air_date">
-        <calendar-outlined />
-        {{ toLocaleDate(episode.air_date, $i18n.locale) }}
-      </span>
-      <span v-if="episode.runtime">
-        <clock-circle-outlined /> {{ runtime2Duration(episode.runtime) }}
-      </span>
-    </template>
+      <a-card-meta :description="episode.synopsis" />
+
+      <a-card-meta>
+        <template #description>
+          <a-flex justify="space-between">
+            <span v-if="episode.air_date">
+              <calendar-outlined />
+              {{ toLocaleDate(episode.air_date, $i18n.locale) }}
+            </span>
+            <span v-if="episode.runtime">
+              <clock-circle-outlined />
+              {{ runtime2Duration(episode.runtime) }}
+            </span>
+          </a-flex>
+        </template>
+      </a-card-meta>
+    </a-flex>
   </a-card>
 </template>
 

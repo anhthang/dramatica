@@ -57,7 +57,7 @@
 
           <template #actions>
             <span v-if="item.air_date">
-              <calendar-outlined /> {{ item.air_date }}
+              <calendar-outlined /> {{ toLocaleDate(item.air_date, locale) }}
             </span>
             <span v-if="item.runtime">
               <clock-circle-outlined /> {{ runtime2Duration(item.runtime) }}
