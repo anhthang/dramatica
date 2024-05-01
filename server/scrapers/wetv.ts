@@ -1,60 +1,87 @@
 import unescape from 'lodash.unescape'
-import urlMetadata from 'url-metadata'
+import xpath from 'xpath-html'
 
-export const tv = async (url: string, language: string) => {
+const regex = /<use[^>]*>(.*?)<\/use>/g
+
+const scraper = async (url: string, language: string) => {
   const urlObj = new URL(url)
 
   const [, , , path] = urlObj.pathname.split('/')
   const [show_id] = path.split('-')
 
   const watch_link = `https://wetv.vip/${language}/play/${show_id}`
-  const metadata = await urlMetadata(watch_link)
 
-  const { 'og:image': cover_url, jsonld } = metadata
+  let html = await fetch(watch_link).then((res) => res.text())
 
-  const information: { [x: string]: any } = {
-    cover_url,
+  // to remove href redefined tags
+  html = html.replace(regex, '')
+
+  const node = xpath
+    .fromPageSource(html)
+    .findElement('//script[@id="__NEXT_DATA__"]')
+
+  try {
+    const data = JSON.parse(node.getText())
+
+    return JSON.parse(data.props.pageProps.data)
+  } catch (error) {
+    console.log('unable to parse json data')
+
+    return
+  }
+}
+
+const parser = (data: any, language: string) => {
+  const { coverInfo, videoList } = data
+
+  return {
+    title: coverInfo.title,
+    synopsis: unescape(coverInfo.description),
     synopsis_source: 'WeTV',
-    airing_platform: 'WeTV',
-    watch_link: watch_link.replace('/play/', '/album/'),
+    cover_url: coverInfo.posterHz,
+    poster_url: coverInfo.posterVt,
+    number_of_episodes: Number(coverInfo.episodeAll),
+    // rating: coverInfo.ratingName,
+    release_year: Number(coverInfo.year),
+    airing_status:
+      Number(coverInfo.episodeUpdated) === Number(coverInfo.episodeAll)
+        ? 'Ended'
+        : 'Airing',
+    watch_link: `https://wetv.vip/${language}/album/${coverInfo.cid}`,
+    episodes: videoList
+      .filter((d: any) => !d.isTrailer)
+      .map((d: any) => ({
+        // drama_id,
+        // language,
+        episode_number: Number(d.episode),
+        title: d.title,
+        preview_img: d.pic_640_360 || d.pic_496_280 || d.pic_332_187,
+        runtime: d.duration,
+        air_date: d.videoCheckUpTime.substring(0, 10),
+        synopsis: d.desc || d.introduction,
+      })),
   }
+}
 
-  if (Array.isArray(jsonld)) {
-    jsonld.forEach((data: any) => {
-      switch (data['@type']) {
-        case 'BreadcrumbList':
-          if (Array.isArray(data.itemListElement)) {
-            const { name } = data.itemListElement.reverse()[0]
-            information.title = name
-          }
-          break
+export const tv = async (url: string, language: string = 'en') => {
+  const data = await scraper(url, language)
 
-        case 'TVSeries':
-          {
-            const { description, actor } = data
-            if (Array.isArray(actor)) {
-              const workInfos = actor.reduce((out, cur) => {
-                out = out.concat(cur.name.workInfo)
-                return out
-              }, [])
+  const { episodes, ...rest } = parser(data, language)
 
-              const workInfo = workInfos.find((w: any) => w.cid === show_id)
-              if (workInfo) {
-                information.poster_url = workInfo.posterVt
-              }
-            }
+  return rest
+}
 
-            if (language === 'en') {
-              const [synopsis] = description.split(' | ')
-              information.synopsis = unescape(synopsis)
-            }
-          }
-          break
-        default:
-          break
-      }
-    })
-  }
+export const episodes = async (
+  drama_id: number,
+  url: string,
+  language: string,
+) => {
+  const data = await scraper(url, language)
 
-  return information
+  const tv = parser(data, language)
+  tv.episodes.forEach((episode: any) => {
+    Object.assign(episode, { drama_id, language })
+  })
+
+  return tv
 }

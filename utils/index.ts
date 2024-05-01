@@ -11,6 +11,12 @@ export const runtime2Duration = (seconds?: number) => {
     : dayjs.duration(seconds * 1000).format('m[m]')
 }
 
+export const isoDuration2Seconds = (isoDuration: string) => {
+  const duration = dayjs.duration(isoDuration)
+
+  return duration.asSeconds()
+}
+
 export const themeSpecificServices = ['WeTV', 'Youku']
 
 export const roles = {

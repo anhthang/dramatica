@@ -69,7 +69,7 @@ const episodes = computed(() =>
 
 const availability = computed(() => {
   return drama.value.availability.find((a) =>
-    ['Netflix', 'Youku'].includes(a.streaming_service),
+    ['Netflix', 'Youku', 'iQIYI', 'WeTV'].includes(a.streaming_service),
   )
 })
 
