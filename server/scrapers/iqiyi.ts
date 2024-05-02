@@ -1,17 +1,11 @@
+import dayjs from 'dayjs'
 import get from 'lodash.get'
-import keyBy from 'lodash.keyby'
 import unescape from 'lodash.unescape'
 import xpath from 'xpath-html'
-import { isoDuration2Seconds } from '~/utils'
 
-const addProtocol = (path: string) => {
-  if (path.startsWith('http')) {
-    return path
-  } else if (path.startsWith('//')) {
-    return `https:${path}`
-  } else {
-    return `https://${path}`
-  }
+const langCodeMap: { [x: string]: string } = {
+  en: 'en_us',
+  vi: 'vi_vn',
 }
 
 const scraper = async (url: string) => {
@@ -24,52 +18,49 @@ const scraper = async (url: string) => {
   try {
     const data = JSON.parse(node.getText())
 
-    return data
+    const {
+      videoAlbumInfo: { albumId },
+    } = data?.props?.initialState?.album || {}
+    return { albumId }
   } catch (error) {
     console.log('unable to parse json data')
 
-    return
+    return { albumId: '' }
   }
 }
 
-const parser = (data: any, language: string = 'en') => {
-  const cacheAlbumList = data?.props?.initialState?.album?.cacheAlbumList || {}
-  const videoAlbumInfo = data?.props?.initialState?.album?.videoAlbumInfo || {}
+export const tv = async (url: string, language: string = 'en') => {
+  const { albumId } = await scraper(url)
 
-  const episodes = cacheAlbumList[1]
-    .filter((a: any) => a.payMark !== 'preview')
-    .map((a: any) => ({
-      episode_number: a.order,
-      play_url: addProtocol(a.albumPlayUrl),
-    }))
+  const params: { [x: string]: string } = {
+    platformId: '3',
+    modeCode: 'vn',
+    langCode: langCodeMap[language],
+  }
 
-  const href = keyBy(videoAlbumInfo.albumHrefLangPile, 'hreflang')
-  const suffix = href[language]
-    ? href[language].href
-    : videoAlbumInfo.albumLocSuffix
+  const { data } = await fetch(
+    `https://pcw-api.iq.com/api/epgInfo/${albumId}?${new URLSearchParams(params).toString()}`,
+  ).then((res) => res.json())
 
-  const tv = {
-    title: videoAlbumInfo.name.trim(),
-    synopsis: unescape(videoAlbumInfo.desc),
+  const publishTime = dayjs(data.publishTime, 'YYYYMMDD')
+
+  return {
+    title: data.name.trim(),
+    synopsis: unescape(data.desc),
     synopsis_source: 'iQIYI',
-    // rating: videoAlbumInfo.rating,
-    cover_url: videoAlbumInfo.albumFocus1024.replace('http://', 'https://'),
-    poster_url: addProtocol(videoAlbumInfo.thumbnailUrl2),
-    release_year: Number(videoAlbumInfo.year),
-    number_of_episodes: videoAlbumInfo.total,
-    watch_link: `https://www.iq.com/album/${suffix}`,
-    episodes,
+    airing_platform: data.isExclusive === 1 ? 'iQIYI' : null,
+    // rating: data.rating,
+    cover_url: data.albumPic
+      .replace('http://', 'https://')
+      .replace('.jpg', '_1080_608.jpg'),
+    poster_url: data.posterPic
+      .replace('http://', 'https://')
+      .replace('.jpg', '_260_360.jpg'),
+    release_year: publishTime.year(),
+    air_date: publishTime.format('YYYY-MM-DD'),
+    number_of_episodes: data.tvCount,
+    watch_link: `https://www.iq.com/album/${data.albumHrefLangPile[language]}`,
   }
-
-  return tv
-}
-
-export const tv = async (url: string) => {
-  const data = await scraper(url)
-
-  const { episodes, ...rest } = parser(data)
-
-  return rest
 }
 
 export const episodes = async (
@@ -77,32 +68,42 @@ export const episodes = async (
   url: string,
   language: string,
 ) => {
-  const data = await scraper(url)
+  const { albumId } = await scraper(url)
 
-  const tv = parser(data, language)
+  const information: { [x: string]: any } = await tv(url, language)
 
-  const scrapers = tv.episodes.map((ep: any) => scraper(ep.play_url))
+  const params: { [x: string]: string } = {
+    platformId: '3',
+    modeCode: 'vn',
+    langCode: langCodeMap[language],
+    startOrder: '1',
+    endOrder: information.number_of_episodes,
+  }
+
+  const response = await fetch(
+    `https://pcw-api.iq.com/api/v2/episodeListSource/${albumId}?${new URLSearchParams(params).toString()}`,
+  ).then((res) => res.json())
+
+  const episodeList = get(response, 'data.epg', [])
 
   /**
    * to get more accurate episode information
    * title: May contain Chinese characters
    * air_date: This field might represent the upload date instead of the air date. Use it for iQiyi original TV shows and dramas only.
    */
-  const episodes = await Promise.all(scrapers)
+  information.episodes = episodeList
+    .filter((e: any) => e.contentType === 1)
+    .map((episode: any) => {
+      return {
+        drama_id,
+        language,
+        title: episode.name,
+        episode_number: episode.order,
+        preview_img: episode.pic.replace('.jpg', '_480_270.jpg'),
+        air_date: episode.initIssueTime.substring(0, 10),
+        runtime: episode.len,
+      }
+    })
 
-  tv.episodes = episodes.map((data) => {
-    const current = get(data, 'props.initialState.play.curVideoInfo', {})
-
-    return {
-      drama_id,
-      language,
-      title: current.name,
-      episode_number: current.order,
-      preview_img: addProtocol(current.albumPic284),
-      air_date: current.isoUploadDate.substring(0, 10),
-      runtime: isoDuration2Seconds(current.isoDuration),
-    }
-  })
-
-  return tv
+  return information
 }

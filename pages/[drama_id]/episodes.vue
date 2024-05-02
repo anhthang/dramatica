@@ -40,7 +40,7 @@
     >
       <form-drama-episodes
         ref="episodesForm"
-        :url="availability && availability.watch_link"
+        :availability="drama.availability"
       />
     </a-modal>
   </a-page-header>
@@ -66,12 +66,6 @@ const translation = computed(() => {
 const episodes = computed(() =>
   drama.value.episodes.filter((e) => e.language === locale.value),
 )
-
-const availability = computed(() => {
-  return drama.value.availability.find((a) =>
-    ['Netflix', 'Youku', 'iQIYI', 'WeTV'].includes(a.streaming_service),
-  )
-})
 
 const visible = ref(false)
 const toggleSync = () => {

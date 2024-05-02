@@ -38,7 +38,7 @@ const scraper = async (url: string) => {
 
 const parser = (data: any) => {
   // extra information is for current episode, not tvshow/drama information
-  const tv = {
+  const tv: { [x: string]: any } = {
     title: get(data, 'data.extra.showName'),
     number_of_episodes: get(data, 'data.extra.episodeTotal'),
     cover_url: get(data, 'data.extra.showImg').replace('http://', 'https://'),

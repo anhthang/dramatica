@@ -3,20 +3,20 @@
     <a-form-item
       ref="url"
       name="url"
-      label="Website"
+      label="Streaming Service"
       :rules="[{ required: true, type: 'url' }]"
     >
-      <a-input-search
-        v-model:value.trim="params.url"
-        enter-button
-        :loading="loading"
-        @search="scrapeEpisodes"
-      >
-        <template #prefix><link-outlined /></template>
-      </a-input-search>
+      <a-select
+        v-model:value="params.url"
+        :options="availability"
+        :field-names="{
+          label: 'streaming_service',
+          value: 'watch_link',
+        }"
+      />
       <template #extra>
-        Provide a link to the source website to import episode synopses. Please
-        note that this feature currently only supports Netflix.
+        Select a streaming service to import drama episode information. Please
+        verify the data's accuracy before importing.
       </template>
     </a-form-item>
 
@@ -30,7 +30,7 @@
     </a-form-item>
   </a-form>
 
-  <a-card v-if="tv">
+  <a-card v-if="tv" :loading="loading">
     <template #cover>
       <img :src="tv.cover_url" />
     </template>
@@ -80,10 +80,10 @@
 const route = useRoute()
 const { locale, locales } = useI18n()
 
-const { url } = defineProps({
-  url: {
-    type: String,
-    default: '',
+const { availability } = defineProps({
+  availability: {
+    type: Array,
+    default: () => [],
   },
 })
 
@@ -93,13 +93,15 @@ const params = ref({
   drama_id: route.params.drama_id,
 })
 
-onMounted(() => {
-  if (url) {
-    params.value.url = url
-  }
-})
-
-watch(params, () => scrapeEpisodes(), { deep: true })
+watch(
+  params,
+  () => {
+    if (params.value.url) {
+      scrapeEpisodes()
+    }
+  },
+  { deep: true },
+)
 
 const tv = ref()
 const episodes = ref([])
