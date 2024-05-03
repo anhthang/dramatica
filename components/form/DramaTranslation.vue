@@ -4,6 +4,7 @@
     layout="vertical"
     :model="translation"
     :rules="formRules"
+    :disabled="loading"
   >
     <a-form-item
       ref="language"
@@ -142,7 +143,6 @@ watch(
 )
 
 const loading = ref(false)
-
 const fetchMetadata = () => {
   loading.value = true
 

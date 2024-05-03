@@ -71,7 +71,10 @@
 </template>
 
 <script setup>
+import keyBy from 'lodash.keyby'
+
 const route = useRoute()
+const { locale } = useI18n()
 
 const { data: drama, refresh } = await useAsyncData(
   `drama-${route.params.drama_id}`,

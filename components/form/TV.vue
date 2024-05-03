@@ -1,7 +1,13 @@
 <template>
   <potential-duplicates-t-v v-if="!isEdit && tv.title" :props="tv" />
 
-  <a-form :ref="formRef" layout="vertical" :model="tv" :rules="formRules">
+  <a-form
+    :ref="formRef"
+    layout="vertical"
+    :model="tv"
+    :rules="formRules"
+    :disabled="loading"
+  >
     <a-row :gutter="[16, 16]" type="flex">
       <a-col :xl="8">
         <a-form-item
@@ -77,9 +83,14 @@
           label="Watch Link"
           v-bind="validateInfos.watch_link"
         >
-          <a-input v-model:value.trim="tv.watch_link">
+          <a-input-search
+            v-model:value.trim="tv.watch_link"
+            enter-button
+            :loading="loading"
+            @search="fetchMetadata"
+          >
             <template #prefix><link-outlined /></template>
-          </a-input>
+          </a-input-search>
         </a-form-item>
       </a-col>
     </a-row>
@@ -266,6 +277,28 @@ const dayOfWeek = [
 ]
 
 const status = ['Upcoming', 'Airing', 'Ended', 'Hiatus']
+
+const loading = ref(false)
+const fetchMetadata = () => {
+  loading.value = true
+
+  $fetch('/api/scrape/tv', {
+    method: 'get',
+    params: {
+      url: tv.value.watch_link,
+      language: 'en',
+    },
+  })
+    .then((data) => {
+      Object.assign(tv.value, data)
+    })
+    .catch((error) => {
+      message.error(error.message)
+    })
+    .finally(() => {
+      loading.value = false
+    })
+}
 
 const formRef = ref()
 const formRules = ref({
