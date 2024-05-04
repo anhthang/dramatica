@@ -53,7 +53,7 @@ const parser = (data: any) => {
     switch (node.typeName) {
       case '播放页简介组件': // tv information
         if (node?.data?.title === '简介') {
-          tv.synopsis = unescape(get(node.nodes[0], 'data.desc'))
+          tv.synopsis = unescape(get(node.nodes[0], 'data.desc')).trim()
           tv.synopsis_source = 'Youku'
           tv.airing_platform = 'Youku'
         }

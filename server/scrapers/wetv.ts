@@ -34,19 +34,26 @@ const scraper = async (url: string, language: string) => {
 const parser = (data: any, language: string) => {
   const { coverInfo, videoList } = data
 
+  let airing_status
+  if (coverInfo.episodeUpdated === '0') {
+    airing_status = 'Upcoming'
+  } else if (coverInfo.episodeUpdated === coverInfo.episodeAll) {
+    airing_status = 'Ended'
+  } else {
+    airing_status = 'Airing'
+  }
+
   return {
     title: coverInfo.title,
-    synopsis: unescape(coverInfo.description),
+    synopsis: unescape(coverInfo.description).trim(),
     synopsis_source: 'WeTV',
     cover_url: coverInfo.posterHz,
     poster_url: coverInfo.posterVt,
-    number_of_episodes: Number(coverInfo.episodeAll),
-    // rating: coverInfo.ratingName,
+    number_of_episodes:
+      coverInfo.episodeAll !== '0' ? Number(coverInfo.episodeAll) : null,
+    rating_name: coverInfo.ratingName,
     release_year: Number(coverInfo.year),
-    airing_status:
-      Number(coverInfo.episodeUpdated) === Number(coverInfo.episodeAll)
-        ? 'Ended'
-        : 'Airing',
+    airing_status,
     watch_link: `https://wetv.vip/${language}/album/${coverInfo.cid}`,
     episodes: videoList
       .filter((d: any) => !d.isTrailer)

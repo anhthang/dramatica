@@ -33,6 +33,18 @@
           </a-input>
         </a-form-item>
       </a-col>
+      <a-col :xl="8">
+        <a-form-item
+          ref="original_title"
+          name="original_title"
+          label="Original Title"
+          v-bind="validateInfos.original_title"
+        >
+          <a-input v-model:value.trim="tv.original_title">
+            <template #prefix><font-size-outlined /></template>
+          </a-input>
+        </a-form-item>
+      </a-col>
     </a-row>
 
     <a-form-item
@@ -66,13 +78,13 @@
       </a-col>
       <a-col :xl="8">
         <a-form-item
-          ref="trailer_url"
-          name="trailer_url"
-          label="Trailer"
-          v-bind="validateInfos.trailer_url"
+          ref="airing_platform"
+          name="airing_platform"
+          label="Airing Platform"
+          v-bind="validateInfos.airing_platform"
         >
-          <a-input v-model:value.trim="tv.trailer_url">
-            <template #prefix><video-camera-outlined /></template>
+          <a-input v-model:value.trim="tv.airing_platform">
+            <template #prefix><font-size-outlined /></template>
           </a-input>
         </a-form-item>
       </a-col>
@@ -89,25 +101,11 @@
             :loading="loading"
             @search="fetchMetadata"
           >
-            <template #prefix><link-outlined /></template>
+            <template #prefix><video-camera-outlined /></template>
           </a-input-search>
         </a-form-item>
       </a-col>
-    </a-row>
 
-    <a-row :gutter="[16, 16]" type="flex">
-      <a-col :xl="8">
-        <a-form-item
-          ref="airing_platform"
-          name="airing_platform"
-          label="Airing Platform"
-          v-bind="validateInfos.airing_platform"
-        >
-          <a-input v-model:value.trim="tv.airing_platform">
-            <template #prefix><font-size-outlined /></template>
-          </a-input>
-        </a-form-item>
-      </a-col>
       <a-col :xl="8">
         <a-form-item
           ref="release_year"
@@ -135,6 +133,19 @@
           </a-input-number>
         </a-form-item>
       </a-col>
+      <a-col :xl="8">
+        <a-form-item
+          ref="rating_name"
+          name="rating_name"
+          label="Rating"
+          v-bind="validateInfos.rating_name"
+        >
+          <a-input v-model:value.trim="tv.rating_name">
+            <template #prefix><safety-certificate-outlined /></template>
+          </a-input>
+        </a-form-item>
+      </a-col>
+
       <a-col :xl="8">
         <a-form-item
           ref="airing_status"
@@ -193,6 +204,33 @@
         option-filter-prop="label"
       />
     </a-form-item>
+
+    <a-row :gutter="[16, 16]" type="flex">
+      <a-col :xl="8">
+        <a-form-item
+          ref="douban"
+          name="douban"
+          label="Douban"
+          v-bind="validateInfos.douban"
+        >
+          <a-input v-model:value.trim="tv.douban">
+            <template #prefix><link-outlined /></template>
+          </a-input>
+        </a-form-item>
+      </a-col>
+      <a-col :xl="8">
+        <a-form-item
+          ref="imdb"
+          name="imdb"
+          label="IMDb"
+          v-bind="validateInfos.imdb"
+        >
+          <a-input v-model:value.trim="tv.imdb">
+            <template #prefix><link-outlined /></template>
+          </a-input>
+        </a-form-item>
+      </a-col>
+    </a-row>
 
     <a-row :gutter="[16, 16]" type="flex">
       <a-col :xl="8">
@@ -304,6 +342,7 @@ const formRef = ref()
 const formRules = ref({
   title: [{ required: true, type: 'string', trigger: ['change', 'blur'] }],
   title_pinyin: [{ type: 'string', trigger: ['change', 'blur'] }],
+  original_title: [{ type: 'string', trigger: ['change', 'blur'] }],
   release_year: [
     {
       required: false,
@@ -327,8 +366,10 @@ const formRules = ref({
   airing_platform: [{ type: 'string', trigger: ['change', 'blur'] }],
   poster_url: [{ type: 'url', trigger: ['change', 'blur'] }],
   cover_url: [{ type: 'url', trigger: ['change', 'blur'] }],
-  trailer_url: [{ type: 'url', trigger: ['change', 'blur'] }],
+  rating_name: [{ type: 'string', trigger: ['change', 'blur'] }],
   watch_link: [{ type: 'url', trigger: ['change', 'blur'] }],
+  douban: [{ type: 'url', trigger: ['change', 'blur'] }],
+  imdb: [{ type: 'url', trigger: ['change', 'blur'] }],
   airing_status: [
     {
       required: true,

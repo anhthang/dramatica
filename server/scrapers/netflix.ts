@@ -80,7 +80,7 @@ export const tv = async (url: string, language: string) => {
           'currentEpisode.parentSeason.episodes.totalCount',
           null,
         ),
-        // rating: get(video, 'contentAdvisory.certificationValue'),
+        rating_name: get(video, 'contentAdvisory.certificationValue'),
         cover_url: get(video, 'boxartHighRes.url'), // might be included "Recently Added" text
         season_id: get(video, 'currentEpisode.parentSeason.videoId'),
       }

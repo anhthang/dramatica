@@ -180,7 +180,6 @@ const formRules = ref({
   synopsis_source: [{ type: 'string', trigger: ['change', 'blur'] }],
   poster_url: [{ type: 'url', trigger: ['change', 'blur'] }],
   cover_url: [{ type: 'url', trigger: ['change', 'blur'] }],
-  // trailer_url: [{ type: 'url', trigger: ['change', 'blur'] }],
   watch_link: [{ type: 'url', trigger: ['change', 'blur'] }],
 })
 

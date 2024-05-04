@@ -34,7 +34,7 @@ export const tv = async (url: string, language: string = 'en') => {
 
   const params: { [x: string]: string } = {
     platformId: '3',
-    modeCode: 'vn',
+    modeCode: 'cn',
     langCode: langCodeMap[language],
   }
 
@@ -55,12 +55,12 @@ export const tv = async (url: string, language: string = 'en') => {
 
   return {
     title: data.name.trim(),
-    synopsis: unescape(data.desc),
+    synopsis: unescape(data.desc).trim(),
     synopsis_source: 'iQIYI',
     airing_platform:
       data.isExclusive === 1 || data.isQiyiProduced === 1 ? 'iQIYI' : null,
     airing_status,
-    // rating: data.rating,
+    rating_name: data.rating,
     cover_url: data.albumPic
       .replace('http://', 'https://')
       .replace('.jpg', '_1080_608.jpg'),
@@ -85,7 +85,7 @@ export const episodes = async (
 
   const params: { [x: string]: string } = {
     platformId: '3',
-    modeCode: 'vn',
+    modeCode: 'cn',
     langCode: langCodeMap[language],
     startOrder: '1',
     endOrder: information.number_of_episodes,
