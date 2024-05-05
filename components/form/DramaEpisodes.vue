@@ -67,10 +67,18 @@
       </template>
 
       <template #footer>
-        <a-typography-text type="warning">
-          Please verify the data carefully before inserting it to avoid
-          incorrect entries.
-        </a-typography-text>
+        <a-typography-paragraph type="warning">
+          <a-typography-text type="warning">
+            Please verify the data carefully before inserting it to avoid
+            incorrect entries.
+          </a-typography-text>
+        </a-typography-paragraph>
+        <a-typography-paragraph>
+          <a-checkbox v-model:checked="ignoreTitle">
+            Leave the checkbox checked for episode titles that appear to be the
+            drama name followed by a number.
+          </a-checkbox>
+        </a-typography-paragraph>
       </template>
     </a-list>
   </a-card>
@@ -103,6 +111,8 @@ watch(
   { deep: true },
 )
 
+const ignoreTitle = ref(true)
+
 const tv = ref()
 const episodes = ref([])
 const loading = ref(false)
@@ -130,9 +140,16 @@ const scrapeEpisodes = () => {
 }
 
 const onSubmit = async () => {
+  const body = ignoreTitle.value
+    ? episodes.value.map((e) => {
+        delete e.title
+        return e
+      })
+    : episodes.value
+
   await $fetch(`/api/scrape/tv/${route.params.drama_id}/episodes`, {
     method: 'post',
-    body: episodes.value,
+    body,
   })
     .then(() => {
       message.success('Episode synopses added successfully!')

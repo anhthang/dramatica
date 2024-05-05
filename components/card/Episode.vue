@@ -4,18 +4,14 @@
       <img :src="episode.preview_img" />
     </template>
 
-    <a-flex vertical gap="middle">
+    <a-flex vertical gap="small">
       <a-card-meta
-        :title="episode.title || `Episode ${episode.episode_number}`"
+        :title="episode.title || `${$t('Episode')} ${episode.episode_number}`"
       >
-        <template #avatar>
+        <template v-if="episode.title" #avatar>
           <a-avatar>{{ episode.episode_number }}</a-avatar>
         </template>
-      </a-card-meta>
 
-      <a-card-meta :description="episode.synopsis" />
-
-      <a-card-meta>
         <template #description>
           <a-flex justify="space-between">
             <span v-if="episode.air_date">
@@ -29,6 +25,8 @@
           </a-flex>
         </template>
       </a-card-meta>
+
+      {{ episode.synopsis }}
     </a-flex>
   </a-card>
 </template>

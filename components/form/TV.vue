@@ -395,6 +395,8 @@ const onChangeDates = () => {
   }
   if (tv.value.dates[1] && tv.value.dates[1].isValid()) {
     tv.value.end_date = tv.value.dates[1].format('YYYY-MM-DD')
+    tv.value.release_year = tv.value.dates[1].year()
+    tv.value.airing_status = 'Ended'
   }
 }
 

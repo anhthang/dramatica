@@ -82,7 +82,7 @@
     <a-tabs v-model:activeKey="activeKey" size="large">
       <template #rightExtra>
         <nuxt-link :to="`/${drama.id}/${activeKey}`">
-          <a-button type="link">{{ rightExtras[activeKey] }}</a-button>
+          <a-button type="link">Browse</a-button>
         </nuxt-link>
       </template>
 
@@ -218,12 +218,6 @@ const { data: drama, refresh } = await useAsyncData(
   `drama-${route.params.drama_id}`,
   () => $fetch(`/api/${route.params.drama_id}`),
 )
-
-const rightExtras = {
-  cast: 'All Cast & Crew',
-  episodes: 'All Episodes',
-  streaming: 'All Streaming Services',
-}
 
 const translation = computed(() => {
   const translationMap = keyBy(drama.value.translations, 'language')
