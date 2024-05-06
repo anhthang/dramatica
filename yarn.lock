@@ -517,13 +517,13 @@ __metadata:
   linkType: hard
 
 "@capsizecss/unpack@npm:^2.0.1":
-  version: 2.1.0
-  resolution: "@capsizecss/unpack@npm:2.1.0"
+  version: 2.2.0
+  resolution: "@capsizecss/unpack@npm:2.2.0"
   dependencies:
     blob-to-buffer: "npm:^1.2.8"
     cross-fetch: "npm:^3.0.4"
     fontkit: "npm:^2.0.2"
-  checksum: 10c0/779431985598615bb6e47b32b7664716468d9caba18edccc67453df4d5b58080fd88a6fa72b0ea94e99e401fe0ee4a586b15911e42f238e878d183f6c02560ff
+  checksum: 10c0/87df9ea6e4bafe947b5b8e5751c5f7847f5f8649a128707480da54bbfafd6dd7eb96f6b948f3589a3849a441fdaa11e21933ad44ba86cbd72298a0254d29696f
   languageName: node
   linkType: hard
 
@@ -2796,9 +2796,9 @@ __metadata:
   linkType: hard
 
 "@types/lodash@npm:*":
-  version: 4.17.0
-  resolution: "@types/lodash@npm:4.17.0"
-  checksum: 10c0/4c5b41c9a6c41e2c05d08499e96f7940bcf194dcfa84356235b630da920c2a5e05f193618cea76006719bec61c76617dff02defa9d29934f9f6a76a49291bd8f
+  version: 4.17.1
+  resolution: "@types/lodash@npm:4.17.1"
+  checksum: 10c0/af2ad8a3c8d7deb170a7ec6e18afc5ae8980576e5f7fe798d8a95a1df7222c15bdf967a25a35879f575a3b64743de00145710ee461a0051e055e94e4fe253f45
   languageName: node
   linkType: hard
 
@@ -3185,21 +3185,21 @@ __metadata:
   linkType: hard
 
 "@vue-macros/common@npm:^1.8.0":
-  version: 1.10.2
-  resolution: "@vue-macros/common@npm:1.10.2"
+  version: 1.10.3
+  resolution: "@vue-macros/common@npm:1.10.3"
   dependencies:
     "@babel/types": "npm:^7.24.0"
     "@rollup/pluginutils": "npm:^5.1.0"
-    "@vue/compiler-sfc": "npm:^3.4.21"
+    "@vue/compiler-sfc": "npm:^3.4.25"
     ast-kit: "npm:^0.12.1"
     local-pkg: "npm:^0.5.0"
-    magic-string-ast: "npm:^0.3.0"
+    magic-string-ast: "npm:^0.5.0"
   peerDependencies:
     vue: ^2.7.0 || ^3.2.25
   peerDependenciesMeta:
     vue:
       optional: true
-  checksum: 10c0/fd130aaf73fadf4f23d236c36d763e19187163374f96c310097c803ccfe2cf7b5403f78c8aeacdf719ca273daf0998e7aed1d59c4099ed22db15620cee48a428
+  checksum: 10c0/b8016921d1ace1383ea98055ecb78c580539613a20472d64d6f6160d05ac34d5ef4cef716f0f0d76a92997ec1eb3fc4a1f86b648f4e7e06b98aa3c8a9cf7a68a
   languageName: node
   linkType: hard
 
@@ -3272,7 +3272,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vue/compiler-sfc@npm:3.4.26, @vue/compiler-sfc@npm:^3.2.47, @vue/compiler-sfc@npm:^3.3.4, @vue/compiler-sfc@npm:^3.4.15, @vue/compiler-sfc@npm:^3.4.21":
+"@vue/compiler-sfc@npm:3.4.26, @vue/compiler-sfc@npm:^3.2.47, @vue/compiler-sfc@npm:^3.3.4, @vue/compiler-sfc@npm:^3.4.15, @vue/compiler-sfc@npm:^3.4.25":
   version: 3.4.26
   resolution: "@vue/compiler-sfc@npm:3.4.26"
   dependencies:
@@ -4146,9 +4146,9 @@ __metadata:
   linkType: hard
 
 "caniuse-lite@npm:^1.0.0, caniuse-lite@npm:^1.0.30001587, caniuse-lite@npm:^1.0.30001599":
-  version: 1.0.30001615
-  resolution: "caniuse-lite@npm:1.0.30001615"
-  checksum: 10c0/49029ff6cdbb35cf84cc9d9d4782dff3a8fb6afb547a83f3e43f13addcb0c4ac6015dc528a42f0f78846dc06261b3fab16555e3979114ad20e15cf7a91e64c33
+  version: 1.0.30001616
+  resolution: "caniuse-lite@npm:1.0.30001616"
+  checksum: 10c0/4c29f0a6c65ec888fadf5112cffc3b162872b74dce6ca4964d242c1c0fd05ab284f8e500f85739d5c96573589cf6e0e911424646b1009440a7c142ef6a5187ce
   languageName: node
   linkType: hard
 
@@ -7454,16 +7454,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"magic-string-ast@npm:^0.3.0":
-  version: 0.3.0
-  resolution: "magic-string-ast@npm:0.3.0"
+"magic-string-ast@npm:^0.5.0":
+  version: 0.5.0
+  resolution: "magic-string-ast@npm:0.5.0"
   dependencies:
-    magic-string: "npm:^0.30.2"
-  checksum: 10c0/f9aa9e372ecd2ccbe1178eb9a2d206307291c4b93cef0aa40802aa1036d02f0e878d975841579e0345cdf01466112c13bb8e4502f856e2463f5b5ea87d5bd1d7
+    magic-string: "npm:^0.30.9"
+  checksum: 10c0/ae6c35a65611addb8d07d2a2dc188b20a8f44ebc7ebe819b7212b0f22c76b6b4c2988bd899f274f2e0010ec086cc05b47a02a87a7685f6eff6be607ef86a89d9
   languageName: node
   linkType: hard
 
-"magic-string@npm:^0.30.0, magic-string@npm:^0.30.10, magic-string@npm:^0.30.2, magic-string@npm:^0.30.3, magic-string@npm:^0.30.4, magic-string@npm:^0.30.5, magic-string@npm:^0.30.8, magic-string@npm:^0.30.9":
+"magic-string@npm:^0.30.0, magic-string@npm:^0.30.10, magic-string@npm:^0.30.3, magic-string@npm:^0.30.4, magic-string@npm:^0.30.5, magic-string@npm:^0.30.8, magic-string@npm:^0.30.9":
   version: 0.30.10
   resolution: "magic-string@npm:0.30.10"
   dependencies:

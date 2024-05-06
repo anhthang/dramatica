@@ -6,7 +6,7 @@
   >
     <a-card-meta
       :title="tv.release_year ? `${tv.title} (${tv.release_year})` : tv.title"
-      :description="tv.title_pinyin"
+      :description="tv.title_pinyin || tv.original_title"
     >
       <template #avatar>
         <a-avatar :src="tv.poster_url" :size="60">

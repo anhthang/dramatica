@@ -1,5 +1,10 @@
 <template>
-  <a-page-header v-if="drama" class="container" :title="translation.title_year">
+  <a-page-header
+    v-if="drama"
+    class="container"
+    :title="translation.title_year"
+    :sub-title="drama.original_title"
+  >
     <template v-if="drama.rating_name" #tags>
       <a-tag color="blue">{{ drama.rating_name }}</a-tag>
     </template>

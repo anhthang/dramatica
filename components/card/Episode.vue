@@ -13,16 +13,18 @@
         </template>
 
         <template #description>
-          <a-flex justify="space-between">
-            <span v-if="episode.air_date">
-              <calendar-outlined />
-              {{ toLocaleDate(episode.air_date, $i18n.locale) }}
-            </span>
-            <span v-if="episode.runtime">
-              <clock-circle-outlined />
-              {{ runtime2Duration(episode.runtime) }}
-            </span>
-          </a-flex>
+          <span v-if="episode.air_date">
+            <calendar-outlined />
+            {{ toLocaleDate(episode.air_date, $i18n.locale) }}
+          </span>
+          <a-divider
+            v-if="episode.air_date && episode.runtime"
+            type="vertical"
+          />
+          <span v-if="episode.runtime">
+            <clock-circle-outlined />
+            {{ runtime2Duration(episode.runtime) }}
+          </span>
         </template>
       </a-card-meta>
 

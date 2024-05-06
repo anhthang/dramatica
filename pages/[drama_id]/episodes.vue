@@ -33,14 +33,26 @@
 
     <a-modal
       v-model:open="visible"
-      title="Sync Episode Synopses"
+      title="Sync Episodes"
       destroy-on-close
       :width="800"
       @ok="addEpisodes"
     >
+      <a-form layout="vertical">
+        <a-form-item name="language" label="Language">
+          <a-radio-group
+            v-model:value="language"
+            :options="
+              locales.map(({ code, name }) => ({ value: code, label: name }))
+            "
+          />
+        </a-form-item>
+      </a-form>
+
       <form-drama-episodes
         ref="episodesForm"
-        :availability="drama.availability"
+        :language="language"
+        :availability="availability"
       />
     </a-modal>
   </a-page-header>
@@ -50,7 +62,7 @@
 import keyBy from 'lodash.keyby'
 
 const route = useRoute()
-const { locale } = useI18n()
+const { locale, locales } = useI18n()
 
 const { data: drama, refresh } = await useAsyncData(
   `drama-${route.params.drama_id}`,
@@ -79,6 +91,20 @@ const addEpisodes = async () => {
   toggleSync()
   refresh()
 }
+
+const language = ref(locale.value)
+
+const availability = computed(() => {
+  const original = drama.value.translations.filter(
+    (t) => t.language === language.value,
+  )
+
+  const netflix = drama.value.availability.filter(
+    (s) => s.streaming_service === 'Netflix',
+  )
+
+  return original.concat(netflix)
+})
 
 useSeoMeta({
   title: drama.value && `Episodes - ${translation.value.title_year}`,

@@ -1,46 +1,15 @@
 <template>
-  <a-form layout="vertical" :model="params">
-    <a-form-item
-      ref="url"
-      name="url"
-      label="Streaming Service"
-      :rules="[{ required: true, type: 'url' }]"
-    >
-      <a-select
-        v-model:value="params.url"
-        :options="availability"
-        :field-names="{
-          label: 'streaming_service',
-          value: 'watch_link',
-        }"
-      />
-      <template #extra>
-        Select a streaming service to import drama episode information. Please
-        verify the data's accuracy before importing.
-      </template>
-    </a-form-item>
-
-    <a-form-item name="language" label="Language" :rules="[{ required: true }]">
-      <a-radio-group
-        v-model:value="params.language"
-        :options="
-          locales.map(({ code, name }) => ({ value: code, label: name }))
-        "
-      />
-    </a-form-item>
-  </a-form>
-
-  <a-card v-if="tv" :loading="loading">
-    <template #cover>
+  <a-card v-if="tv" :loading="pending">
+    <template v-if="!pending" #cover>
       <img :src="tv.cover_url" />
     </template>
 
     <a-card-meta :title="tv.title" :description="tv.synopsis" />
 
     <a-list
-      v-if="episodes.length"
+      v-if="tv.episodes.length"
       item-layout="vertical"
-      :data-source="episodes"
+      :data-source="tv.episodes"
       :pagination="{ pageSize: 5, simple: true }"
     >
       <template #header>
@@ -85,74 +54,79 @@
 </template>
 
 <script setup>
-const route = useRoute()
-const { locale, locales } = useI18n()
+import keyBy from 'lodash.keyby'
+import pick from 'lodash.pick'
 
-const { availability } = defineProps({
+const route = useRoute()
+const { locale } = useI18n()
+
+const props = defineProps({
   availability: {
     type: Array,
     default: () => [],
   },
-})
-
-const params = ref({
-  url: '',
-  language: locale.value,
-  drama_id: route.params.drama_id,
-})
-
-watch(
-  params,
-  () => {
-    if (params.value.url) {
-      scrapeEpisodes()
-    }
+  language: {
+    type: String,
+    required: true,
   },
-  { deep: true },
+})
+
+const { data: tv, pending } = useAsyncData(
+  () =>
+    Promise.all(
+      props.availability.map((s) =>
+        $fetch(`/api/scrape/tv/${route.params.drama_id}/episodes`, {
+          method: 'get',
+          params: {
+            url: s.watch_link,
+            drama_id: route.params.drama_id,
+            language: props.language,
+          },
+        }),
+      ),
+    ),
+  {
+    watch: [() => props.language],
+    transform: (data) => {
+      const [original, netflix] = data
+      if (netflix) {
+        const epMap = keyBy(netflix.episodes, 'episode_number')
+
+        original.episodes.forEach((ep) => {
+          if (epMap[ep.episode_number]) {
+            const picked = pick(epMap[ep.episode_number], [
+              'title',
+              'synopsis',
+              'synopsis_source',
+              'preview_img',
+            ])
+
+            Object.assign(ep, picked)
+          }
+        })
+      }
+
+      return original
+    },
+  },
 )
 
 const ignoreTitle = ref(true)
 
-const tv = ref()
-const episodes = ref([])
-const loading = ref(false)
-
-const scrapeEpisodes = () => {
-  loading.value = true
-
-  $fetch(`/api/scrape/tv/${route.params.drama_id}/episodes`, {
-    method: 'get',
-    params: params.value,
-  })
-    .then((data) => {
-      const { episodes: tvEpisodes, ...rest } = data
-
-      tv.value = rest
-      episodes.value = tvEpisodes
-    })
-    .catch((error) => {
-      episodes.value = []
-      message.error(error.message)
-    })
-    .finally(() => {
-      loading.value = false
-    })
-}
-
 const onSubmit = async () => {
   const body = ignoreTitle.value
-    ? episodes.value.map((e) => {
+    ? tv.value.episodes.map((e) => {
         delete e.title
         return e
       })
-    : episodes.value
+    : tv.value.episodes
 
-  await $fetch(`/api/scrape/tv/${route.params.drama_id}/episodes`, {
+  await $fetch(`/api/tv/${route.params.drama_id}/episodes`, {
     method: 'post',
     body,
   })
     .then(() => {
-      message.success('Episode synopses added successfully!')
+      message.success('Episodes added/updated successfully!')
     })
     .catch((error) => {
       message.error(error.message)
