@@ -26,7 +26,7 @@
 
           <template #actions>
             <span v-if="item.air_date">
-              <calendar-outlined /> {{ toLocaleDate(item.air_date, locale) }}
+              <calendar-outlined /> {{ toLocaleDate(item.air_date, language) }}
             </span>
             <span v-if="item.runtime">
               <clock-circle-outlined /> {{ runtime2Duration(item.runtime) }}
@@ -58,7 +58,6 @@ import keyBy from 'lodash.keyby'
 import pick from 'lodash.pick'
 
 const route = useRoute()
-const { locale } = useI18n()
 
 const props = defineProps({
   availability: {
