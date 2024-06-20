@@ -44,7 +44,51 @@ onMounted(() => {
   themeCfg.value.algorithm = getAlgorithm(preference)
 })
 
+const user = useState('authenticated', () => undefined)
+const getAuthUser = (authUser) => {
+  const {
+    app_metadata: { providers },
+    id: uid,
+    user_metadata: { email, email_verified, picture, name },
+  } = authUser
+
+  return {
+    uid,
+    email,
+    email_verified,
+    name,
+    picture,
+    providers,
+  }
+}
+
 const config = useRuntimeConfig()
+
+const client = useSupabaseClient()
+
+client.auth.getSession().then(({ data }) => {
+  if (data.session && data.session.user) {
+    user.value = getAuthUser(data.session.user)
+  }
+})
+
+client.auth.onAuthStateChange((event, session) => {
+  switch (event) {
+    case 'SIGNED_IN':
+      user.value = getAuthUser(session.user)
+      break
+    case 'SIGNED_OUT':
+      user.value = undefined
+      break
+    case 'TOKEN_REFRESHED':
+    case 'USER_UPDATED':
+    case 'USER_DELETED':
+    case 'PASSWORD_RECOVERY':
+    default:
+      break
+  }
+})
+
 const { appName, appDesc, baseUrl } = config.public
 
 useHead({
@@ -76,6 +120,12 @@ useSeoMeta({
   --card-highlighted-bg-light: #d2e5ff;
   --card-highlighted-bg-dark: #002159;
   --card-highlighted-border: #1677ff;
+
+  --color-text-gradient-stop-1: #4285f4;
+  --color-text-gradient-stop-2: #9b72cb;
+  --color-text-gradient-stop-3: #d96570;
+  --color-surface: #fff;
+
   --poster-height: 320px;
   --cover-height: 210px;
   font-family: Cabin, sans-serif;
