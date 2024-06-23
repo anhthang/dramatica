@@ -65,7 +65,7 @@
     "lodash.unescape": "^4.0.1",
     "nuxt": "3.12.2",
     "prettier": "^3.3.2",
-    "typescript": "^5.4.5",
+    "typescript": "^5.5.2",
     "xpath-html": "^1.0.3"
   },
   "packageManager": "yarn@4.3.0"

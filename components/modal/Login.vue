@@ -47,10 +47,12 @@
 const client = useSupabaseClient()
 
 const login = async (provider) => {
+  console.log('redirect to', provider, window.location.origin)
+
   const { user, error } = await client.auth.signInWithOAuth({
     provider,
     options: {
-      emailRedirectTo: window.location.origin,
+      redirectTo: window.location.origin,
     },
   })
 
