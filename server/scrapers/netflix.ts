@@ -14,6 +14,7 @@ const requester = async (body: any, lang: string) => {
     headers: {
       'content-type': 'application/json',
       'x-netflix.context.locales': `${lang}-vn`,
+      cookie: process.env.NETFLIX_COOKIE || '',
     },
     body: JSON.stringify(body),
   })
@@ -22,7 +23,10 @@ const requester = async (body: any, lang: string) => {
     throw createError(`${response.status} - ${response.statusText}`)
   }
 
-  const { data } = await response.json()
+  const { data, errors } = await response.json()
+  if (Array.isArray(errors)) {
+    throw createError(errors[0].message)
+  }
 
   return data
 }
@@ -34,17 +38,21 @@ const tvDetail = async (unifiedEntityId: string, lang: string) => {
       opaqueImageFormat: 'JPG',
       transparentImageFormat: 'PNG',
       videoMerchEnabled: true,
+      fetchPromoVideoOverride: false,
       hasPromoVideoOverride: false,
       promoVideoId: 0,
       videoMerchContext: 'BROWSE',
-      artworkContext: {},
+      isLiveEpisodic: false,
+      artworkContext: {
+        groupLoc: 'eyJrLnR5cGUiOiJwb3B1bGFydGl0bGVzIn0.',
+      },
       textEvidenceUiContext: 'ODP',
       unifiedEntityId,
     },
     extensions: {
       persistedQuery: {
-        version: 1,
-        sha256Hash: process.env.NETFLIX_DETAIL_MODAL_HASH,
+        id: process.env.NETFLIX_DETAIL_MODAL_HASH,
+        version: 102,
       },
     },
   }
@@ -114,8 +122,8 @@ export const episodes = async (
       },
       extensions: {
         persistedQuery: {
-          version: 1,
-          sha256Hash: process.env.NETFLIX_PREVIEW_MODAL_HASH,
+          id: process.env.NETFLIX_PREVIEW_MODAL_HASH,
+          version: 102,
         },
       },
     },

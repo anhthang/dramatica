@@ -84,7 +84,7 @@
       </a-col>
     </a-row>
 
-    <a-tabs v-model:activeKey="activeKey" size="large">
+    <a-tabs v-model:active-key="activeKey" size="large">
       <template #rightExtra>
         <nuxt-link :to="`/${drama.id}/${activeKey}`">
           <a-button type="link">Browse</a-button>
@@ -208,7 +208,6 @@
 </template>
 
 <script setup>
-import copy from 'ant-design-vue/lib/_util/copy-to-clipboard'
 import keyBy from 'lodash.keyby'
 
 const page = ref(1)
@@ -245,7 +244,7 @@ const airDate = ({ air_date, end_date }) => {
 }
 
 const copyUrl = () => {
-  copy(config.public.baseUrl + route.fullPath)
+  navigator.clipboard.writeText(config.public.baseUrl + route.fullPath)
   message.success('Copied to clipboard!')
 }
 
