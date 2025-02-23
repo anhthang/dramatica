@@ -81,6 +81,9 @@ const { data: tv, pending } = useAsyncData(
             drama_id: route.params.drama_id,
             language: props.language,
           },
+        }).catch(() => {
+          // sometime netflix scraper is broken
+          return undefined
         }),
       ),
     ),

@@ -244,7 +244,7 @@ const airDate = ({ air_date, end_date }) => {
 }
 
 const copyUrl = () => {
-  navigator.clipboard.writeText(config.public.baseUrl + route.fullPath)
+  navigator.clipboard.writeText(config.app.homepage + route.fullPath)
   message.success('Copied to clipboard!')
 }
 

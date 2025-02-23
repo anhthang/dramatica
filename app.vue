@@ -89,7 +89,7 @@ client.auth.onAuthStateChange((event, session) => {
   }
 })
 
-const { appName, appDesc, baseUrl } = config.public
+const { name, description, homepage } = config.app
 
 useHead({
   htmlAttrs: {
@@ -100,18 +100,18 @@ useHead({
 
 useSeoMeta({
   titleTemplate: (chunk) => {
-    return chunk ? `${chunk} - ${appName}` : appName
+    return chunk ? `${chunk} - ${name}` : name
   },
-  description: appDesc,
+  description,
   ogType: 'website',
-  ogUrl: baseUrl,
-  ogTitle: appName,
-  ogDescription: appDesc,
-  ogImage: `${baseUrl}/website-card.png`,
+  ogUrl: homepage,
+  ogTitle: name,
+  ogDescription: description,
+  ogImage: `${homepage}/website-card.png`,
   twitterCard: 'summary_large_image',
-  twitterTitle: appName,
-  twitterDescription: appDesc,
-  twitterImage: `${baseUrl}/website-card.png`,
+  twitterTitle: name,
+  twitterDescription: description,
+  twitterImage: `${homepage}/website-card.png`,
 })
 </script>
 

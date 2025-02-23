@@ -44,7 +44,7 @@ const tvDetail = async (unifiedEntityId: string, lang: string) => {
       videoMerchContext: 'BROWSE',
       isLiveEpisodic: false,
       artworkContext: {
-        groupLoc: 'eyJrLnR5cGUiOiJwb3B1bGFydGl0bGVzIn0.',
+        groupLoc: 'eyJrLnR5cGUiOiJuZXRmbGl4b3JpZ2luYWxzIn0.',
       },
       textEvidenceUiContext: 'ODP',
       unifiedEntityId,

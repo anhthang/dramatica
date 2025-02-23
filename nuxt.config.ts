@@ -1,3 +1,5 @@
+import app from './package.json'
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
@@ -47,10 +49,10 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
-    public: {
-      appName: process.env.APP_NAME,
-      appDesc: process.env.APP_DESC,
-      baseUrl: process.env.BASE_URL,
+    app: {
+      name: app.displayName,
+      description: app.description,
+      homepage: app.homepage,
     },
   },
 })

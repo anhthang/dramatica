@@ -1,9 +1,9 @@
 <template>
   <div class="global-footer">
     <div class="global-footer-copyright">
-      <a :href="$config.public.baseUrl" target="_blank">
-        {{ $config.public.appName }}
-      </a>
+      <NuxtLink to="/" target="_blank">
+        {{ $config.app.name }}
+      </NuxtLink>
       ©{{ new Date().getFullYear() }} - Made with ☕️ in Hanoi
     </div>
   </div>
