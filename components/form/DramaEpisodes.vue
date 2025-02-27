@@ -100,7 +100,7 @@ const { data: tv, pending } = useAsyncData(
               'title',
               'synopsis',
               'synopsis_source',
-              'preview_img',
+              // 'preview_img', // prefer airing source img instead of netflix
             ])
 
             Object.assign(ep, picked)

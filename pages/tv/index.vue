@@ -77,8 +77,8 @@ const fetchMetadata = () => {
       language: 'en',
     },
   })
-    .then((data) => {
-      Object.assign(metadata.value, data)
+    .then(({ season_id, ...rest }) => {
+      Object.assign(metadata.value, rest)
       checked.value = true
     })
     .catch((error) => {

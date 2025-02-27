@@ -63,29 +63,11 @@ const getAuthUser = (authUser) => {
 }
 
 const config = useRuntimeConfig()
-
 const client = useSupabaseClient()
 
-client.auth.getSession().then(({ data }) => {
-  if (data.session && data.session.user) {
-    user.value = getAuthUser(data.session.user)
-  }
-})
-
-client.auth.onAuthStateChange((event, session) => {
-  switch (event) {
-    case 'SIGNED_IN':
-      user.value = getAuthUser(session.user)
-      break
-    case 'SIGNED_OUT':
-      user.value = undefined
-      break
-    case 'TOKEN_REFRESHED':
-    case 'USER_UPDATED':
-    case 'USER_DELETED':
-    case 'PASSWORD_RECOVERY':
-    default:
-      break
+client.auth.getUser().then(({ data }) => {
+  if (data.user) {
+    user.value = getAuthUser(data.user)
   }
 })
 
