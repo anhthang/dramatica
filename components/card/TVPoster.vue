@@ -1,27 +1,36 @@
 <template>
-  <nuxt-link :to="`/${tv.id}`">
-    <a-card hoverable :loading="loading">
-      <template v-if="!loading" #cover>
-        <a-image :preview="false" :alt="tv.title" :src="tv.poster_url" />
+  <NuxtLink :to="`/${tv.id}`">
+    <Card
+      :pt="{
+        // root: 'h-full overflow-hidden',
+        // header: 'h-48',
+        body: 'flex-1',
+        caption: 'flex-grow',
+        subtitle: 'flex justify-between gap-2',
+      }"
+    >
+      <template #header>
+        <img loading="lazy" :alt="tv.title" :src="tv.poster_url" />
       </template>
 
-      <a-card-meta :title="tv.title">
-        <template #description>
-          <a-flex justify="space-between">
-            <span>
-              <calendar-outlined />
-              {{ toLocaleDate(tv.air_date, $i18n.locale) }}
-            </span>
-            <span><number-outlined /> {{ tv.number_of_episodes }}</span>
-          </a-flex>
-        </template>
-      </a-card-meta>
-    </a-card>
-  </nuxt-link>
+      <template #title>{{ tv.title }}</template>
+
+      <template #subtitle>
+        <span class="flex items-center gap-1">
+          <i class="pi pi-calendar" />
+          {{ toLocaleDate(tv.air_date, $i18n.locale) }}
+        </span>
+        <span v-if="tv.number_of_episodes" class="flex items-center gap-1">
+          <i class="pi pi-hashtag" />
+          {{ tv.number_of_episodes }}
+        </span>
+      </template>
+    </Card>
+  </NuxtLink>
 </template>
 
 <script setup>
-const { tv, loading } = defineProps({
+const { tv } = defineProps({
   tv: {
     type: Object,
     default: () => ({}),

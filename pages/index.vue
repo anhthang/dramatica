@@ -1,45 +1,28 @@
 <template>
-  <a-page-header class="container drama-container">
-    <div
-      v-for="(tab, tIdx) in Object.keys(tabKeyMap)"
-      :key="tab"
-      style="margin-bottom: 24px"
-    >
-      <a-flex v-if="tabList[tab].length" justify="space-between">
-        <a-typography-title :level="4">
-          <notification-outlined v-if="tab === 'Airing'" />
-          <rise-outlined v-if="tab === 'Trending'" />
-          <alert-outlined v-if="tab === 'Upcoming'" />
-          {{ $t(tab) }}
-        </a-typography-title>
-        <a-flex v-if="tabList[tab].length > 1">
-          <a-button type="text" @click="prev(tIdx)">
-            <left-outlined />
-          </a-button>
-          <a-button type="text" @click="next(tIdx)">
-            <right-outlined />
-          </a-button>
-        </a-flex>
-      </a-flex>
-
-      <a-carousel ref="slider" arrows>
-        <div v-for="(dramas, idx) in tabList[tab]" :key="idx">
-          <a-row :gutter="[16, 16]" type="flex">
-            <a-col
-              v-for="drama in dramas"
-              :key="drama.id"
-              :xs="24"
-              :md="8"
-              :lg="6"
-              :xl="4"
-            >
-              <card-t-v-poster :tv="drama" :loading="pending" />
-            </a-col>
-          </a-row>
-        </div>
-      </a-carousel>
+  <Panel
+    header="Homepage"
+    pt:root:class="!border-0 !bg-transparent"
+    pt:title:class="flex items-center gap-4 font-medium text-3xl"
+  >
+    <div v-for="(tab, tIdx) in Object.keys(tabKeyMap)" :key="tab" class="mb-4">
+      <Carousel
+        :key="tIdx"
+        :value="tabList[tab]"
+        :num-visible="6"
+        :num-scroll="1"
+        circular
+        :autoplay-interval="3000"
+      >
+        <template #item="{ data: page }">
+          <div
+            class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6 gap-4"
+          >
+            <CardTVPoster v-for="tv in page" :key="tv.idx" :tv="tv" />
+          </div>
+        </template>
+      </Carousel>
     </div>
-  </a-page-header>
+  </Panel>
 </template>
 
 <script setup>
@@ -48,13 +31,13 @@ import groupBy from 'lodash.groupby'
 
 const tabKeyMap = {
   Airing: 'Airing',
-  Trending: 'Ended',
+  // Trending: 'Ended',
   Upcoming: 'Upcoming',
 }
 
 const { locale } = useI18n()
 
-const { data, pending } = await useAsyncData(
+const { data } = await useAsyncData(
   () => $fetch('/api/drama', { params: { language: locale.value } }),
   { watch: [locale] },
 )
@@ -68,17 +51,15 @@ const tabList = computed(() => {
     return out
   }, {})
 })
-
-const slider = ref()
-const next = (idx) => {
-  slider.value[idx].next()
-}
-const prev = (idx) => {
-  slider.value[idx].prev()
-}
 </script>
 
 <style>
+:root {
+  font-family: Cabin, sans-serif;
+  --p-card-body-padding: 1.125rem;
+  --p-card-title-font-size: 1.125rem;
+}
+
 .container {
   margin: 0 auto;
   min-height: calc(100vh - 128px); /** minus header & footer */
