@@ -1,59 +1,5 @@
 <template>
-  <a-page-header v-if="drama" class="container" title="Streaming Services">
-    <template #breadcrumb>
-      <a-breadcrumb>
-        <a-breadcrumb-item>
-          <nuxt-link to="/"> Home </nuxt-link>
-        </a-breadcrumb-item>
-        <a-breadcrumb-item>
-          <nuxt-link :to="`/${drama.id}`">
-            {{ translation.title_year }}
-          </nuxt-link>
-        </a-breadcrumb-item>
-      </a-breadcrumb>
-    </template>
-
-    <template #extra>
-      <a-button type="primary" @click="toggle('open')">
-        <video-camera-add-outlined /> Add
-      </a-button>
-    </template>
-
-    <a-table
-      :data-source="drama.availability"
-      :columns="columns"
-      :pagination="false"
-    >
-      <template #bodyCell="{ column, record }">
-        <template v-if="column.key === 'streaming_service'">
-          <img
-            v-if="themeSpecificServices.includes(record.streaming_service)"
-            :src="`/logo/${record.streaming_service.toLowerCase()}-${$colorMode.value}.png`"
-            :alt="record.streaming_service"
-            :height="20"
-          />
-          <img
-            v-else
-            :src="`/logo/${record.streaming_service.toLowerCase()}.png`"
-            :alt="record.streaming_service"
-            :height="20"
-          />
-        </template>
-
-        <template v-if="column.key === 'watch_link'">
-          <nuxt-link :to="record.watch_link" target="_blank">
-            {{ record.watch_link }}
-          </nuxt-link>
-        </template>
-
-        <template v-if="column.key === 'action'">
-          <a-button :disabled="!record.id" @click="toggle('open', record)">
-            <edit-outlined /> Edit
-          </a-button>
-        </template>
-      </template>
-    </a-table>
-
+  <!-- <a-page-header v-if="drama" class="container" title="Streaming Services">
     <a-modal
       v-model:open="visible.open"
       :title="selection ? 'Edit Streaming Service' : 'Add Streaming Service'"
@@ -67,7 +13,56 @@
         :existing="drama.availability.map((s) => s.streaming_service)"
       />
     </a-modal>
-  </a-page-header>
+  </a-page-header> -->
+  <div>
+    <Panel
+      v-if="drama"
+      header="Streaming Services"
+      pt:root:class="!border-0 !bg-transparent"
+      pt:title:class="flex items-center gap-4 font-medium text-3xl"
+    >
+      <template #icons>
+        <Button label="Add" icon="pi pi-video" @click="toggle('open')" />
+      </template>
+
+      <DataTable :value="drama.availability" striped-rows>
+        <Column field="streaming_service" header="Streaming Service">
+          <template #body="{ data }">
+            <img
+              v-if="themeSpecificServices.includes(data.streaming_service)"
+              :src="`/logo/${data.streaming_service.toLowerCase()}-${$colorMode.value}.png`"
+              :alt="data.streaming_service"
+              class="h-5"
+            />
+            <img
+              v-else
+              :src="`/logo/${data.streaming_service.toLowerCase()}.png`"
+              :alt="data.streaming_service"
+              class="h-5"
+            />
+          </template>
+        </Column>
+        <Column field="watch_link" header="Watch Link">
+          <template #body="{ data }">
+            <NuxtLink :to="data.watch_link" target="_blank">
+              {{ data.watch_link }}
+            </NuxtLink>
+          </template>
+        </Column>
+        <Column header="Actions">
+          <template #body="{ data }">
+            <Button
+              label="Edit"
+              icon="pi pi-pen-to-square"
+              severity="secondary"
+              size="small"
+              @click="toggle('open', data)"
+            />
+          </template>
+        </Column>
+      </DataTable>
+    </Panel>
+  </div>
 </template>
 
 <script setup>
@@ -76,7 +71,7 @@ import keyBy from 'lodash.keyby'
 const route = useRoute()
 const { locale } = useI18n()
 
-const { data: drama, refresh } = await useAsyncData(
+const { data: drama } = await useAsyncData(
   `drama-${route.params.drama_id}`,
   () => $fetch(`/api/${route.params.drama_id}`),
 )
@@ -92,23 +87,6 @@ useSeoMeta({
   description: drama.value && translation.value.synopsis,
 })
 
-const columns = [
-  {
-    title: 'Streaming Service',
-    dataIndex: 'streaming_service',
-    key: 'streaming_service',
-  },
-  {
-    title: 'Watch Link',
-    dataIndex: 'watch_link',
-    key: 'watch_link',
-  },
-  {
-    title: 'Action',
-    key: 'action',
-  },
-]
-
 const visible = ref({
   loading: false,
   open: false,
@@ -122,14 +100,14 @@ const toggle = (key, record) => {
   selection.value = record
 }
 
-const streamingForm = ref()
-const addStreamingService = async () => {
-  toggle('loading')
+// const streamingForm = ref()
+// const addStreamingService = async () => {
+//   toggle('loading')
 
-  await streamingForm.value.onSubmit()
+//   await streamingForm.value.onSubmit()
 
-  toggle('loading')
-  toggle('open')
-  refresh()
-}
+//   toggle('loading')
+//   toggle('open')
+//   refresh()
+// }
 </script>

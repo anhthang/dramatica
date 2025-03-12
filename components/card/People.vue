@@ -1,15 +1,18 @@
 <template>
-  <nuxt-link :to="`/people/${people.people_id}`">
-    <a-card hoverable style="height: 100%">
-      <a-card-meta :title="name" :description="character">
-        <template #avatar>
-          <a-avatar :src="people.people.profile_url" :size="60">
-            {{ name.charAt(0) }}
-          </a-avatar>
-        </template>
-      </a-card-meta>
-    </a-card>
-  </nuxt-link>
+  <NuxtLink :to="`/people/${people.people_id}`">
+    <div class="flex items-center">
+      <Avatar
+        :image="people.people.profile_url"
+        size="large"
+        pt:image:class="object-contain"
+        shape="circle"
+      />
+      <Card class="!shadow-none">
+        <template #title>{{ name }}</template>
+        <template #subtitle>{{ character }}</template>
+      </Card>
+    </div>
+  </NuxtLink>
 </template>
 
 <script setup>

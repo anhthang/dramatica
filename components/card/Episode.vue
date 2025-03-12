@@ -17,11 +17,11 @@
 
     <template #subtitle>
       <span class="flex items-center gap-1">
-        <i class="pi pi-palette" />
+        <i class="pi pi-calendar" />
         {{ toLocaleDate(episode.air_date, $i18n.locale) }}
       </span>
       <span v-if="episode.runtime" class="flex items-center gap-1">
-        <i class="pi pi-palette" />
+        <i class="pi pi-clock" />
         {{ runtime2Duration(episode.runtime) }}
       </span>
     </template>

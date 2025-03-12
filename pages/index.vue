@@ -53,33 +53,7 @@ const tabList = computed(() => {
 })
 </script>
 
-<style>
-:root {
-  font-family: Cabin, sans-serif;
-  --p-card-body-padding: 1.125rem;
-  --p-card-title-font-size: 1.125rem;
-}
-
-.container {
-  margin: 0 auto;
-  min-height: calc(100vh - 128px); /** minus header & footer */
-  display: flex;
-  flex-direction: column;
-  max-width: 1600px;
-}
-
-.drama-container {
-  .ant-card-cover {
-    height: var(--poster-height);
-    overflow: hidden;
-
-    img {
-      height: var(--poster-height);
-      object-fit: cover;
-    }
-  }
-}
-
+<!-- <style>
 /** Global */
 .duplicate-alert {
   margin-left: auto;
@@ -108,4 +82,4 @@ html.dark-mode .card-highlighted {
   border-start-end-radius: 6px;
   content: '';
 }
-</style>
+</style> -->

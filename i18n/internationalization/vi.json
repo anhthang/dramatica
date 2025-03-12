@@ -9,10 +9,10 @@
   "Airing Platform": "Nền tảng phát sóng",
   "Aired": "Ngày phát sóng",
   "Genres": "Thể loại",
-  "Synopsis": "Nội dung",
-  "Cast": "Diễn viên",
-  "Episodes": "Danh sách tập",
-  "Episode": "Tập",
+  "Synopsis": "Tóm tắt phim",
+  "Cast": "Dàn diễn viên",
+  "Episodes": "Các tập phim",
+  "Episode": "Tập phim",
   "Where to Watch": "Kênh phát sóng",
   "Watch": "Xem phim",
   "Share": "Chia sẻ",
@@ -25,7 +25,7 @@
   "Biography": "Tiểu sử",
   "Drama": "Phim truyền hình",
   "more": "thêm",
-  "No Biography": "Hiện tại chưa có tiểu sử cho { peopleName }",
+  "No Biography": "Chưa có tiểu sử của { peopleName }",
   "Male": "Nam",
   "Female": "Nữ"
 }

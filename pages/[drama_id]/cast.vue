@@ -1,70 +1,5 @@
 <template>
-  <a-page-header v-if="drama" class="container" title="Cast & Crew">
-    <template #breadcrumb>
-      <a-breadcrumb>
-        <a-breadcrumb-item>
-          <nuxt-link to="/"> Home </nuxt-link>
-        </a-breadcrumb-item>
-        <a-breadcrumb-item>
-          <nuxt-link :to="`/${drama.id}`">
-            {{ translation.title_year }}
-          </nuxt-link>
-        </a-breadcrumb-item>
-      </a-breadcrumb>
-    </template>
-
-    <template #extra>
-      <a-button type="primary" @click="toggle('add')">
-        <user-add-outlined /> Add
-      </a-button>
-
-      <a-button @click="toggle('edit')"><form-outlined /> Edit</a-button>
-    </template>
-
-    <a-row :gutter="[16, 16]" type="flex">
-      <a-col :xs="24" :sm="16" :lg="18">
-        <div v-for="role in roles.cast" v-show="peopleByRole[role]" :key="role">
-          <a-divider orientation="left">
-            <a-typography-title :level="5">{{ role }}</a-typography-title>
-          </a-divider>
-
-          <a-row :gutter="[16, 16]" type="flex">
-            <a-col
-              v-for="people in peopleByRole[role]"
-              :key="people.id"
-              :xs="24"
-              :md="12"
-              :lg="8"
-            >
-              <card-people :people="people" />
-            </a-col>
-          </a-row>
-        </div>
-      </a-col>
-      <a-col :xs="24" :sm="8" :lg="6">
-        <div
-          v-for="role in roles.crew"
-          v-show="peopleByRole[role]"
-          :key="role"
-          class="drama-crew"
-        >
-          <a-divider orientation="left">
-            <a-typography-title :level="5">{{ role }}</a-typography-title>
-          </a-divider>
-
-          <a-row :gutter="[16, 16]" type="flex">
-            <a-col
-              v-for="people in peopleByRole[role]"
-              :key="people.id"
-              :xs="24"
-            >
-              <card-people :people="people" />
-            </a-col>
-          </a-row>
-        </div>
-      </a-col>
-    </a-row>
-
+  <!-- <a-page-header v-if="drama" class="container" title="Cast & Crew">
     <a-modal
       v-model:open="visible.add"
       title="Add Cast & Crew"
@@ -93,7 +28,97 @@
         :metadata="drama.people"
       />
     </a-modal>
-  </a-page-header>
+  </a-page-header> -->
+  <div>
+    <Panel
+      v-if="drama"
+      header="Cast & Crew"
+      pt:root:class="!border-0 !bg-transparent"
+      pt:title:class="flex items-center gap-4 font-medium text-3xl"
+      pt:header-actions:class="flex gap-2"
+    >
+      <template #icons>
+        <Button label="Add" icon="pi pi-user-plus" @click="toggle('add')" />
+        <Button
+          label="Edit"
+          icon="pi pi-user-edit"
+          severity="secondary"
+          @click="toggle('edit')"
+        />
+      </template>
+
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="col-span-4 md:col-span-3 flex flex-col gap-4">
+          <Fieldset
+            v-for="role in roles.cast"
+            v-show="peopleByRole[role]"
+            :key="role"
+            pt:legend:class="w-auto"
+          >
+            <template #legend>
+              <div class="flex items-center gap-2">
+                <span class="pi pi-users" />
+                <span class="font-semibold"> {{ role }} </span>
+              </div>
+            </template>
+
+            <DataView
+              :value="peopleByRole[role]"
+              layout="grid"
+              :pt="{
+                header: '!bg-transparent !border-0 text-lg font-medium',
+                content: '!bg-transparent',
+              }"
+            >
+              <template #grid="{ items }">
+                <div
+                  class="grid grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4"
+                >
+                  <CardPeople
+                    v-for="people in items"
+                    :key="people.id"
+                    :people="people"
+                  />
+                </div>
+              </template>
+            </DataView>
+          </Fieldset>
+        </div>
+        <div class="col-span-4 md:col-span-1 flex flex-col gap-4">
+          <Fieldset
+            v-for="role in roles.crew"
+            v-show="peopleByRole[role]"
+            :key="role"
+            pt:legend:class="w-auto"
+          >
+            <template #legend>
+              <div class="flex items-center gap-2">
+                <span class="pi pi-book" />
+                <span class="font-semibold"> {{ role }} </span>
+              </div>
+            </template>
+
+            <DataView
+              :value="peopleByRole[role]"
+              layout="grid"
+              :pt="{
+                header: '!bg-transparent !border-0 text-lg font-medium',
+                content: '!bg-transparent',
+              }"
+            >
+              <template #grid="{ items }">
+                <CardPeople
+                  v-for="people in items"
+                  :key="people.id"
+                  :people="people"
+                />
+              </template>
+            </DataView>
+          </Fieldset>
+        </div>
+      </div>
+    </Panel>
+  </div>
 </template>
 
 <script setup>
@@ -103,7 +128,7 @@ import keyBy from 'lodash.keyby'
 const route = useRoute()
 const { locale } = useI18n()
 
-const { data: drama, refresh } = await useAsyncData(
+const { data: drama } = await useAsyncData(
   `drama-${route.params.drama_id}`,
   () => $fetch(`/api/${route.params.drama_id}`),
   {
@@ -135,26 +160,19 @@ const toggle = (key) => {
   visible.value[key] = !visible.value[key]
 }
 
-const peopleForm = ref()
-const addDramaMember = async (key) => {
-  toggle('loading')
+// const peopleForm = ref()
+// const addDramaMember = async (key) => {
+//   toggle('loading')
 
-  await peopleForm.value.onSubmit()
+//   await peopleForm.value.onSubmit()
 
-  refresh()
-  toggle('loading')
-  toggle(key)
-}
+//   refresh()
+//   toggle('loading')
+//   toggle(key)
+// }
 
 useSeoMeta({
   title: drama.value && `Cast & Crew - ${translation.value.title_year}`,
   description: drama.value && translation.value.synopsis,
 })
 </script>
-
-<style>
-.drama-crew .ant-card-meta-detail {
-  display: flex;
-  align-items: center;
-}
-</style>

@@ -1,36 +1,5 @@
 <template>
-  <a-page-header v-if="drama" class="container" title="Episodes">
-    <template #breadcrumb>
-      <a-breadcrumb>
-        <a-breadcrumb-item>
-          <nuxt-link to="/"> Home </nuxt-link>
-        </a-breadcrumb-item>
-        <a-breadcrumb-item>
-          <nuxt-link :to="`/${drama.id}`">
-            {{ translation.title_year }}
-          </nuxt-link>
-        </a-breadcrumb-item>
-      </a-breadcrumb>
-    </template>
-
-    <template #extra>
-      <a-button type="primary" @click="toggleSync">
-        <sync-outlined /> Sync
-      </a-button>
-    </template>
-
-    <a-row :gutter="[16, 16]" type="flex">
-      <a-col
-        v-for="episode in episodes"
-        :key="episode.episode_number"
-        :xs="24"
-        :md="8"
-        :lg="6"
-      >
-        <card-episode :episode="episode" />
-      </a-col>
-    </a-row>
-
+  <!-- <a-page-header v-if="drama" class="container" title="Episodes">
     <a-modal
       v-model:open="visible"
       title="Sync Episodes"
@@ -55,16 +24,39 @@
         :availability="availability"
       />
     </a-modal>
-  </a-page-header>
+  </a-page-header> -->
+
+  <div>
+    <Panel
+      v-if="drama"
+      header="Episodes"
+      pt:root:class="!border-0 !bg-transparent"
+      pt:title:class="flex items-center gap-4 font-medium text-3xl"
+    >
+      <template #icons>
+        <Button label="Sync" icon="pi pi-sync" @click="toggleSync" />
+      </template>
+
+      <div
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
+      >
+        <CardEpisode
+          v-for="episode in episodes"
+          :key="episode.episode_number"
+          :episode="episode"
+        />
+      </div>
+    </Panel>
+  </div>
 </template>
 
 <script setup>
 import keyBy from 'lodash.keyby'
 
 const route = useRoute()
-const { locale, locales } = useI18n()
+const { locale } = useI18n()
 
-const { data: drama, refresh } = await useAsyncData(
+const { data: drama } = await useAsyncData(
   `drama-${route.params.drama_id}`,
   () => $fetch(`/api/${route.params.drama_id}`),
 )
@@ -84,27 +76,27 @@ const toggleSync = () => {
   visible.value = !visible.value
 }
 
-const episodesForm = ref()
-const addEpisodes = async () => {
-  await episodesForm.value.onSubmit()
+// const episodesForm = ref()
+// const addEpisodes = async () => {
+//   await episodesForm.value.onSubmit()
 
-  toggleSync()
-  refresh()
-}
+//   toggleSync()
+//   refresh()
+// }
 
-const language = ref(locale.value)
+// const language = ref(locale.value)
 
-const availability = computed(() => {
-  const original = drama.value.translations.filter(
-    (t) => t.language === language.value,
-  )
+// const availability = computed(() => {
+//   const original = drama.value.translations.filter(
+//     (t) => t.language === language.value,
+//   )
 
-  const netflix = drama.value.availability.filter(
-    (s) => s.streaming_service === 'Netflix',
-  )
+//   const netflix = drama.value.availability.filter(
+//     (s) => s.streaming_service === 'Netflix',
+//   )
 
-  return original.concat(netflix)
-})
+//   return original.concat(netflix)
+// })
 
 useSeoMeta({
   title: drama.value && `Episodes - ${translation.value.title_year}`,

@@ -73,6 +73,9 @@ useSeoMeta({
 
   --poster-height: 320px;
   --cover-height: 210px;
-  font-family: Cabin, sans-serif;
+  font-family: Dosis, sans-serif;
+
+  --p-card-body-padding: 1.125rem;
+  --p-card-title-font-size: 1.125rem;
 }
 </style>
