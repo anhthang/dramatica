@@ -48,46 +48,50 @@
           </div>
         </Tab>
       </TabList>
+
+      <TabPanels>
+        <TabPanel value="information">
+          <div class="grid grid-cols-1 lg:grid-cols-10 gap-12 mt-2">
+            <div class="col-span-1 lg:col-span-6">
+              <DescriptionList :descriptions="descriptions" />
+            </div>
+
+            <div class="col-span-1 lg:col-span-4 flex flex-col gap-4">
+              <img :alt="translation.title" :src="translation.cover_url" />
+
+              <div class="flex gap-4">
+                <NuxtLink
+                  v-if="translation.watch_link"
+                  :to="translation.watch_link"
+                  target="_blank"
+                  style="width: 100%"
+                >
+                  <Button
+                    :label="$t('Watch')"
+                    icon="pi pi-play-circle"
+                    size="large"
+                    fluid
+                    :class="{
+                      '!bg-[#ff4a22]': streaming === 'wetv',
+                      '!bg-[#1cc749]': streaming === 'iqiyi',
+                      '!bg-[#e50914]': streaming === 'netflix',
+                      '!bg-[#2c78ff]': streaming === 'youku',
+                    }"
+                  />
+                </NuxtLink>
+                <Button
+                  :label="$t('Share')"
+                  icon="pi pi-share-alt"
+                  size="large"
+                  fluid
+                  @click="copyUrl"
+                />
+              </div>
+            </div>
+          </div>
+        </TabPanel>
+      </TabPanels>
     </Tabs>
-
-    <div class="grid grid-cols-1 lg:grid-cols-10 gap-12 mt-4">
-      <div class="col-span-1 lg:col-span-6">
-        <DescriptionList :descriptions="descriptions" />
-      </div>
-
-      <div class="col-span-1 lg:col-span-4 flex flex-col gap-4">
-        <img :alt="translation.title" :src="translation.cover_url" />
-
-        <div class="flex gap-4">
-          <NuxtLink
-            v-if="translation.watch_link"
-            :to="translation.watch_link"
-            target="_blank"
-            style="width: 100%"
-          >
-            <Button
-              :label="$t('Watch')"
-              icon="pi pi-play-circle"
-              size="large"
-              fluid
-              :class="{
-                '!bg-[#ff4a22]': streaming === 'wetv',
-                '!bg-[#1cc749]': streaming === 'iqiyi',
-                '!bg-[#e50914]': streaming === 'netflix',
-                '!bg-[#2c78ff]': streaming === 'youku',
-              }"
-            />
-          </NuxtLink>
-          <Button
-            :label="$t('Share')"
-            icon="pi pi-share-alt"
-            size="large"
-            fluid
-            @click="copyUrl"
-          />
-        </div>
-      </div>
-    </div>
   </Panel>
   <!-- <a-page-header
     v-if="drama"

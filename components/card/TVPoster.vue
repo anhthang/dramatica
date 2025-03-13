@@ -2,7 +2,7 @@
   <NuxtLink :to="`/${tv.id}`">
     <Card
       :pt="{
-        // root: 'h-full overflow-hidden',
+        root: 'h-full overflow-hidden',
         // header: 'h-48',
         body: 'flex-1',
         caption: 'flex-grow',

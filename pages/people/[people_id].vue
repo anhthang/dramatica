@@ -1,65 +1,96 @@
 <template>
-  <a-page-header v-if="people" class="container">
+  <div v-if="people" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+    <div class="col-span-4 md:col-span-1 flex flex-col gap-4">
+      <div class="flex flex-col gap-4 items-center">
+        <Image :src="people.profile_url" :alt="peopleName" class="w-40" />
+
+        <div class="text-3xl">{{ peopleName }}</div>
+
+        <div class="flex gap-2">
+          <NuxtLink :to="people.weibo" target="_blank">
+            <Button
+              text
+              icon="pi pi-comment"
+              size="large"
+              :disabled="!people.weibo"
+            />
+          </NuxtLink>
+          <NuxtLink :to="people.douyin" target="_blank">
+            <Button
+              text
+              icon="pi pi-tiktok"
+              size="large"
+              :disabled="!people.douyin"
+            />
+          </NuxtLink>
+          <NuxtLink :to="people.instagram" target="_blank">
+            <Button
+              text
+              icon="pi pi-instagram"
+              size="large"
+              :disabled="!people.instagram"
+            />
+          </NuxtLink>
+        </div>
+      </div>
+
+      <Divider />
+
+      <DescriptionList
+        heading="Personal Information"
+        :descriptions="descriptions"
+      />
+    </div>
+    <div class="col-span-4 md:col-span-3 flex flex-col gap-4">
+      <Tabs value="drama">
+        <TabList>
+          <Tab value="drama" as="div" class="flex items-center gap-2">
+            <i class="pi pi-video" />
+            <span>Drama</span>
+          </Tab>
+        </TabList>
+        <TabPanels>
+          <TabPanel value="drama">
+            <div v-for="year of Object.keys(dramaByYear).reverse()" :key="year">
+              <Timeline :value="[year]" class="my-4">
+                <template #marker="{ item }">
+                  <span class="text-xl font-medium">{{ item }}</span>
+                </template>
+              </Timeline>
+
+              <Timeline :value="dramaByYear[year]" align="alternate">
+                <template #marker="{ item }">
+                  <Button
+                    v-if="item.drama.airing_status === 'Ended'"
+                    rounded
+                    text
+                    icon="pi pi-check-circle"
+                    severity="success"
+                    disabled
+                  />
+                  <Button
+                    v-if="item.drama.airing_status === 'Airing'"
+                    rounded
+                    text
+                    icon="pi pi-play-circle"
+                    severity="info"
+                    disabled
+                  />
+                </template>
+                <template #content="{ item }">
+                  <NuxtLink :to="`/${item.drama.id}`">
+                    <CardTVCover :tv="item.drama" />
+                  </NuxtLink>
+                </template>
+              </Timeline>
+            </div>
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
+    </div>
+  </div>
+  <!-- <a-page-header v-if="people" class="container">
     <a-row :gutter="[16, 16]" type="flex">
-      <a-col :sm="6">
-        <a-flex vertical gap="large" align="center">
-          <a-avatar
-            :src="people.profile_url"
-            :size="{ xs: 160, sm: 160, md: 160, lg: 240, xl: 240, xxl: 240 }"
-          >
-            <template #icon><user-outlined /></template>
-          </a-avatar>
-
-          <a-typography-title :level="3">
-            {{ peopleName }}
-          </a-typography-title>
-
-          <a-flex>
-            <nuxt-link :to="people.weibo" target="_blank">
-              <a-button type="text" size="large" :disabled="!people.weibo">
-                <weibo-outlined />
-              </a-button>
-            </nuxt-link>
-            <nuxt-link :to="people.douyin" target="_blank">
-              <a-button type="text" size="large" :disabled="!people.douyin">
-                <tik-tok-outlined />
-              </a-button>
-            </nuxt-link>
-            <nuxt-link :to="people.instagram" target="_blank">
-              <a-button type="text" size="large" :disabled="!people.instagram">
-                <instagram-outlined />
-              </a-button>
-            </nuxt-link>
-          </a-flex>
-        </a-flex>
-        <a-divider />
-
-        <a-descriptions
-          :title="$t('Personal Information')"
-          :column="1"
-          size="small"
-        >
-          <template #extra>
-            <a-button @click="toggle('edit')"><edit-outlined /> Edit</a-button>
-          </template>
-          <a-descriptions-item :label="$t('Native Name')">
-            {{ people.native_name }}
-          </a-descriptions-item>
-          <a-descriptions-item :label="$t('Gender')">
-            {{ $t(people.gender) }}
-          </a-descriptions-item>
-          <a-descriptions-item :label="$t('Birthday')">
-            {{ toLocaleDate(people.dob, $i18n.locale) }}
-          </a-descriptions-item>
-          <!-- <a-descriptions-item :label="$t('Age')">
-              {{
-                Math.floor(
-                  (new Date() - new Date(people.dob).getTime()) / 3.15576e10,
-                )
-              }}
-            </a-descriptions-item> -->
-        </a-descriptions>
-      </a-col>
       <a-col :sm="18">
         <a-descriptions :title="$t('Biography')" :column="1">
           <a-typography-text v-if="people.biography">
@@ -82,60 +113,7 @@
               </a-button>
             </a-flex>
           </template>
-          <a-timeline
-            v-for="year of Object.keys(dramaByYear).reverse()"
-            :key="year"
-          >
-            <a-timeline-item>
-              <template #dot>
-                <clock-circle-outlined style="font-size: 16px" />
-              </template>
-              <a-typography-title :level="5">{{ year }}</a-typography-title>
-            </a-timeline-item>
-
-            <a-timeline-item
-              v-for="{ drama, ...rest } in dramaByYear[year]"
-              :key="rest.id"
-              :color="airingColor[drama.airing_status] || 'gray'"
-            >
-              <nuxt-link :to="`/${rest.drama_id}`">
-                <a-popover>
-                  <a-card-meta
-                    :title="drama.title"
-                    :description="
-                      toLocaleCharacterName(rest, locale) || rest.role
-                    "
-                  />
-                  <template #content>
-                    <a-card style="width: 450px">
-                      <template v-if="drama.cover_url" #cover>
-                        <a-image
-                          :preview="false"
-                          :alt="drama.title"
-                          :src="drama.cover_url"
-                        />
-                      </template>
-
-                      <a-card-meta :title="drama.title">
-                        <template #description>
-                          <a-typography-paragraph
-                            :ellipsis="{
-                              rows: 6,
-                              expandable: true,
-                              symbol: $t('more'),
-                            }"
-                            :content="drama.synopsis"
-                            type="secondary"
-                          >
-                          </a-typography-paragraph>
-                        </template>
-                      </a-card-meta>
-                    </a-card>
-                  </template>
-                </a-popover>
-              </nuxt-link>
-            </a-timeline-item>
-          </a-timeline>
+          
         </a-card>
       </a-col>
     </a-row>
@@ -179,26 +157,22 @@
         :metadata="people.dramas"
       />
     </a-modal>
-  </a-page-header>
+  </a-page-header> -->
 </template>
 
 <script setup>
 import groupBy from 'lodash.groupby'
 
-const airingColor = {
-  Airing: 'blue',
-  Ended: 'green',
-  Hiatus: 'orange',
-}
+// const airingColor = {
+//   Airing: 'blue',
+//   Ended: 'green',
+//   Hiatus: 'orange',
+// }
 
 const { locale } = useI18n()
 const route = useRoute()
 
-const {
-  data: people,
-  pending,
-  refresh,
-} = await useAsyncData(
+const { data: people } = await useAsyncData(
   `people-${route.params.people_id}-${locale.value}`,
   () =>
     $fetch(`/api/people/${route.params.people_id}`, {
@@ -208,6 +182,14 @@ const {
     watch: [locale],
   },
 )
+
+const descriptions = computed(() => {
+  return [
+    { title: 'Native Name', value: people.value.native_name },
+    { title: 'Gender', value: people.value.gender },
+    { title: 'Birthday', value: toLocaleDate(people.value.dob, locale) },
+  ]
+})
 
 const dramaByYear = computed(() =>
   groupBy(people.value.dramas, (i) => i.drama.release_year || 'TBA'),
@@ -228,36 +210,36 @@ useSeoMeta({
   twitterImage: people.value && people.value.profile_url,
 })
 
-const visible = ref({
-  edit: false,
-  add_drama: false,
-  edit_drama: false,
-  loading: false,
-})
+// const visible = ref({
+//   edit: false,
+//   add_drama: false,
+//   edit_drama: false,
+//   loading: false,
+// })
 
-const toggle = (key) => {
-  visible.value[key] = !visible.value[key]
-}
+// const toggle = (key) => {
+//   visible.value[key] = !visible.value[key]
+// }
 
-const peopleForm = ref()
-const onEditPeople = async () => {
-  toggle('loading')
+// const peopleForm = ref()
+// const onEditPeople = async () => {
+//   toggle('loading')
 
-  await peopleForm.value.onSubmit()
+//   await peopleForm.value.onSubmit()
 
-  toggle('loading')
-  toggle('edit')
-  refresh()
-}
+//   toggle('loading')
+//   toggle('edit')
+//   refresh()
+// }
 
-const dramaPeopleForm = ref()
-const onUpdatePeopleDrama = async (key) => {
-  toggle('loading')
+// const dramaPeopleForm = ref()
+// const onUpdatePeopleDrama = async (key) => {
+//   toggle('loading')
 
-  await dramaPeopleForm.value.onSubmit()
+//   await dramaPeopleForm.value.onSubmit()
 
-  toggle('loading')
-  toggle(key)
-  refresh()
-}
+//   toggle('loading')
+//   toggle(key)
+//   refresh()
+// }
 </script>
