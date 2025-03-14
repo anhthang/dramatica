@@ -388,7 +388,6 @@
 
 <script setup>
 import { zodResolver } from '@primevue/forms/resolvers/zod'
-import dayjs from 'dayjs'
 import { z } from 'zod'
 
 const emit = defineEmits(['onBack', 'onSuccess'])
@@ -416,10 +415,10 @@ onBeforeMount(() => {
   Object.assign(tv.value, metadata)
 
   if (metadata.air_date) {
-    tv.value.dates[0] = dayjs(metadata.air_date, 'YYYY-MM-DD')
+    tv.value.dates[0] = new Date(metadata.air_date)
   }
   if (metadata.end_date) {
-    tv.value.dates[1] = dayjs(metadata.end_date, 'YYYY-MM-DD')
+    tv.value.dates[1] = new Date(metadata.end_date)
   }
 
   if (Array.isArray(metadata.genres)) {

@@ -89,14 +89,13 @@
         </Message>
       </div>
       <div class="flex flex-col gap-2">
-        <label for="people_dobr">Date of Birth</label>
+        <label for="people_dob">Date of Birth</label>
         <DatePicker
-          v-model="people.date"
+          v-model="people.dob"
           date-format="dd/mm/yy"
           show-button-bar
           :min-date="new Date()"
           class="w-full"
-          @date-select="onChangeDate"
         />
       </div>
       <div class="flex flex-col gap-2">
@@ -216,8 +215,9 @@
 
 <script setup>
 import { zodResolver } from '@primevue/forms/resolvers/zod'
-import dayjs from 'dayjs'
 import { z } from 'zod'
+
+const emit = defineEmits(['onSuccess'])
 
 const { isEdit, metadata } = defineProps({
   isEdit: {
@@ -232,14 +232,13 @@ const { isEdit, metadata } = defineProps({
 
 const people = ref({
   name: '',
-  date: '',
 })
 
 onBeforeMount(() => {
   Object.assign(people.value, metadata)
 
   if (metadata.dob) {
-    people.value.date = dayjs(metadata.dob, 'YYYY-MM-DD')
+    people.value.dob = new Date(metadata.dob)
   }
 })
 
@@ -262,17 +261,15 @@ const resolver = ref(
   ),
 )
 
-const onChangeDate = () => {
-  if (people.value.date.isValid()) {
-    people.value.dob = people.value.date.format('YYYY-MM-DD')
-  }
-}
-
 const disabled = ref(false)
 const onSubmit = async ({ valid }) => {
   if (!valid) return
 
   disabled.value = true
+
+  if (people.value.dob) {
+    people.value.dob = toISODate(people.value.dob)
+  }
 
   const url = isEdit ? `/api/people/${people.value.id}` : '/api/people'
 
@@ -287,6 +284,8 @@ const onSubmit = async ({ valid }) => {
           summary: `[${people.value.name}] updated successfully!`,
           life: 3000,
         })
+
+        emit('onSuccess', 'edit', true)
       } else {
         toast.add({
           severity: 'success',
@@ -294,6 +293,8 @@ const onSubmit = async ({ valid }) => {
           detail: 'People added successfully!',
           life: 3000,
         })
+
+        emit('onSuccess', 'add', true)
       }
     })
     .catch((error) => {

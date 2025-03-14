@@ -3,6 +3,10 @@ import duration from 'dayjs/plugin/duration.js'
 
 dayjs.extend(duration)
 
+export const toISODate = (date: Date) => {
+  return date ? dayjs(date).format('YYYY-MM-DD') : ''
+}
+
 export const runtime2Duration = (seconds?: number) => {
   if (!seconds) return ''
 
