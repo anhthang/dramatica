@@ -217,6 +217,8 @@
 import { zodResolver } from '@primevue/forms/resolvers/zod'
 import { z } from 'zod'
 
+const toast = useToast()
+
 const emit = defineEmits(['onSuccess'])
 
 const { isEdit, metadata } = defineProps({

@@ -11,7 +11,7 @@
     <template #icons>
       <Button
         label="Edit"
-        icon="pi pi-pencil"
+        icon="pi pi-pen-to-square"
         severity="secondary"
         @click="toggle('edit')"
       />
@@ -102,38 +102,20 @@
     >
       <FormTV :is-edit="true" :metadata="drama" @on-success="toggle" />
     </Dialog>
-  </Panel>
 
-  <!-- <a-page-header
-    v-if="drama"
-    class="container"
-    :title="translation.title_year"
-    :sub-title="drama.original_title"
-  >
-    <a-modal
-      v-model:open="visible.edit"
-      title="Edit Drama"
-      destroy-on-close
-      :confirm-loading="visible.loading"
-      :width="1200"
-      @ok="onEdit"
+    <Dialog
+      v-model:visible="visible.translation"
+      modal
+      header="Drama Translation"
+      dismissable-mask
+      class="w-[72rem]"
     >
-      <form-t-v ref="tvForm" :is-edit="true" :metadata="drama" />
-    </a-modal>
-
-    <a-modal
-      v-model:open="visible.translation"
-      title="Add Translation"
-      destroy-on-close
-      :confirm-loading="visible.loading"
-      @ok="onUpdateTranslation"
-    >
-      <form-drama-translation
-        ref="translationForm"
+      <FormDramaTranslation
         :translations="drama.translations"
+        @on-success="toggle"
       />
-    </a-modal>
-  </a-page-header> -->
+    </Dialog>
+  </Panel>
 </template>
 
 <script setup>
@@ -234,16 +216,4 @@ const toggle = (key, shouldRefresh) => {
     refresh()
   }
 }
-
-// const translationForm = ref()
-// const onUpdateTranslation = async () => {
-//   toggle('loading')
-
-//   await translationForm.value.onSubmit().then(() => {
-//     toggle('translation')
-//   })
-
-//   refresh()
-//   toggle('loading')
-// }
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <a-form :ref="formRef" layout="vertical" :model="member" :rules="formRules">
+  <!-- <a-form :ref="formRef" layout="vertical" :model="member" :rules="formRules">
     <a-form-item v-if="edit">
       <a-select
         v-if="isDrama"
@@ -55,71 +55,127 @@
       <card-person v-else :person="selection" :highlight="true" />
     </a-form-item>
 
-    <a-form-item
-      ref="role"
-      name="role"
-      label="Role"
-      v-bind="validateInfos.role"
-    >
-      <a-select v-model:value="member.role" show-search :options="selectOpts" />
-      <template #extra>Cast/Crew member's role in the drama.</template>
-    </a-form-item>
+  </a-form> -->
+  <Form
+    v-slot="$form"
+    :initial-values="member"
+    :resolver
+    class="flex flex-col gap-4"
+    @submit="onSubmit"
+  >
+    <div class="flex flex-col gap-2">
+      <label for="member_role">Role</label>
+      <Select
+        v-model="member.role"
+        name="role"
+        :options="selectOpts"
+        option-group-label="label"
+        option-group-children="options"
+        option-label="label"
+        option-value="value"
+      />
+      <Message
+        v-if="$form.role?.invalid"
+        severity="error"
+        size="small"
+        variant="simple"
+      >
+        {{ $form.role.error.message }}
+      </Message>
+    </div>
 
-    <a-form-item
-      v-if="isCast"
-      ref="character_name"
-      name="character_name"
-      label="Character"
-      v-bind="validateInfos.character_name"
-    >
-      <a-input v-model:value.trim="member.character_name">
-        <template #prefix><font-size-outlined /></template>
-      </a-input>
-      <template #extra>
+    <div v-if="isCast" class="flex flex-col gap-2">
+      <label for="member_character_name">Character</label>
+      <IconField>
+        <InputIcon class="pi pi-user" />
+        <InputText
+          id="member_character_name"
+          v-model.trim="member.character_name"
+          name="character_name"
+          type="text"
+          fluid
+        />
+      </IconField>
+      <Message
+        v-if="$form.character_name?.invalid"
+        severity="error"
+        size="small"
+        variant="simple"
+      >
+        {{ $form.character_name.error.message }}
+      </Message>
+      <Message v-else severity="secondary" size="small" variant="simple">
         Character name played by the cast member in the drama
-      </template>
-    </a-form-item>
-    <a-form-item
-      v-if="isCast"
-      ref="character_name_vi"
-      name="character_name_vi"
-      label="Character (Vietnamese)"
-      v-bind="validateInfos.character_name_vi"
-    >
-      <a-input v-model:value.trim="member.character_name_vi">
-        <template #prefix><font-size-outlined /></template>
-      </a-input>
-      <template #extra>
-        Character name played by the cast member in the drama (in Vietnamese)
-      </template>
-    </a-form-item>
+      </Message>
+    </div>
 
-    <a-form-item
-      v-if="isCast"
-      ref="billing_order"
-      name="billing_order"
-      label="Billing Order"
-      v-bind="validateInfos.billing_order"
-    >
-      <a-input-number v-model:value="member.billing_order" style="width: 100%">
-        <template #prefix><number-outlined /></template>
-      </a-input-number>
-      <template #extra>
+    <div v-if="isCast" class="flex flex-col gap-2">
+      <label for="member_character_name_vi">Character (Vietnamese)</label>
+      <IconField>
+        <InputIcon class="pi pi-user" />
+        <InputText
+          id="member_character_name_vi"
+          v-model.trim="member.character_name_vi"
+          name="character_name_vi"
+          type="text"
+          fluid
+        />
+      </IconField>
+      <Message
+        v-if="$form.character_name_vi?.invalid"
+        severity="error"
+        size="small"
+        variant="simple"
+      >
+        {{ $form.character_name_vi.error.message }}
+      </Message>
+      <Message v-else severity="secondary" size="small" variant="simple">
+        Character name played by the cast member in the drama (in Vietnamese)
+      </Message>
+    </div>
+
+    <div v-if="isCast" class="flex flex-col gap-2">
+      <label for="member_billing_order">Billing Order</label>
+      <IconField>
+        <InputIcon class="pi pi-hashtag" />
+        <InputText
+          id="member_billing_order"
+          v-model.trim="member.billing_order"
+          name="billing_order"
+          type="text"
+          fluid
+        />
+      </IconField>
+      <Message
+        v-if="$form.billing_order?.invalid"
+        severity="error"
+        size="small"
+        variant="simple"
+      >
+        {{ $form.billing_order.error.message }}
+      </Message>
+      <Message v-else severity="secondary" size="small" variant="simple">
         Order of appearance in the credits (lower number is higher billing)
-      </template>
-    </a-form-item>
-  </a-form>
+      </Message>
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <Button label="Save" type="submit" :disabled="!$form.valid" />
+    </div>
+  </Form>
 </template>
 
 <script setup>
-import { Form } from 'ant-design-vue'
-import groupBy from 'lodash.groupby'
+import { zodResolver } from '@primevue/forms/resolvers/zod'
+// import groupBy from 'lodash.groupby'
 import pick from 'lodash.pick'
+import { z } from 'zod'
 
 const route = useRoute()
-const { locale } = useI18n()
+const toast = useToast()
+// const { locale } = useI18n()
 
-const { type, edit, existing, metadata } = defineProps({
+const { type, edit, metadata } = defineProps({
   type: {
     type: String,
     required: true,
@@ -168,101 +224,90 @@ onMounted(() => {
 
 const selection = ref()
 
-const input = ref('')
-const suggestions = ref([])
+// const input = ref('')
+// const suggestions = ref([])
 
-const fetchSuggestions = () => {
-  const url = isDrama ? '/api/drama' : '/api/people'
+// const fetchSuggestions = () => {
+//   const url = isDrama ? '/api/drama' : '/api/people'
 
-  $fetch(url, {
-    params: {
-      query: input.value,
-      language: locale.value,
-    },
-  }).then((data) => {
-    suggestions.value = data
-      .filter((p) => !existing.includes(p.id))
-      .map((p) => ({
-        value: p.id,
-        ...p,
-      }))
+//   $fetch(url, {
+//     params: {
+//       query: input.value,
+//       language: locale.value,
+//     },
+//   }).then((data) => {
+//     suggestions.value = data
+//       .filter((p) => !existing.includes(p.id))
+//       .map((p) => ({
+//         value: p.id,
+//         ...p,
+//       }))
+//   })
+// }
+
+// const onSelect = (value) => {
+//   const { drama, people, ...rest } = isDrama
+//     ? metadata.find((d) => d.drama_id === value)
+//     : metadata.find((p) => p.people_id === value)
+
+//   selection.value = isDrama ? drama : people
+//   Object.assign(member.value, rest)
+// }
+
+// const onSelectSuggestion = (value, option) => {
+//   if (isDrama) {
+//     member.value.drama_id = value
+//   } else {
+//     member.value.people_id = value
+//   }
+
+//   selection.value = option
+
+//   input.value = ''
+//   suggestions.value = []
+// }
+
+const resolver = ref(
+  zodResolver(
+    z.object({
+      drama_id: z.number().nullish(),
+      people_id: z.number().nullish(),
+      role: z.enum(enumRoles),
+      character_name: z.string().nullish(),
+      character_name_vi: z.string().nullish(),
+      billing_order: z.number().nullish(),
+    }),
+  ),
+)
+
+const onSubmit = async ({ valid }) => {
+  if (!valid) return
+
+  const body = isCast.value
+    ? member.value
+    : pick(member.value, ['drama_id', 'people_id', 'role'])
+
+  $fetch(`/api/tv/${member.value.drama_id}/people`, {
+    method: 'post',
+    body,
   })
-}
-
-const onSelect = (value) => {
-  const { drama, people, ...rest } = isDrama
-    ? metadata.find((d) => d.drama_id === value)
-    : metadata.find((p) => p.people_id === value)
-
-  selection.value = isDrama ? drama : people
-  Object.assign(member.value, rest)
-}
-
-const onSelectSuggestion = (value, option) => {
-  if (isDrama) {
-    member.value.drama_id = value
-  } else {
-    member.value.people_id = value
-  }
-
-  selection.value = option
-
-  input.value = ''
-  suggestions.value = []
-}
-
-const formRef = ref()
-const formRules = ref({
-  drama_id: [{ required: true, type: 'number', trigger: ['change', 'blur'] }],
-  people_id: [{ required: true, type: 'number', trigger: ['change', 'blur'] }],
-  role: [
-    {
-      required: true,
-      type: 'enum',
-      enum: enumRoles,
-      trigger: ['change', 'blur'],
-    },
-  ],
-  character_name: [{ type: 'string', trigger: ['change', 'blur'] }],
-  character_name_vi: [{ type: 'string', trigger: ['change', 'blur'] }],
-  billing_order: [{ type: 'number', trigger: ['change', 'blur'] }],
-})
-
-const { useForm } = Form
-const { validate, validateInfos } = useForm(member, formRules)
-
-const onSubmit = async () => {
-  await validate()
     .then(() => {
-      const body = isCast.value
-        ? member.value
-        : pick(member.value, ['drama_id', 'people_id', 'role'])
-
-      $fetch(`/api/tv/${member.value.drama_id}/people`, {
-        method: 'post',
-        body,
-      })
-        .then(() => {
-          if (isDrama) {
-            message.success(
-              `[${selection.value.title}] has been successfully added to the people!`,
-            )
-          } else {
-            message.success(
-              `[${selection.value.name}] has been successfully added to the drama!`,
-            )
-          }
+      if (isDrama) {
+        toast.add({
+          severity: 'success',
+          summary: `[${selection.value.title}] has been successfully added to the people!`,
+          life: 3000,
         })
-        .catch((error) => {
-          message.error(error.message)
+      } else {
+        toast.add({
+          severity: 'success',
+          summary: `[${selection.value.name}] has been successfully added to the drama!`,
+          life: 3000,
         })
+      }
     })
     .catch((error) => {
-      console.error(error)
+      message.error(error.message)
     })
 }
-
-defineExpose({
-  onSubmit,
-})
 </script>

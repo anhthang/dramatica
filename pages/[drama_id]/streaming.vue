@@ -1,19 +1,4 @@
 <template>
-  <!-- <a-page-header v-if="drama" class="container" title="Streaming Services">
-    <a-modal
-      v-model:open="visible.open"
-      :title="selection ? 'Edit Streaming Service' : 'Add Streaming Service'"
-      destroy-on-close
-      :confirm-loading="visible.loading"
-      @ok="addStreamingService"
-    >
-      <form-drama-streaming
-        ref="streamingForm"
-        :metadata="selection"
-        :existing="drama.availability.map((s) => s.streaming_service)"
-      />
-    </a-modal>
-  </a-page-header> -->
   <div>
     <Panel
       v-if="drama"
@@ -51,16 +36,38 @@
         </Column>
         <Column header="Actions">
           <template #body="{ data }">
-            <Button
-              label="Edit"
-              icon="pi pi-pen-to-square"
-              severity="secondary"
-              size="small"
-              @click="toggle('open', data)"
-            />
+            <div class="flex gap-2">
+              <Button
+                label="Edit"
+                icon="pi pi-pen-to-square"
+                severity="secondary"
+                size="small"
+                @click="toggle('open', data)"
+              />
+              <!-- <Button
+                label="Delete"
+                icon="pi pi-trash"
+                severity="danger"
+                size="small"
+              /> -->
+            </div>
           </template>
         </Column>
       </DataTable>
+
+      <Dialog
+        v-model:visible="visible.open"
+        modal
+        :header="selection ? 'Edit Streaming Service' : 'Add Streaming Service'"
+        dismissable-mask
+        class="w-[36rem]"
+      >
+        <FormDramaStreaming
+          :metadata="selection"
+          :existing="drama.availability.map((s) => s.streaming_service)"
+          @on-success="toggle"
+        />
+      </Dialog>
     </Panel>
   </div>
 </template>
@@ -99,15 +106,4 @@ const toggle = (key, record) => {
 
   selection.value = record
 }
-
-// const streamingForm = ref()
-// const addStreamingService = async () => {
-//   toggle('loading')
-
-//   await streamingForm.value.onSubmit()
-
-//   toggle('loading')
-//   toggle('open')
-//   refresh()
-// }
 </script>

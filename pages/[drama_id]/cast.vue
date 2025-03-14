@@ -1,34 +1,4 @@
 <template>
-  <!-- <a-page-header v-if="drama" class="container" title="Cast & Crew">
-    <a-modal
-      v-model:open="visible.add"
-      title="Add Cast & Crew"
-      destroy-on-close
-      :confirm-loading="visible.loading"
-      @ok="addDramaMember('add')"
-    >
-      <form-drama-people
-        ref="peopleForm"
-        type="people"
-        :existing="drama.people.map((a) => a.people_id)"
-      />
-    </a-modal>
-
-    <a-modal
-      v-model:open="visible.edit"
-      title="Edit Cast & Crew"
-      destroy-on-close
-      :confirm-loading="visible.loading"
-      @ok="addDramaMember('edit')"
-    >
-      <form-drama-people
-        ref="peopleForm"
-        type="people"
-        :edit="true"
-        :metadata="drama.people"
-      />
-    </a-modal>
-  </a-page-header> -->
   <div>
     <Panel
       v-if="drama"
@@ -117,6 +87,35 @@
           </Fieldset>
         </div>
       </div>
+
+      <Dialog
+        v-model:visible="visible.add"
+        modal
+        header="Add Cast & Crew"
+        dismissable-mask
+        class="w-[36rem]"
+      >
+        <FormDramaPeople
+          type="people"
+          :existing="drama.people.map((a) => a.people_id)"
+          @on-success="toggle"
+        />
+      </Dialog>
+
+      <Dialog
+        v-model:visible="visible.edit"
+        modal
+        header="Edit Cast & Crew"
+        dismissable-mask
+        class="w-[36rem]"
+      >
+        <FormDramaPeople
+          type="people"
+          :edit="true"
+          :metadata="drama.people"
+          @on-success="toggle"
+        />
+      </Dialog>
     </Panel>
   </div>
 </template>
@@ -159,17 +158,6 @@ const visible = ref({
 const toggle = (key) => {
   visible.value[key] = !visible.value[key]
 }
-
-// const peopleForm = ref()
-// const addDramaMember = async (key) => {
-//   toggle('loading')
-
-//   await peopleForm.value.onSubmit()
-
-//   refresh()
-//   toggle('loading')
-//   toggle(key)
-// }
 
 useSeoMeta({
   title: drama.value && `Cast & Crew - ${translation.value.title_year}`,

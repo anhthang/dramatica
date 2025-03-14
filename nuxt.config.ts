@@ -1,5 +1,8 @@
+import { execSync } from 'child_process'
 import Aura from '@primevue/themes/aura'
 import app from './package.json'
+
+const revision = execSync('git rev-parse --short HEAD').toString().trim()
 
 const isProduction = process.env.NODE_ENV === 'production'
 
@@ -67,6 +70,8 @@ export default defineNuxtConfig({
   supabase: {
     redirect: false,
   },
+
+  buildId: `v${app.version} (${revision})`,
 
   runtimeConfig: {
     app: {

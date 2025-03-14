@@ -5,6 +5,9 @@
     pt:root:class="!border-0 !bg-transparent"
     pt:title:class="flex items-center gap-4 font-medium text-3xl"
   >
+    <template #icons>
+      <Button label="Add" icon="pi pi-video" @click="toggle('add_drama')" />
+    </template>
     <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
       <div class="col-span-4 md:col-span-1 flex flex-col gap-4">
         <div class="flex flex-col gap-4 items-center">
@@ -47,15 +50,13 @@
           :descriptions="descriptions"
         />
 
-        <div class="flex gap-2">
-          <Button
-            label="Edit"
-            icon="pi pi-pen-to-square"
-            severity="secondary"
-            fluid
-            @click="toggle('edit')"
-          />
-        </div>
+        <Button
+          label="Edit"
+          icon="pi pi-pen-to-square"
+          severity="secondary"
+          fluid
+          @click="toggle('edit')"
+        />
       </div>
       <div class="col-span-4 md:col-span-3 flex flex-col gap-4">
         <Tabs value="drama">
@@ -108,64 +109,6 @@
         </Tabs>
       </div>
     </div>
-    <!-- <a-page-header v-if="people" class="container">
-    <a-row :gutter="[16, 16]" type="flex">
-      <a-col :sm="18">
-        <a-descriptions :title="$t('Biography')" :column="1">
-          <a-typography-text v-if="people.biography">
-            {{ people.biography }}
-          </a-typography-text>
-          <a-typography-text v-else>
-            {{ $t('No Biography', { peopleName }) }}
-          </a-typography-text>
-        </a-descriptions>
-
-        <a-card :title="$t('Drama')" :loading="pending">
-          <template #extra>
-            <a-flex gap="small">
-              <a-button type="primary" @click="toggle('add_drama')">
-                <video-camera-add-outlined /> Add
-              </a-button>
-
-              <a-button @click="toggle('edit_drama')">
-                <form-outlined /> Edit
-              </a-button>
-            </a-flex>
-          </template>
-          
-        </a-card>
-      </a-col>
-    </a-row>
-
-    <a-modal
-      v-model:open="visible.add_drama"
-      title="Add Drama People"
-      destroy-on-close
-      :confirm-loading="visible.loading"
-      @ok="onUpdatePeopleDrama('add_drama')"
-    >
-      <form-drama-people
-        ref="dramaPeopleForm"
-        type="drama"
-        :existing="people.dramas.map((d) => d.drama_id)"
-      />
-    </a-modal>
-
-    <a-modal
-      v-model:open="visible.edit_drama"
-      title="Edit Drama People"
-      destroy-on-close
-      :confirm-loading="visible.loading"
-      @ok="onUpdatePeopleDrama('edit_drama')"
-    >
-      <form-drama-people
-        ref="dramaPeopleForm"
-        type="drama"
-        :edit="true"
-        :metadata="people.dramas"
-      />
-    </a-modal>
-  </a-page-header> -->
 
     <Dialog
       v-model:visible="visible.edit"
@@ -175,6 +118,35 @@
       class="w-[72rem]"
     >
       <FormPeople :is-edit="true" :metadata="people" @on-success="toggle" />
+    </Dialog>
+
+    <Dialog
+      v-model:visible="visible.add_drama"
+      modal
+      header="Add Drama People"
+      dismissable-mask
+      class="w-[36rem]"
+    >
+      <FormDramaPeople
+        type="drama"
+        :existing="people.dramas.map((d) => d.drama_id)"
+        @on-success="toggle"
+      />
+    </Dialog>
+
+    <Dialog
+      v-model:visible="visible.edit_drama"
+      modal
+      header="Edit Drama People"
+      dismissable-mask
+      class="w-[36rem]"
+    >
+      <FormDramaPeople
+        type="drama"
+        :edit="true"
+        :metadata="people.dramas"
+        @on-success="toggle"
+      />
     </Dialog>
   </Panel>
 </template>
