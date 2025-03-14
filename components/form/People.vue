@@ -1,155 +1,223 @@
 <template>
-  <potential-duplicates-people v-if="!isEdit && people.name" :props="people" />
+  <!-- <potential-duplicates-people v-if="!isEdit && people.name" :props="people" /> -->
 
-  <a-form
-    :ref="formRef"
-    layout="vertical"
-    :model="people"
-    :rules="formRules"
-    :disabled="disabled"
+  <Form
+    v-slot="$form"
+    :initial-values="people"
+    :resolver
+    class="flex flex-col gap-6"
+    @submit="onSubmit"
   >
-    <a-row :gutter="[16, 16]" type="flex">
-      <a-col :xs="24" :md="8">
-        <a-form-item
-          ref="name"
-          name="name"
-          label="Stage Name"
-          v-bind="validateInfos.name"
-        >
-          <a-input v-model:value.trim="people.name">
-            <template #prefix><font-size-outlined /></template>
-          </a-input>
-        </a-form-item>
-      </a-col>
-      <a-col :xs="24" :md="8">
-        <a-form-item
-          ref="native_name"
-          name="native_name"
-          label="Native Name"
-          v-bind="validateInfos.native_name"
-        >
-          <a-input v-model:value.trim="people.native_name">
-            <template #prefix><font-size-outlined /></template>
-          </a-input>
-        </a-form-item>
-      </a-col>
-      <a-col :xs="24" :md="8">
-        <a-form-item
-          ref="name_vi"
-          name="name_vi"
-          label="Vietnamese Name"
-          v-bind="validateInfos.name_vi"
-        >
-          <a-input v-model:value.trim="people.name_vi">
-            <template #prefix><font-size-outlined /></template>
-          </a-input>
-        </a-form-item>
-      </a-col>
-    </a-row>
-
-    <a-row :gutter="[16, 16]" type="flex">
-      <a-col :xs="24" :md="8">
-        <a-form-item
-          ref="gender"
-          name="gender"
-          label="Gender"
-          v-bind="validateInfos.gender"
-        >
-          <a-select
-            v-model:value="people.gender"
-            :options="genders.map((value) => ({ value }))"
+    <div class="grid grid-cols-3 gap-4">
+      <div class="flex flex-col gap-2">
+        <label for="people_name">Stage Name</label>
+        <IconField>
+          <InputIcon class="pi pi-user" />
+          <InputText
+            id="people_name"
+            v-model.trim="people.name"
+            name="name"
+            type="text"
+            fluid
           />
-        </a-form-item>
-      </a-col>
-      <a-col :xs="24" :md="8">
-        <a-form-item
-          ref="dob"
-          name="dob"
-          label="Date of Birth"
-          v-bind="validateInfos.dob"
+        </IconField>
+        <Message
+          v-if="$form.name?.invalid"
+          severity="error"
+          size="small"
+          variant="simple"
         >
-          <a-date-picker
-            v-model:value="people.date"
-            style="width: 100%"
-            @change="onChangeDates"
+          {{ $form.name.error.message }}
+        </Message>
+      </div>
+      <div class="flex flex-col gap-2">
+        <label for="people_native_name">Native Name</label>
+        <IconField>
+          <InputIcon class="pi pi-user" />
+          <InputText
+            id="people_native_name"
+            v-model.trim="people.native_name"
+            name="native_name"
+            type="text"
+            fluid
           />
-        </a-form-item>
-      </a-col>
-    </a-row>
+        </IconField>
+        <Message
+          v-if="$form.native_name?.invalid"
+          severity="error"
+          size="small"
+          variant="simple"
+        >
+          {{ $form.native_name.error.message }}
+        </Message>
+      </div>
+      <div class="flex flex-col gap-2">
+        <label for="people_name_vi">Vietnamese Name</label>
+        <IconField>
+          <InputIcon class="pi pi-user" />
+          <InputText
+            id="people_name_vi"
+            v-model.trim="people.name_vi"
+            name="name_vi"
+            type="text"
+            fluid
+          />
+        </IconField>
+        <Message
+          v-if="$form.name_vi?.invalid"
+          severity="error"
+          size="small"
+          variant="simple"
+        >
+          {{ $form.name_vi.error.message }}
+        </Message>
+      </div>
+    </div>
 
-    <a-form-item
-      ref="profile_url"
-      name="profile_url"
-      v-bind="validateInfos.profile_url"
-      label="Profile Picture"
-    >
-      <a-input v-model:value.trim="people.profile_url">
-        <template #prefix><user-outlined /></template>
-      </a-input>
-    </a-form-item>
+    <div class="grid grid-cols-3 gap-4">
+      <div class="flex flex-col gap-2">
+        <label for="people_gender">Gender</label>
+        <Select v-model="people.gender" name="gender" :options="genders">
+        </Select>
+        <Message
+          v-if="$form.gender?.invalid"
+          severity="error"
+          size="small"
+          variant="simple"
+        >
+          {{ $form.gender.error.message }}
+        </Message>
+      </div>
+      <div class="flex flex-col gap-2">
+        <label for="people_dobr">Date of Birth</label>
+        <DatePicker
+          v-model="people.date"
+          date-format="dd/mm/yy"
+          show-button-bar
+          :min-date="new Date()"
+          class="w-full"
+          @date-select="onChangeDate"
+        />
+      </div>
+      <div class="flex flex-col gap-2">
+        <label for="people_profile_url">Profile Picture</label>
+        <IconField>
+          <InputIcon class="pi pi-image" />
+          <InputText
+            id="people_profile_url"
+            v-model.trim="people.profile_url"
+            name="profile_url"
+            type="text"
+            fluid
+          />
+        </IconField>
+        <Message
+          v-if="$form.profile_url?.invalid"
+          severity="error"
+          size="small"
+          variant="simple"
+        >
+          {{ $form.profile_url.error.message }}
+        </Message>
+      </div>
+    </div>
 
-    <a-form-item
-      ref="biography"
-      name="biography"
-      v-bind="validateInfos.biography"
-      label="Biography"
-    >
-      <a-textarea
-        v-model:value.trim="people.biography"
-        :auto-size="{ minRows: 3, maxRows: 6 }"
+    <div class="flex flex-col gap-2">
+      <label for="people_biography">Biography</label>
+      <Textarea
+        id="people_biography"
+        v-model.trim="people.biography"
+        name="biography"
+        :rows="5"
+        auto-resize
       />
-      <template #extra>
+      <Message severity="secondary" size="small" variant="simple">
         When citing a biography found online, please include a reference at the
         bottom.
-      </template>
-    </a-form-item>
+      </Message>
+    </div>
 
-    <a-row :gutter="[16, 16]" type="flex">
-      <a-col xs="24" :md="8">
-        <a-form-item
-          ref="weibo"
-          name="weibo"
-          v-bind="validateInfos.weibo"
-          label="Weibo"
+    <div class="grid grid-cols-3 gap-4">
+      <div class="flex flex-col gap-2">
+        <label for="people_weibo">Weibo</label>
+        <IconField>
+          <InputIcon class="pi pi-comment" />
+          <InputText
+            id="people_weibo"
+            v-model.trim="people.weibo"
+            name="weibo"
+            type="text"
+            fluid
+          />
+        </IconField>
+        <Message
+          v-if="$form.weibo?.invalid"
+          severity="error"
+          size="small"
+          variant="simple"
         >
-          <a-input v-model:value.trim="people.weibo">
-            <template #prefix><weibo-outlined /></template>
-          </a-input>
-        </a-form-item>
-      </a-col>
-      <a-col xs="24" :md="8">
-        <a-form-item
-          ref="douyin"
-          name="douyin"
-          v-bind="validateInfos.douyin"
-          label="Douyin"
+          {{ $form.weibo.error.message }}
+        </Message>
+      </div>
+      <div class="flex flex-col gap-2">
+        <label for="people_douyin">Douyin</label>
+        <IconField>
+          <InputIcon class="pi pi-tiktok" />
+          <InputText
+            id="people_douyin"
+            v-model.trim="people.douyin"
+            name="douyin"
+            type="text"
+            fluid
+          />
+        </IconField>
+        <Message
+          v-if="$form.douyin?.invalid"
+          severity="error"
+          size="small"
+          variant="simple"
         >
-          <a-input v-model:value.trim="people.douyin">
-            <template #prefix><tik-tok-outlined /></template>
-          </a-input>
-        </a-form-item>
-      </a-col>
-      <a-col xs="24" :md="8">
-        <a-form-item
-          ref="instagram"
-          name="instagram"
-          v-bind="validateInfos.instagram"
-          label="Instagram"
+          {{ $form.douyin.error.message }}
+        </Message>
+      </div>
+      <div class="flex flex-col gap-2">
+        <label for="people_instagram">Instagram</label>
+        <IconField>
+          <InputIcon class="pi pi-instagram" />
+          <InputText
+            id="people_instagram"
+            v-model.trim="people.instagram"
+            name="instagram"
+            type="text"
+            fluid
+          />
+        </IconField>
+        <Message
+          v-if="$form.instagram?.invalid"
+          severity="error"
+          size="small"
+          variant="simple"
         >
-          <a-input v-model:value.trim="people.instagram">
-            <template #prefix><instagram-outlined /></template>
-          </a-input>
-        </a-form-item>
-      </a-col>
-    </a-row>
-  </a-form>
+          {{ $form.instagram.error.message }}
+        </Message>
+      </div>
+    </div>
+
+    <div class="flex gap-2 justify-end">
+      <Button
+        label="Save"
+        icon="pi pi-save"
+        type="submit"
+        :disabled="!$form.valid"
+      />
+    </div>
+  </Form>
 </template>
 
 <script setup>
-import { Button, Form } from 'ant-design-vue'
+import { zodResolver } from '@primevue/forms/resolvers/zod'
 import dayjs from 'dayjs'
-
-const router = useRouter()
+import { z } from 'zod'
 
 const { isEdit, metadata } = defineProps({
   isEdit: {
@@ -177,83 +245,66 @@ onBeforeMount(() => {
 
 const genders = ['Male', 'Female', 'Other']
 
-const formRef = ref()
-const formRules = ref({
-  name: [{ required: true, type: 'string', trigger: ['change', 'blur'] }],
-  native_name: [{ type: 'string', trigger: ['change', 'blur'] }],
-  gender: [
-    {
-      required: true,
-      type: 'enum',
-      enum: genders,
-      trigger: ['change', 'blur'],
-    },
-  ],
-  name_vi: [{ type: 'string', trigger: ['change', 'blur'] }],
-  dob: [{ type: 'date', trigger: ['change', 'blur'] }],
-  profile_url: [{ type: 'url', trigger: ['change', 'blur'] }],
-  biography: [{ type: 'string', trigger: ['change', 'blur'] }],
-  weibo: [{ type: 'url', trigger: ['change', 'blur'] }],
-  douyin: [{ type: 'url', trigger: ['change', 'blur'] }],
-  instagram: [{ type: 'url', trigger: ['change', 'blur'] }],
-})
+const resolver = ref(
+  zodResolver(
+    z.object({
+      name: z.string().min(1),
+      native_name: z.string().nullish(),
+      gender: z.enum(genders).nullish(),
+      name_vi: z.string().nullish(),
+      dob: z.date(),
+      profile_url: z.string().url().nullish().or(z.string().min(0).max(0)),
+      biography: z.string().nullish(),
+      weibo: z.string().url().nullish().or(z.string().min(0).max(0)),
+      douyin: z.string().url().nullish().or(z.string().min(0).max(0)),
+      instagram: z.string().url().nullish().or(z.string().min(0).max(0)),
+    }),
+  ),
+)
 
-const onChangeDates = () => {
+const onChangeDate = () => {
   if (people.value.date.isValid()) {
     people.value.dob = people.value.date.format('YYYY-MM-DD')
   }
 }
 
-const { useForm } = Form
-const { validate, validateInfos, resetFields } = useForm(people, formRules)
-
 const disabled = ref(false)
-const onSubmit = async () => {
+const onSubmit = async ({ valid }) => {
+  if (!valid) return
+
   disabled.value = true
 
-  await validate()
+  const url = isEdit ? `/api/people/${people.value.id}` : '/api/people'
+
+  $fetch(url, {
+    method: 'post',
+    body: people.value,
+  })
     .then(() => {
-      const url = isEdit ? `/api/people/${people.value.id}` : '/api/people'
-
-      $fetch(url, {
-        method: 'post',
-        body: people.value,
-      })
-        .then((data) => {
-          if (isEdit) {
-            message.success(`[${people.value.name}] updated successfully!`)
-          } else {
-            notification.success({
-              message: people.value.name,
-              description: 'People added successfully!',
-              btn: () =>
-                h(
-                  Button,
-                  {
-                    type: 'primary',
-                    // size: 'small',
-                    onClick: () => router.push(`/people/${data.id}`),
-                  },
-                  { default: () => 'Manage People' },
-                ),
-            })
-          }
-
-          resetFields()
+      if (isEdit) {
+        toast.add({
+          severity: 'success',
+          summary: `[${people.value.name}] updated successfully!`,
+          life: 3000,
         })
-        .catch((error) => {
-          message.error(error.message)
+      } else {
+        toast.add({
+          severity: 'success',
+          summary: people.value.name,
+          detail: 'People added successfully!',
+          life: 3000,
         })
+      }
     })
-    .catch(() => {
-      // nothing
+    .catch((error) => {
+      toast.add({
+        severity: 'error',
+        summary: error.message,
+        life: 3000,
+      })
     })
     .finally(() => {
       disabled.value = false
     })
 }
-
-defineExpose({
-  onSubmit,
-})
 </script>

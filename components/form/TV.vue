@@ -1,271 +1,399 @@
 <template>
-  <potential-duplicates-t-v v-if="!isEdit && tv.title" :props="tv" />
-
-  <a-form
-    :ref="formRef"
-    layout="vertical"
-    :model="tv"
-    :rules="formRules"
-    :disabled="loading"
+  <!-- <potential-duplicates-t-v v-if="!isEdit && tv.title" :props="tv" /> -->
+  <Form
+    v-slot="$form"
+    :initial-values="tv"
+    :resolver
+    class="flex flex-col gap-6"
+    @submit="onSubmit"
   >
-    <a-row :gutter="[16, 16]" type="flex">
-      <a-col :xl="8">
-        <a-form-item
-          ref="title"
-          name="title"
-          label="Title"
-          v-bind="validateInfos.title"
+    <div class="grid grid-cols-3 gap-4">
+      <div class="flex flex-col gap-2">
+        <label for="tv_title">Title</label>
+        <IconField>
+          <InputIcon class="pi pi-pencil" />
+          <InputText
+            id="tv_title"
+            v-model.trim="tv.title"
+            name="title"
+            type="text"
+            fluid
+          />
+        </IconField>
+        <Message
+          v-if="$form.title?.invalid"
+          severity="error"
+          size="small"
+          variant="simple"
         >
-          <a-input v-model:value.trim="tv.title">
-            <template #prefix><font-size-outlined /></template>
-          </a-input>
-        </a-form-item>
-      </a-col>
-      <a-col :xl="8">
-        <a-form-item
-          ref="title_pinyin"
-          name="title_pinyin"
-          label="Title Pinyin"
-          v-bind="validateInfos.title_pinyin"
+          {{ $form.title.error.message }}
+        </Message>
+      </div>
+      <div class="flex flex-col gap-2">
+        <label for="tv_title_pinyin">Pinyin Title</label>
+        <IconField>
+          <InputIcon class="pi pi-pencil" />
+          <InputText
+            id="tv_title_pinyin"
+            v-model.trim="tv.title_pinyin"
+            name="title_pinyin"
+            type="text"
+            fluid
+          />
+        </IconField>
+        <Message
+          v-if="$form.title_pinyin?.invalid"
+          severity="error"
+          size="small"
+          variant="simple"
         >
-          <a-input v-model:value.trim="tv.title_pinyin">
-            <template #prefix><font-size-outlined /></template>
-          </a-input>
-        </a-form-item>
-      </a-col>
-      <a-col :xl="8">
-        <a-form-item
-          ref="original_title"
-          name="original_title"
-          label="Original Title"
-          v-bind="validateInfos.original_title"
-        >
-          <a-input v-model:value.trim="tv.original_title">
-            <template #prefix><font-size-outlined /></template>
-          </a-input>
-        </a-form-item>
-      </a-col>
-    </a-row>
+          {{ $form.title_pinyin.error.message }}
+        </Message>
+      </div>
 
-    <a-form-item
-      ref="synopsis"
-      name="synopsis"
-      v-bind="validateInfos.synopsis"
-      label="Synopsis"
-    >
-      <a-textarea
-        v-model:value.trim="tv.synopsis"
-        :auto-size="{ minRows: 3, maxRows: 6 }"
+      <div class="flex flex-col gap-2">
+        <label for="tv_original_title">Original Title</label>
+        <IconField>
+          <InputIcon class="pi pi-pencil" />
+          <InputText
+            id="tv_original_title"
+            v-model.trim="tv.original_title"
+            name="original_title"
+            type="text"
+            fluid
+          />
+        </IconField>
+        <Message
+          v-if="$form.original_title?.invalid"
+          severity="error"
+          size="small"
+          variant="simple"
+        >
+          {{ $form.original_title.error.message }}
+        </Message>
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label for="tv_synopsis">Synopsis</label>
+      <Textarea
+        id="tv_synopsis"
+        v-model.trim="tv.synopsis"
+        name="synopsis"
+        :rows="5"
+        auto-resize
       />
-      <template #extra>
+      <Message severity="secondary" size="small" variant="simple">
         When copying a synopsis from another source, please include a citation
         at the field below.
-      </template>
-    </a-form-item>
+      </Message>
+    </div>
 
-    <a-row :gutter="[16, 16]" type="flex">
-      <a-col :xl="8">
-        <a-form-item
-          ref="synopsis_source"
-          name="synopsis_source"
-          label="Source"
-          v-bind="validateInfos.synopsis_source"
+    <div class="grid grid-cols-3 gap-4">
+      <div class="flex flex-col gap-2">
+        <label for="tv_synopsis_source">Source</label>
+        <IconField>
+          <InputIcon class="pi pi-pencil" />
+          <InputText
+            id="tv_synopsis_source"
+            v-model.trim="tv.synopsis_source"
+            name="synopsis_source"
+            type="text"
+            fluid
+          />
+        </IconField>
+        <Message
+          v-if="$form.synopsis_source?.invalid"
+          severity="error"
+          size="small"
+          variant="simple"
         >
-          <a-input v-model:value.trim="tv.synopsis_source">
-            <template #prefix><font-size-outlined /></template>
-          </a-input>
-        </a-form-item>
-      </a-col>
-      <a-col :xl="8">
-        <a-form-item
-          ref="airing_platform"
-          name="airing_platform"
-          label="Airing Platform"
-          v-bind="validateInfos.airing_platform"
+          {{ $form.synopsis_source.error.message }}
+        </Message>
+      </div>
+      <div class="flex flex-col gap-2">
+        <label for="tv_airing_platform">Airing Platform</label>
+        <IconField>
+          <InputIcon class="pi pi-desktop" />
+          <InputText
+            id="tv_airing_platform"
+            v-model.trim="tv.airing_platform"
+            name="airing_platform"
+            type="text"
+            fluid
+          />
+        </IconField>
+        <Message
+          v-if="$form.airing_platform?.invalid"
+          severity="error"
+          size="small"
+          variant="simple"
         >
-          <a-input v-model:value.trim="tv.airing_platform">
-            <template #prefix><font-size-outlined /></template>
-          </a-input>
-        </a-form-item>
-      </a-col>
-      <a-col :xl="8">
-        <a-form-item
-          ref="watch_link"
-          name="watch_link"
-          label="Watch Link"
-          v-bind="validateInfos.watch_link"
-        >
-          <a-input-search
-            v-model:value.trim="tv.watch_link"
-            enter-button
-            :loading="loading"
-            @search="fetchMetadata"
-          >
-            <template #prefix><video-camera-outlined /></template>
-          </a-input-search>
-        </a-form-item>
-      </a-col>
+          {{ $form.airing_platform.error.message }}
+        </Message>
+      </div>
 
-      <a-col :xl="8">
-        <a-form-item
-          ref="release_year"
-          name="release_year"
-          label="Release Year"
-          v-bind="validateInfos.release_year"
+      <div class="flex flex-col gap-2">
+        <label for="tv_watch_link">Watch Link</label>
+        <IconField>
+          <InputIcon class="pi pi-video" />
+          <InputText
+            id="tv_watch_link"
+            v-model.trim="tv.watch_link"
+            name="watch_link"
+            type="text"
+            fluid
+          />
+          <InputIcon
+            class="pi pi-search cursor-pointer hover:text-green-400"
+            @click="fetchMetadata"
+          />
+        </IconField>
+        <Message
+          v-if="$form.watch_link?.invalid"
+          severity="error"
+          size="small"
+          variant="simple"
         >
-          <a-input-number v-model:value="tv.release_year" style="width: 100%">
-            <template #prefix><number-outlined /></template>
-          </a-input-number>
-        </a-form-item>
-      </a-col>
-      <a-col :xl="8">
-        <a-form-item
-          ref="number_of_episodes"
-          name="number_of_episodes"
-          label="Total Episodes"
-          v-bind="validateInfos.number_of_episodes"
-        >
-          <a-input-number
-            v-model:value="tv.number_of_episodes"
-            style="width: 100%"
-          >
-            <template #prefix><number-outlined /></template>
-          </a-input-number>
-        </a-form-item>
-      </a-col>
-      <a-col :xl="8">
-        <a-form-item
-          ref="rating_name"
-          name="rating_name"
-          label="Rating"
-          v-bind="validateInfos.rating_name"
-        >
-          <a-input v-model:value.trim="tv.rating_name">
-            <template #prefix><safety-certificate-outlined /></template>
-          </a-input>
-        </a-form-item>
-      </a-col>
+          {{ $form.watch_link.error.message }}
+        </Message>
+      </div>
+    </div>
 
-      <a-col :xl="8">
-        <a-form-item
-          ref="airing_status"
+    <div class="grid grid-cols-3 gap-4">
+      <div class="flex flex-col gap-2">
+        <label for="tv_release_year">Release Year</label>
+        <IconField>
+          <InputIcon class="pi pi-hashtag" />
+          <InputText
+            id="tv_release_year"
+            v-model.trim="tv.release_year"
+            name="release_year"
+            type="text"
+            fluid
+          />
+        </IconField>
+        <Message
+          v-if="$form.release_year?.invalid"
+          severity="error"
+          size="small"
+          variant="simple"
+        >
+          {{ $form.release_year.error.message }}
+        </Message>
+      </div>
+      <div class="flex flex-col gap-2">
+        <label for="tv_number_of_episodes">Total Episodes</label>
+        <IconField>
+          <InputIcon class="pi pi-hashtag" />
+          <InputText
+            id="tv_number_of_episodes"
+            v-model.trim="tv.number_of_episodes"
+            name="number_of_episodes"
+            type="text"
+            fluid
+          />
+        </IconField>
+        <Message
+          v-if="$form.number_of_episodes?.invalid"
+          severity="error"
+          size="small"
+          variant="simple"
+        >
+          {{ $form.number_of_episodes.error.message }}
+        </Message>
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label for="tv_rating_name">Rating</label>
+        <IconField>
+          <InputIcon class="pi pi-shield" />
+          <InputText
+            id="tv_rating_name"
+            v-model.trim="tv.rating_name"
+            name="rating_name"
+            type="text"
+            fluid
+          />
+        </IconField>
+        <Message
+          v-if="$form.rating_name?.invalid"
+          severity="error"
+          size="small"
+          variant="simple"
+        >
+          {{ $form.rating_name.error.message }}
+        </Message>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-3 gap-4">
+      <div class="flex flex-col gap-2">
+        <label for="tv_airing_status">Airing Status</label>
+        <Select
+          v-model="tv.airing_status"
           name="airing_status"
-          label="Airing Status"
-          v-bind="validateInfos.airing_status"
+          :options="status"
         >
-          <a-select
-            v-model:value="tv.airing_status"
-            :options="status.map((value) => ({ value }))"
-          />
-        </a-form-item>
-      </a-col>
-      <a-col :xl="8">
-        <a-form-item
-          ref="air_date"
-          name="air_date"
-          label="Air Date"
-          v-bind="validateInfos.air_date"
+        </Select>
+        <Message
+          v-if="$form.airing_status?.invalid"
+          severity="error"
+          size="small"
+          variant="simple"
         >
-          <a-date-picker
-            v-model:value="tv.dates[0]"
-            style="width: 100%"
-            @change="onChangeDates"
-          />
-        </a-form-item>
-      </a-col>
-      <a-col :xl="8">
-        <a-form-item
-          ref="end_date"
-          name="end_date"
-          label="End Date"
-          v-bind="validateInfos.end_date"
-        >
-          <a-date-picker
-            v-model:value="tv.dates[1]"
-            style="width: 100%"
-            @change="onChangeDates"
-          />
-        </a-form-item>
-      </a-col>
-    </a-row>
+          {{ $form.airing_status.error.message }}
+        </Message>
+      </div>
+      <div class="flex flex-col gap-2">
+        <label for="tv_air_date">Air Date</label>
+        <DatePicker
+          v-model="tv.air_date"
+          date-format="dd/mm/yy"
+          show-button-bar
+          :min-date="new Date()"
+          class="w-full"
+        />
+      </div>
+      <div class="flex flex-col gap-2">
+        <label for="tv_end_date">End Date</label>
+        <DatePicker
+          v-model="tv.end_date"
+          date-format="dd/mm/yy"
+          show-button-bar
+          :min-date="new Date()"
+          class="w-full"
+        />
+      </div>
+    </div>
 
-    <a-form-item
-      ref="genres"
-      name="genres"
-      label="Genres"
-      v-bind="validateInfos.tv_genres"
-    >
-      <a-select
-        v-model:value="tv.tv_genres"
-        show-search
-        mode="multiple"
+    <div class="grid gap-2">
+      <label for="tv_genre">Genres</label>
+      <MultiSelect
+        name="tv_genre"
         :options="tvGenres"
-        :filter-option="true"
-        option-filter-prop="label"
+        option-label="label"
+        option-value="value"
+        filter
+        class="w-full"
       />
-    </a-form-item>
+    </div>
 
-    <a-row :gutter="[16, 16]" type="flex">
-      <a-col :xl="8">
-        <a-form-item
-          ref="douban"
-          name="douban"
-          label="Douban"
-          v-bind="validateInfos.douban"
+    <div class="grid grid-cols-3 gap-4">
+      <div class="flex flex-col gap-2">
+        <label for="tv_douban">Douban</label>
+        <IconField>
+          <InputIcon class="pi pi-tiktok" />
+          <InputText
+            id="tv_douban"
+            v-model.trim="tv.douban"
+            name="douban"
+            type="text"
+            fluid
+          />
+        </IconField>
+        <Message
+          v-if="$form.douban?.invalid"
+          severity="error"
+          size="small"
+          variant="simple"
         >
-          <a-input v-model:value.trim="tv.douban">
-            <template #prefix><link-outlined /></template>
-          </a-input>
-        </a-form-item>
-      </a-col>
-      <a-col :xl="8">
-        <a-form-item
-          ref="imdb"
-          name="imdb"
-          label="IMDb"
-          v-bind="validateInfos.imdb"
+          {{ $form.douban.error.message }}
+        </Message>
+      </div>
+      <div class="flex flex-col gap-2">
+        <label for="tv_imdb">IMDb</label>
+        <IconField>
+          <InputIcon class="pi pi-desktop" />
+          <InputText
+            id="tv_imdb"
+            v-model.trim="tv.imdb"
+            name="imdb"
+            type="text"
+            fluid
+          />
+        </IconField>
+        <Message
+          v-if="$form.imdb?.invalid"
+          severity="error"
+          size="small"
+          variant="simple"
         >
-          <a-input v-model:value.trim="tv.imdb">
-            <template #prefix><link-outlined /></template>
-          </a-input>
-        </a-form-item>
-      </a-col>
-    </a-row>
+          {{ $form.imdb.error.message }}
+        </Message>
+      </div>
+    </div>
 
-    <a-row :gutter="[16, 16]" type="flex">
-      <a-col :xl="8">
-        <a-form-item
-          ref="poster_url"
-          name="poster_url"
-          label="Poster"
-          v-bind="validateInfos.poster_url"
+    <div class="grid grid-cols-3 gap-4">
+      <div class="flex flex-col gap-2">
+        <label for="tv_poster_url">Poster</label>
+        <IconField>
+          <InputIcon class="pi pi-image" />
+          <InputText
+            id="tv_poster_url"
+            v-model.trim="tv.poster_url"
+            name="poster_url"
+            type="text"
+            fluid
+          />
+        </IconField>
+        <Message
+          v-if="$form.poster_url?.invalid"
+          severity="error"
+          size="small"
+          variant="simple"
         >
-          <a-input v-model:value.trim="tv.poster_url">
-            <template #prefix><file-image-outlined /></template>
-          </a-input>
-        </a-form-item>
-      </a-col>
-      <a-col :xl="8">
-        <a-form-item
-          ref="cover_url"
-          name="cover_url"
-          label="Cover"
-          v-bind="validateInfos.cover_url"
+          {{ $form.poster_url.error.message }}
+        </Message>
+      </div>
+      <div class="flex flex-col gap-2">
+        <label for="tv_cover">Cover</label>
+        <IconField>
+          <InputIcon class="pi pi-image" />
+          <InputText
+            id="tv_cover"
+            v-model.trim="tv.cover_url"
+            name="cover"
+            type="text"
+            fluid
+          />
+        </IconField>
+        <Message
+          v-if="$form.cover?.invalid"
+          severity="error"
+          size="small"
+          variant="simple"
         >
-          <a-input v-model:value.trim="tv.cover_url">
-            <template #prefix><file-image-outlined /></template>
-          </a-input>
-        </a-form-item>
-      </a-col>
-    </a-row>
-  </a-form>
+          {{ $form.cover.error.message }}
+        </Message>
+      </div>
+    </div>
+
+    <div class="flex gap-2 justify-between">
+      <Button
+        label="Back"
+        icon="pi pi-arrow-circle-left"
+        severity="secondary"
+        @click="$emit('onBack')"
+      />
+      <Button
+        label="Save"
+        icon="pi pi-save"
+        type="submit"
+        :disabled="!$form.valid"
+      />
+    </div>
+  </Form>
 </template>
 
 <script setup>
+import { zodResolver } from '@primevue/forms/resolvers/zod'
 import dayjs from 'dayjs'
-import { Button, Form } from 'ant-design-vue'
+import { z } from 'zod'
 
-const router = useRouter()
+const emit = defineEmits(['onBack', 'onSuccess'])
+
+const toast = useToast()
 
 const { isEdit, metadata } = defineProps({
   isEdit: {
@@ -286,6 +414,7 @@ const tv = ref({
 
 onBeforeMount(() => {
   Object.assign(tv.value, metadata)
+
   if (metadata.air_date) {
     tv.value.dates[0] = dayjs(metadata.air_date, 'YYYY-MM-DD')
   }
@@ -338,111 +467,76 @@ const fetchMetadata = () => {
     })
 }
 
-const formRef = ref()
-const formRules = ref({
-  title: [{ required: true, type: 'string', trigger: ['change', 'blur'] }],
-  title_pinyin: [{ type: 'string', trigger: ['change', 'blur'] }],
-  original_title: [{ type: 'string', trigger: ['change', 'blur'] }],
-  release_year: [
-    {
-      required: false,
-      type: 'number',
-      min: 1970,
-      max: 2200,
-      trigger: ['change', 'blur'],
-    },
-  ],
-  number_of_episodes: [
-    {
-      required: false,
-      type: 'number',
-      min: 1,
-      max: 1000,
-      trigger: ['change', 'blur'],
-    },
-  ],
-  synopsis: [{ type: 'string', trigger: ['change', 'blur'] }],
-  synopsis_source: [{ type: 'string', trigger: ['change', 'blur'] }],
-  airing_platform: [{ type: 'string', trigger: ['change', 'blur'] }],
-  poster_url: [{ type: 'url', trigger: ['change', 'blur'] }],
-  cover_url: [{ type: 'url', trigger: ['change', 'blur'] }],
-  rating_name: [{ type: 'string', trigger: ['change', 'blur'] }],
-  watch_link: [{ type: 'url', trigger: ['change', 'blur'] }],
-  douban: [{ type: 'url', trigger: ['change', 'blur'] }],
-  imdb: [{ type: 'url', trigger: ['change', 'blur'] }],
-  airing_status: [
-    {
-      required: true,
-      type: 'enum',
-      enum: status,
-      trigger: ['change', 'blur'],
-    },
-  ],
-  air_day: [
-    {
-      type: 'enum',
-      enum: dayOfWeek,
-      trigger: ['change', 'blur'],
-    },
-  ],
-  air_date: [{ type: 'date', trigger: ['change', 'blur'] }],
-  end_date: [{ type: 'date', trigger: ['change', 'blur'] }],
-})
+// const onChangeDates = () => {
+//   if (tv.value.dates[0] && tv.value.dates[0].isValid()) {
+//     tv.value.air_date = tv.value.dates[0].format('YYYY-MM-DD')
+//   }
+//   if (tv.value.dates[1] && tv.value.dates[1].isValid()) {
+//     tv.value.end_date = tv.value.dates[1].format('YYYY-MM-DD')
+//     tv.value.release_year = tv.value.dates[1].year()
+//     tv.value.airing_status = 'Ended'
+//   }
+// }
 
-const onChangeDates = () => {
-  if (tv.value.dates[0] && tv.value.dates[0].isValid()) {
-    tv.value.air_date = tv.value.dates[0].format('YYYY-MM-DD')
-  }
-  if (tv.value.dates[1] && tv.value.dates[1].isValid()) {
-    tv.value.end_date = tv.value.dates[1].format('YYYY-MM-DD')
-    tv.value.release_year = tv.value.dates[1].year()
-    tv.value.airing_status = 'Ended'
-  }
-}
+const resolver = ref(
+  zodResolver(
+    z.object({
+      title: z.string().min(1),
+      title_pinyin: z.string().nullish(),
+      original_title: z.string().nullish(),
+      release_year: z.number().min(1970).max(2200).nullish(),
+      number_of_episodes: z.number().nullish(),
+      synopsis: z.string().nullish(),
+      synopsis_source: z.string().nullish(),
+      airing_platform: z.string().nullish(),
+      poster_url: z.string().url().nullish().or(z.string().min(0).max(0)),
+      cover_url: z.string().url().nullish().or(z.string().min(0).max(0)),
+      rating_name: z.string().nullish(),
+      watch_link: z.string().url().nullish().or(z.string().min(0).max(0)),
+      douban: z.string().url().nullish().or(z.string().min(0).max(0)),
+      imdb: z.string().url().nullish().or(z.string().min(0).max(0)),
+      airing_status: z.enum(status).nullish(),
+      air_day: z.enum(dayOfWeek).nullish(),
+      air_date: z.date(),
+      end_date: z.date(),
+    }),
+  ),
+)
 
-const { useForm } = Form
-const { validate, validateInfos, resetFields } = useForm(tv, formRules)
+const onSubmit = async ({ valid }) => {
+  if (!valid) return
 
-const onSubmit = async () => {
-  await validate()
+  const url = isEdit ? `/api/tv/${tv.value.id}` : '/api/tv'
+  $fetch(url, {
+    method: 'post',
+    body: tv.value,
+  })
     .then(() => {
-      const url = isEdit ? `/api/tv/${tv.value.id}` : '/api/tv'
-
-      $fetch(url, {
-        method: 'post',
-        body: tv.value,
-      })
-        .then((data) => {
-          if (isEdit) {
-            message.success(`[${tv.value.title}] updated successfully!`)
-          } else {
-            notification.success({
-              message: tv.value.title,
-              description: 'TV/Drama added successfully!',
-              btn: () =>
-                h(
-                  Button,
-                  {
-                    type: 'primary',
-                    onClick: () => router.push(`/${data.id}`),
-                  },
-                  { default: () => 'Manage TV/Drama' },
-                ),
-            })
-          }
-
-          resetFields()
+      if (isEdit) {
+        toast.add({
+          severity: 'success',
+          summary: `[${tv.value.title}] updated successfully!`,
+          life: 3000,
         })
-        .catch((error) => {
-          message.error(error.message)
+
+        emit('onSuccess', 'edit', true)
+      } else {
+        toast.add({
+          severity: 'success',
+          summary: tv.value.title,
+          detail: 'TV/Drama added successfully!',
+          life: 3000,
         })
+
+        emit('onSuccess', 'add', true)
+      }
     })
-    .catch(() => {
-      // nothing
+    .catch((error) => {
+      toast.add({
+        severity: 'error',
+        summary: error.message,
+        life: 3000,
+      })
     })
 }
-
-defineExpose({
-  onSubmit,
-})
 </script>

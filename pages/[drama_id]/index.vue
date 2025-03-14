@@ -92,7 +92,18 @@
         </TabPanel>
       </TabPanels>
     </Tabs>
+
+    <Dialog
+      v-model:visible="visible.edit"
+      modal
+      header="Edit Drama"
+      dismissable-mask
+      class="w-[72rem]"
+    >
+      <FormTV :is-edit="true" :metadata="drama" @on-success="toggle" />
+    </Dialog>
   </Panel>
+
   <!-- <a-page-header
     v-if="drama"
     class="container"
@@ -128,15 +139,12 @@
 <script setup>
 import keyBy from 'lodash.keyby'
 
-// const page = ref(1)
-// const size = 12
-
 const route = useRoute()
 const config = useRuntimeConfig()
 
 const { locale } = useI18n()
 
-const { data: drama } = await useAsyncData(
+const { data: drama, refresh } = await useAsyncData(
   `drama-${route.params.drama_id}`,
   () => $fetch(`/api/${route.params.drama_id}`),
 )
@@ -213,27 +221,19 @@ useSeoMeta({
   twitterImage: seoImage,
 })
 
-// const visible = ref({
-//   edit: false,
-//   translation: false,
-//   loading: false,
-// })
+const visible = ref({
+  edit: false,
+  translation: false,
+  loading: false,
+})
 
-// const toggle = (key) => {
-//   visible.value[key] = !visible.value[key]
-// }
+const toggle = (key, shouldRefresh) => {
+  visible.value[key] = !visible.value[key]
 
-// const tvForm = ref()
-// const onEdit = async () => {
-//   toggle('loading')
-
-//   await tvForm.value.onSubmit().then(() => {
-//     toggle('edit')
-//   })
-
-//   refresh()
-//   toggle('loading')
-// }
+  if (shouldRefresh) {
+    refresh()
+  }
+}
 
 // const translationForm = ref()
 // const onUpdateTranslation = async () => {
