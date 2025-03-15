@@ -4,9 +4,11 @@
   >
     <!-- <LayoutSider /> -->
     <div
-      class="flex flex-col justify-between flex-1 mx-auto max-w-screen-2xl h-full overflow-y-auto pb-0.5"
+      class="flex flex-col flex-1 mx-auto max-w-screen-2xl h-full overflow-y-auto pb-0.5"
     >
-      <NuxtPage />
+      <LayoutHeader />
+
+      <NuxtPage class="flex-grow" />
 
       <LayoutFooter />
     </div>
