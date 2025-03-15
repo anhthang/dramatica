@@ -1,17 +1,21 @@
 <template>
-  <a-card
-    hoverable
-    :class="highlight && 'card-highlighted'"
-    style="height: 100%"
+  <div
+    class="flex items-center p-3 border rounded-md"
+    :class="{
+      'card-highlighted': highlight,
+    }"
   >
-    <a-card-meta :title="personName" :description="person.native_name">
-      <template #avatar>
-        <a-avatar :src="person.profile_url" :size="60">
-          {{ personName.charAt(0) }}
-        </a-avatar>
-      </template>
-    </a-card-meta>
-  </a-card>
+    <Avatar
+      :image="person.profile_url"
+      size="xlarge"
+      pt:image:class="object-cover"
+      shape="circle"
+    />
+    <Card class="!shadow-none bg-transparent">
+      <template #title>{{ personName }}</template>
+      <template #subtitle>{{ person.native_name }}</template>
+    </Card>
+  </div>
 </template>
 
 <script setup>

@@ -11,7 +11,13 @@
     <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
       <div class="col-span-4 md:col-span-1 flex flex-col gap-4">
         <div class="flex flex-col gap-4 items-center">
-          <Image :src="people.profile_url" :alt="peopleName" class="w-40" />
+          <Avatar
+            :image="people.profile_url"
+            :alt="peopleName"
+            shape="circle"
+            class="w-48 h-48"
+            pt:image:class="object-cover"
+          />
 
           <!-- <div class="text-3xl">{{ peopleName }}</div> -->
 

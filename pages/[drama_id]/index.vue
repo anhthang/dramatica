@@ -72,10 +72,10 @@
                     size="large"
                     fluid
                     :class="{
-                      '!bg-[#ff4a22]': streaming === 'wetv',
-                      '!bg-[#1cc749]': streaming === 'iqiyi',
-                      '!bg-[#e50914]': streaming === 'netflix',
-                      '!bg-[#2c78ff]': streaming === 'youku',
+                      '!bg-[#ff4a22] border-[#ff4a22]': streaming === 'wetv',
+                      '!bg-[#1cc749] border-[#1cc749]': streaming === 'iqiyi',
+                      '!bg-[#e50914] border-[#e50914]': streaming === 'netflix',
+                      '!bg-[#2c78ff] border-[#2c78ff]': streaming === 'youku',
                     }"
                   />
                 </NuxtLink>

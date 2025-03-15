@@ -31,29 +31,6 @@
         </a-select-opt-group>
       </a-select>
     </a-form-item>
-    <a-form-item v-else>
-      <a-auto-complete
-        v-model:value="input"
-        allow-clear
-        :options="suggestions"
-        @select="onSelectSuggestion"
-        @search="fetchSuggestions"
-      >
-        <a-input placeholder="Search drama or cast/crew member by name...">
-          <template #prefix><search-outlined /></template>
-        </a-input>
-
-        <template #option="item">
-          <select-option-t-v v-if="isDrama" :item="item" />
-          <select-option-people v-else :item="item" />
-        </template>
-      </a-auto-complete>
-    </a-form-item>
-
-    <a-form-item v-if="!edit && selection">
-      <card-t-v v-if="isDrama" :tv="selection" :highlight="true" />
-      <card-person v-else :person="selection" :highlight="true" />
-    </a-form-item>
 
   </a-form> -->
   <Form
@@ -63,6 +40,39 @@
     class="flex flex-col gap-4"
     @submit="onSubmit"
   >
+    <AutoComplete
+      v-if="!edit"
+      v-model="input"
+      v-focustrap
+      :suggestions="suggestions"
+      fluid
+      placeholder="Search drama or cast/crew member by name..."
+      @option-select="onSelectSuggestion"
+      @complete="fetchSuggestions"
+    >
+      <template #option="{ option }">
+        <div v-if="isDrama" class="flex items-center gap-2">
+          <Avatar :image="option.cover_url" pt:image:class="object-contain" />
+          <span>{{ option.title }}</span>
+        </div>
+        <div v-else class="flex items-center gap-2">
+          <Avatar
+            :image="option.profile_url"
+            pt:image:class="object-cover"
+            shape="circle"
+          />
+          <span>
+            {{ toLocalePeopleName(option, locale) }} ({{ option.native_name }})
+          </span>
+        </div>
+      </template>
+    </AutoComplete>
+
+    <div v-if="!edit && selection">
+      <CardTV v-if="isDrama" :tv="selection" :highlight="true" />
+      <CardPerson v-else :person="selection" :highlight="true" />
+    </div>
+
     <div class="flex flex-col gap-2">
       <label for="member_role">Role</label>
       <Select
@@ -173,9 +183,9 @@ import { z } from 'zod'
 
 const route = useRoute()
 const toast = useToast()
-// const { locale } = useI18n()
+const { locale } = useI18n()
 
-const { type, edit, metadata } = defineProps({
+const { type, edit, metadata, existing } = defineProps({
   type: {
     type: String,
     required: true,
@@ -224,26 +234,21 @@ onMounted(() => {
 
 const selection = ref()
 
-// const input = ref('')
-// const suggestions = ref([])
+const input = ref('')
+const suggestions = ref([])
 
-// const fetchSuggestions = () => {
-//   const url = isDrama ? '/api/drama' : '/api/people'
+const fetchSuggestions = () => {
+  const url = isDrama ? '/api/drama' : '/api/people'
 
-//   $fetch(url, {
-//     params: {
-//       query: input.value,
-//       language: locale.value,
-//     },
-//   }).then((data) => {
-//     suggestions.value = data
-//       .filter((p) => !existing.includes(p.id))
-//       .map((p) => ({
-//         value: p.id,
-//         ...p,
-//       }))
-//   })
-// }
+  $fetch(url, {
+    params: {
+      query: input.value,
+      language: locale.value,
+    },
+  }).then((data) => {
+    suggestions.value = data.filter((p) => !existing.includes(p.id))
+  })
+}
 
 // const onSelect = (value) => {
 //   const { drama, people, ...rest } = isDrama
@@ -254,18 +259,18 @@ const selection = ref()
 //   Object.assign(member.value, rest)
 // }
 
-// const onSelectSuggestion = (value, option) => {
-//   if (isDrama) {
-//     member.value.drama_id = value
-//   } else {
-//     member.value.people_id = value
-//   }
+const onSelectSuggestion = (option) => {
+  if (isDrama) {
+    member.value.drama_id = option.value.id
+  } else {
+    member.value.people_id = option.value.id
+  }
 
-//   selection.value = option
+  selection.value = option.value
 
-//   input.value = ''
-//   suggestions.value = []
-// }
+  input.value = ''
+  suggestions.value = []
+}
 
 const resolver = ref(
   zodResolver(

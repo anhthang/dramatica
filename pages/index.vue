@@ -53,14 +53,8 @@ const tabList = computed(() => {
 })
 </script>
 
-<!-- <style>
+<style>
 /** Global */
-.duplicate-alert {
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 1.5rem;
-}
-
 .card-highlighted {
   background-color: var(--card-highlighted-bg-light);
   border-color: var(--card-highlighted-border);
@@ -82,4 +76,4 @@ html.dark-mode .card-highlighted {
   border-start-end-radius: 6px;
   content: '';
 }
-</style> -->
+</style>

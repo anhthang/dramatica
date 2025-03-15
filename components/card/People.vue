@@ -4,7 +4,7 @@
       <Avatar
         :image="people.people.profile_url"
         size="large"
-        pt:image:class="object-contain"
+        pt:image:class="object-cover"
         shape="circle"
       />
       <Card class="!shadow-none">
