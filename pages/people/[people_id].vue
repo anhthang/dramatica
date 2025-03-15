@@ -154,12 +154,6 @@
 <script setup>
 import groupBy from 'lodash.groupby'
 
-// const airingColor = {
-//   Airing: 'blue',
-//   Ended: 'green',
-//   Hiatus: 'orange',
-// }
-
 const { locale } = useI18n()
 const route = useRoute()
 
@@ -215,15 +209,4 @@ const toggle = (key, shouldRefresh) => {
     refresh()
   }
 }
-
-// const dramaPeopleForm = ref()
-// const onUpdatePeopleDrama = async (key) => {
-//   toggle('loading')
-
-//   await dramaPeopleForm.value.onSubmit()
-
-//   toggle('loading')
-//   toggle(key)
-//   refresh()
-// }
 </script>

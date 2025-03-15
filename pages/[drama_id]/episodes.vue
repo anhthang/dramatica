@@ -1,31 +1,4 @@
 <template>
-  <!-- <a-page-header v-if="drama" class="container" title="Episodes">
-    <a-modal
-      v-model:open="visible"
-      title="Sync Episodes"
-      destroy-on-close
-      :width="800"
-      @ok="addEpisodes"
-    >
-      <a-form layout="vertical">
-        <a-form-item name="language" label="Language">
-          <a-radio-group
-            v-model:value="language"
-            :options="
-              locales.map(({ code, name }) => ({ value: code, label: name }))
-            "
-          />
-        </a-form-item>
-      </a-form>
-
-      <form-drama-episodes
-        ref="episodesForm"
-        :language="language"
-        :availability="availability"
-      />
-    </a-modal>
-  </a-page-header> -->
-
   <div>
     <Panel
       v-if="drama"
@@ -34,7 +7,7 @@
       pt:title:class="flex items-center gap-4 font-medium text-3xl"
     >
       <template #icons>
-        <Button label="Sync" icon="pi pi-sync" @click="toggleSync" />
+        <Button label="Fetch" icon="pi pi-sync" @click="toggleFetch" />
       </template>
 
       <div
@@ -46,6 +19,19 @@
           :episode="episode"
         />
       </div>
+
+      <Dialog
+        v-model:visible="visible"
+        modal
+        header="Episode Information"
+        dismissable-mask
+        class="w-[48rem]"
+      >
+        <FormDramaEpisodes
+          :availability="availability"
+          @on-success="toggleFetch"
+        />
+      </Dialog>
     </Panel>
   </div>
 </template>
@@ -72,31 +58,17 @@ const episodes = computed(() =>
 )
 
 const visible = ref(false)
-const toggleSync = () => {
+const toggleFetch = () => {
   visible.value = !visible.value
 }
 
-// const episodesForm = ref()
-// const addEpisodes = async () => {
-//   await episodesForm.value.onSubmit()
+const availability = computed(() => {
+  const netflix = drama.value.availability.filter(
+    (s) => s.streaming_service === 'Netflix',
+  )
 
-//   toggleSync()
-//   refresh()
-// }
-
-// const language = ref(locale.value)
-
-// const availability = computed(() => {
-//   const original = drama.value.translations.filter(
-//     (t) => t.language === language.value,
-//   )
-
-//   const netflix = drama.value.availability.filter(
-//     (s) => s.streaming_service === 'Netflix',
-//   )
-
-//   return original.concat(netflix)
-// })
+  return drama.value.translations.concat(netflix)
+})
 
 useSeoMeta({
   title: drama.value && `Episodes - ${translation.value.title_year}`,

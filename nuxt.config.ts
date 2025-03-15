@@ -25,10 +25,6 @@ export default defineNuxtConfig({
     '@primevue/nuxt-module',
   ],
 
-  colorMode: {
-    preference: 'dark',
-  },
-
   fonts: {
     families: [{ name: 'Dosis', provider: 'google' }],
   },
