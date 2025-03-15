@@ -9,7 +9,7 @@
         :key="description.title"
         class="flex items-center py-2 px-2 flex-wrap"
         :class="{
-          'border-t border-surface': idx !== 0,
+          'border-t border-zinc-100 dark:border-zinc-700': idx !== 0,
         }"
       >
         <div
@@ -19,13 +19,13 @@
         </div>
         <div
           v-if="description.title === 'Status'"
-          class="text-surface-900 dark:text-surface-0 w-full md:w-9/12 md:order-none order-1 text-justify"
+          class="text-surface-500 dark:text-surface-200 w-full md:w-9/12 md:order-none order-1 text-justify"
         >
           {{ $t(description.value) }}
         </div>
         <div
           v-else
-          class="text-surface-900 dark:text-surface-0 w-full md:w-9/12 md:order-none order-1 text-justify"
+          class="text-surface-500 dark:text-surface-200 w-full md:w-9/12 md:order-none order-1 text-justify"
         >
           {{ description.value }}
         </div>

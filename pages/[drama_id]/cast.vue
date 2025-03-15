@@ -2,10 +2,12 @@
   <div>
     <Panel
       v-if="drama"
-      header="Cast & Crew"
-      pt:root:class="!border-0 !bg-transparent"
-      pt:title:class="flex items-center gap-4 font-medium text-3xl"
-      pt:header-actions:class="flex gap-2"
+      :header="translation.title_year"
+      :pt="{
+        root: '!border-0 !bg-transparent',
+        title: 'flex items-center gap-4 font-medium text-3xl',
+        headerActions: 'flex gap-2',
+      }"
     >
       <template #icons>
         <Button label="Add" icon="pi pi-user-plus" @click="toggle('add')" />
@@ -17,76 +19,84 @@
         />
       </template>
 
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div class="col-span-4 md:col-span-3 flex flex-col gap-4">
-          <Fieldset
-            v-for="role in roles.cast"
-            v-show="peopleByRole[role]"
-            :key="role"
-            pt:legend:class="w-auto"
-          >
-            <template #legend>
-              <div class="flex items-center gap-2">
-                <span class="pi pi-users" />
-                <span class="font-semibold"> {{ role }} </span>
-              </div>
-            </template>
+      <Tabs value="cast">
+        <TVTabList :id="drama.id" current-tab="cast" />
 
-            <DataView
-              :value="peopleByRole[role]"
-              layout="grid"
-              :pt="{
-                header: '!bg-transparent !border-0 text-lg font-medium',
-                content: '!bg-transparent',
-              }"
-            >
-              <template #grid="{ items }">
-                <div
-                  class="grid grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4"
+        <TabPanels class="bg-transparent">
+          <TabPanel value="cast">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div class="col-span-4 md:col-span-3 flex flex-col gap-4">
+                <Fieldset
+                  v-for="role in roles.cast"
+                  v-show="peopleByRole[role]"
+                  :key="role"
+                  pt:legend:class="w-auto"
                 >
-                  <CardPeople
-                    v-for="people in items"
-                    :key="people.id"
-                    :people="people"
-                  />
-                </div>
-              </template>
-            </DataView>
-          </Fieldset>
-        </div>
-        <div class="col-span-4 md:col-span-1 flex flex-col gap-4">
-          <Fieldset
-            v-for="role in roles.crew"
-            v-show="peopleByRole[role]"
-            :key="role"
-            pt:legend:class="w-auto"
-          >
-            <template #legend>
-              <div class="flex items-center gap-2">
-                <span class="pi pi-book" />
-                <span class="font-semibold"> {{ role }} </span>
-              </div>
-            </template>
+                  <template #legend>
+                    <div class="flex items-center gap-2">
+                      <span class="pi pi-users" />
+                      <span class="font-semibold"> {{ role }} </span>
+                    </div>
+                  </template>
 
-            <DataView
-              :value="peopleByRole[role]"
-              layout="grid"
-              :pt="{
-                header: '!bg-transparent !border-0 text-lg font-medium',
-                content: '!bg-transparent',
-              }"
-            >
-              <template #grid="{ items }">
-                <CardPeople
-                  v-for="people in items"
-                  :key="people.id"
-                  :people="people"
-                />
-              </template>
-            </DataView>
-          </Fieldset>
-        </div>
-      </div>
+                  <DataView
+                    :value="peopleByRole[role]"
+                    layout="grid"
+                    :pt="{
+                      header: '!bg-transparent !border-0 text-lg font-medium',
+                      content: '!bg-transparent',
+                    }"
+                  >
+                    <template #grid="{ items }">
+                      <div
+                        class="grid grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4"
+                      >
+                        <CardPeople
+                          v-for="people in items"
+                          :key="people.id"
+                          :people="people"
+                        />
+                      </div>
+                    </template>
+                  </DataView>
+                </Fieldset>
+              </div>
+              <div class="col-span-4 md:col-span-1 flex flex-col gap-4">
+                <Fieldset
+                  v-for="role in roles.crew"
+                  v-show="peopleByRole[role]"
+                  :key="role"
+                  pt:legend:class="w-auto"
+                >
+                  <template #legend>
+                    <div class="flex items-center gap-2">
+                      <span class="pi pi-book" />
+                      <span class="font-semibold"> {{ role }} </span>
+                    </div>
+                  </template>
+
+                  <DataView
+                    :value="peopleByRole[role]"
+                    layout="grid"
+                    :pt="{
+                      header: '!bg-transparent !border-0 text-lg font-medium',
+                      content: '!bg-transparent',
+                    }"
+                  >
+                    <template #grid="{ items }">
+                      <CardPeople
+                        v-for="people in items"
+                        :key="people.id"
+                        :people="people"
+                      />
+                    </template>
+                  </DataView>
+                </Fieldset>
+              </div>
+            </div>
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
 
       <Dialog
         v-model:visible="visible.add"

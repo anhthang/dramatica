@@ -24,32 +24,9 @@
     </template>
 
     <Tabs value="information">
-      <TabList>
-        <Tab v-for="tab in items" :key="tab.label" :value="tab.value">
-          <router-link
-            v-if="tab.route"
-            v-slot="{ href, navigate }"
-            :to="tab.route"
-            custom
-          >
-            <a
-              v-ripple
-              :href="href"
-              class="flex items-center gap-2 text-inherit"
-              @click="navigate"
-            >
-              <i :class="tab.icon" />
-              <span>{{ $t(tab.label) }}</span>
-            </a>
-          </router-link>
-          <div v-else class="flex items-center gap-2 text-inherit">
-            <i :class="tab.icon" />
-            <span>{{ $t(tab.label) }}</span>
-          </div>
-        </Tab>
-      </TabList>
+      <TVTabList :id="drama.id" current-tab="information" />
 
-      <TabPanels>
+      <TabPanels class="bg-transparent">
         <TabPanel value="information">
           <div class="grid grid-cols-1 lg:grid-cols-10 gap-12 mt-2">
             <div class="col-span-1 lg:col-span-6">
@@ -130,28 +107,6 @@ const { data: drama, refresh } = await useAsyncData(
   `drama-${route.params.drama_id}`,
   () => $fetch(`/api/${route.params.drama_id}`),
 )
-
-const items = ref([
-  { value: 'information', label: 'Information', icon: 'pi pi-video' },
-  {
-    route: `/${drama.value.id}/cast`,
-    value: 'cast',
-    label: 'Cast',
-    icon: 'pi pi-users',
-  },
-  {
-    route: `/${drama.value.id}/episodes`,
-    value: 'episodes',
-    label: 'Episodes',
-    icon: 'pi pi-desktop',
-  },
-  {
-    route: `/${drama.value.id}/streaming`,
-    value: 'where_to_watch',
-    label: 'Where to Watch',
-    icon: 'pi pi-youtube',
-  },
-])
 
 const translation = computed(() => {
   const translationMap = keyBy(drama.value.translations, 'language')

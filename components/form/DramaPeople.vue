@@ -1,38 +1,4 @@
 <template>
-  <!-- <a-form :ref="formRef" layout="vertical" :model="member" :rules="formRules">
-    <a-form-item v-if="edit">
-      <a-select
-        v-if="isDrama"
-        v-model:value="member.drama_id"
-        @change="onSelect"
-      >
-        <a-select-opt-group
-          v-for="(group, label) in groupBy(
-            metadata,
-            (i) => i.drama.release_year || 'TBA',
-          )"
-          :key="label"
-          :label="label"
-        >
-          <a-select-option v-for="{ drama } in group" :key="drama.id">
-            <select-option-t-v :item="drama" />
-          </a-select-option>
-        </a-select-opt-group>
-      </a-select>
-      <a-select v-else v-model:value="member.people_id" @change="onSelect">
-        <a-select-opt-group
-          v-for="(group, label) in groupBy(metadata, 'role')"
-          :key="label"
-          :label="label"
-        >
-          <a-select-option v-for="{ people } in group" :key="people.id">
-            <select-option-people :item="people" />
-          </a-select-option>
-        </a-select-opt-group>
-      </a-select>
-    </a-form-item>
-
-  </a-form> -->
   <Form
     v-slot="$form"
     :initial-values="member"
