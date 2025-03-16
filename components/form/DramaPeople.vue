@@ -143,13 +143,14 @@
 
 <script setup>
 import { zodResolver } from '@primevue/forms/resolvers/zod'
-// import groupBy from 'lodash.groupby'
 import pick from 'lodash.pick'
 import { z } from 'zod'
 
 const route = useRoute()
 const toast = useToast()
 const { locale } = useI18n()
+
+const emit = defineEmits(['onSuccess'])
 
 const { type, edit, metadata, existing } = defineProps({
   type: {
@@ -191,7 +192,7 @@ const member = isDrama
 
 onMounted(() => {
   if (edit) {
-    const { drama, people, ...rest } = metadata[0]
+    const { drama, people, ...rest } = metadata
 
     selection.value = isDrama ? drama : people
     Object.assign(member.value, rest)
@@ -215,15 +216,6 @@ const fetchSuggestions = () => {
     suggestions.value = data.filter((p) => !existing.includes(p.id))
   })
 }
-
-// const onSelect = (value) => {
-//   const { drama, people, ...rest } = isDrama
-//     ? metadata.find((d) => d.drama_id === value)
-//     : metadata.find((p) => p.people_id === value)
-
-//   selection.value = isDrama ? drama : people
-//   Object.assign(member.value, rest)
-// }
 
 const onSelectSuggestion = (option) => {
   if (isDrama) {
@@ -269,12 +261,16 @@ const onSubmit = async ({ valid }) => {
           summary: `[${selection.value.title}] has been successfully added to the people!`,
           life: 3000,
         })
+
+        emit('onSuccess', edit ? 'edit_drama' : 'add_drama', true)
       } else {
         toast.add({
           severity: 'success',
           summary: `[${selection.value.name}] has been successfully added to the drama!`,
           life: 3000,
         })
+
+        emit('onSuccess', edit ? 'edit' : 'add', true)
       }
     })
     .catch((error) => {

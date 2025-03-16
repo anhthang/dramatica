@@ -35,6 +35,5 @@ const { tv } = defineProps({
     type: Object,
     default: () => ({}),
   },
-  loading: Boolean,
 })
 </script>

@@ -157,7 +157,12 @@
     </div>
 
     <div class="flex flex-col gap-2">
-      <Button label="Save" type="submit" :disabled="!$form.valid" />
+      <Button
+        label="Save"
+        type="submit"
+        :disabled="!$form.valid"
+        :loading="loading"
+      />
     </div>
   </Form>
 </template>

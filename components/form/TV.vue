@@ -381,6 +381,7 @@
         label="Back"
         icon="pi pi-arrow-circle-left"
         severity="secondary"
+        :loading="loading"
         @click="$emit('onBack')"
       />
       <Button
@@ -388,6 +389,7 @@
         icon="pi pi-save"
         type="submit"
         :disabled="!$form.valid"
+        :loading="loading"
       />
     </div>
   </Form>

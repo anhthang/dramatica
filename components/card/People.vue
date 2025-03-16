@@ -7,7 +7,7 @@
         pt:image:class="object-cover"
         shape="circle"
       />
-      <Card class="!shadow-none bg-transparent">
+      <Card class="!shadow-none bg-transparent" pt:body:class="py-0">
         <template #title>{{ name }}</template>
         <template #subtitle>{{ character }}</template>
       </Card>

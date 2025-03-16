@@ -95,7 +95,6 @@ useSeoMeta({
 })
 
 const visible = ref({
-  loading: false,
   open: false,
 })
 

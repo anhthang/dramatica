@@ -161,7 +161,6 @@ useSeoMeta({
 const visible = ref({
   edit: false,
   translation: false,
-  loading: false,
 })
 
 const toggle = (key, shouldRefresh) => {

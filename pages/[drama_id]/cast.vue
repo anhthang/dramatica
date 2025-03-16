@@ -137,7 +137,7 @@ import keyBy from 'lodash.keyby'
 const route = useRoute()
 const { locale } = useI18n()
 
-const { data: drama } = await useAsyncData(
+const { data: drama, refresh } = await useAsyncData(
   `drama-${route.params.drama_id}`,
   () => $fetch(`/api/${route.params.drama_id}`),
   {
@@ -162,11 +162,14 @@ const peopleByRole = computed(
 const visible = ref({
   add: false,
   edit: false,
-  loading: false,
 })
 
-const toggle = (key) => {
+const toggle = (key, shouldRefresh) => {
   visible.value[key] = !visible.value[key]
+
+  if (shouldRefresh) {
+    refresh()
+  }
 }
 
 useSeoMeta({

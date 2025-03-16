@@ -78,35 +78,48 @@
                 v-for="year of Object.keys(dramaByYear).reverse()"
                 :key="year"
               >
-                <Timeline :value="[year]" class="my-4">
+                <Timeline
+                  :value="[year]"
+                  class="my-4"
+                  pt:event-opposite:class="hidden"
+                >
                   <template #marker="{ item }">
                     <span class="text-xl font-medium">{{ item }}</span>
                   </template>
                 </Timeline>
 
-                <Timeline :value="dramaByYear[year]" align="alternate">
+                <Timeline
+                  :value="dramaByYear[year]"
+                  pt:root:class="gap-4"
+                  pt:event-opposite:class="hidden"
+                  pt:event-content:class="flex items-center"
+                >
                   <template #marker="{ item }">
-                    <Button
+                    <i
                       v-if="item.drama.airing_status === 'Ended'"
-                      rounded
-                      text
-                      icon="pi pi-check-circle"
-                      severity="success"
-                      disabled
+                      class="pi pi-check-circle text-green-500"
                     />
-                    <Button
+                    <i
                       v-if="item.drama.airing_status === 'Airing'"
-                      rounded
-                      text
-                      icon="pi pi-play-circle"
-                      severity="info"
-                      disabled
+                      class="pi pi-play-circle text-blue-500"
                     />
                   </template>
                   <template #content="{ item }">
-                    <NuxtLink :to="`/${item.drama.id}`">
-                      <CardTVCover :tv="item.drama" />
+                    <NuxtLink :to="`/${item.drama.id}`" class="flex-1">
+                      <CardTimeline :tv="item" :locale="locale" />
                     </NuxtLink>
+                    <Button
+                      label="Edit"
+                      icon="pi pi-pen-to-square"
+                      severity="secondary"
+                      size="small"
+                      @click="
+                        () => {
+                          metadata = item
+                          toggle('edit_drama')
+                        }
+                      "
+                    />
                   </template>
                 </Timeline>
               </div>
@@ -150,10 +163,12 @@
       <FormDramaPeople
         type="drama"
         :edit="true"
-        :metadata="people.dramas"
+        :metadata="metadata"
         @on-success="toggle"
       />
     </Dialog>
+
+    <Toast />
   </Panel>
 </template>
 
@@ -162,6 +177,8 @@ import groupBy from 'lodash.groupby'
 
 const { locale } = useI18n()
 const route = useRoute()
+
+const metadata = ref()
 
 const { data: people, refresh } = await useAsyncData(
   `people-${route.params.people_id}-${locale.value}`,
@@ -205,7 +222,6 @@ const visible = ref({
   edit: false,
   add_drama: false,
   edit_drama: false,
-  loading: false,
 })
 
 const toggle = (key, shouldRefresh) => {
