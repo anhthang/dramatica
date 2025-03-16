@@ -369,8 +369,15 @@
       </div>
     </div>
 
-    <div class="flex gap-2 justify-between">
+    <div
+      class="flex gap-2"
+      :class="{
+        'justify-between': !isEdit,
+        'justify-end': isEdit,
+      }"
+    >
       <Button
+        v-if="!isEdit"
         label="Back"
         icon="pi pi-arrow-circle-left"
         severity="secondary"

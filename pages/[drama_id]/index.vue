@@ -85,7 +85,7 @@
       modal
       header="Drama Translation"
       dismissable-mask
-      class="w-[72rem]"
+      class="w-[48rem]"
     >
       <FormDramaTranslation
         :translations="drama.translations"

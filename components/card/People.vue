@@ -3,11 +3,11 @@
     <div class="flex items-center">
       <Avatar
         :image="people.people.profile_url"
-        size="large"
+        size="xlarge"
         pt:image:class="object-cover"
         shape="circle"
       />
-      <Card class="!shadow-none">
+      <Card class="!shadow-none bg-transparent">
         <template #title>{{ name }}</template>
         <template #subtitle>{{ character }}</template>
       </Card>

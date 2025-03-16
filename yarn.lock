@@ -2879,15 +2879,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash.chunk@npm:^4.2.9":
-  version: 4.2.9
-  resolution: "@types/lodash.chunk@npm:4.2.9"
-  dependencies:
-    "@types/lodash": "npm:*"
-  checksum: 10c0/5759b3d969c5db4b0893b70261ae40d4b9a6466c984c16de6fa1d3945b3199cc09f948a444a3b4e6cfa0dd984044cf937cbc8dab5fe0ac8da67244ed74d9e4e4
-  languageName: node
-  linkType: hard
-
 "@types/lodash.get@npm:^4.4.9":
   version: 4.4.9
   resolution: "@types/lodash.get@npm:4.4.9"
@@ -4905,7 +4896,6 @@ __metadata:
     "@primevue/nuxt-module": "npm:^4.3.2"
     "@primevue/themes": "npm:^4.3.2"
     "@tailwindcss/typography": "npm:^0.5.16"
-    "@types/lodash.chunk": "npm:^4.2.9"
     "@types/lodash.get": "npm:^4.4.9"
     "@types/lodash.groupby": "npm:^4.6.9"
     "@types/lodash.isequal": "npm:^4.5.8"
@@ -4920,7 +4910,6 @@ __metadata:
     eslint-plugin-vue: "npm:^10.0.0"
     husky: "npm:^9.1.7"
     lint-staged: "npm:^15.5.0"
-    lodash.chunk: "npm:^4.2.0"
     lodash.get: "npm:^4.4.2"
     lodash.groupby: "npm:^4.6.0"
     lodash.isequal: "npm:^4.5.0"
@@ -7332,13 +7321,6 @@ __metadata:
   version: 4.4.0
   resolution: "lodash.castarray@npm:4.4.0"
   checksum: 10c0/0bf523ad1596a5bf17869ba047235b4453eee927005013ae152345e2b291b81a02e7f2b7c38f876a1d16f73c34aa3c3241e965193e5b31595035bc8f330c4358
-  languageName: node
-  linkType: hard
-
-"lodash.chunk@npm:^4.2.0":
-  version: 4.2.0
-  resolution: "lodash.chunk@npm:4.2.0"
-  checksum: 10c0/f9f99969561ad2f62af1f9a96c5bd0af776f000292b0d8db3126c28eb3b32e210d7c31b49c18d0d7901869bd769057046dc134b60cfa0c2c4ce017823a26bb23
   languageName: node
   linkType: hard
 
