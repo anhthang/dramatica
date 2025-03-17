@@ -37,38 +37,21 @@
           :rows="5"
         >
           <template #list="slotProps">
-            <div class="flex flex-col">
-              <div v-for="(item, index) in slotProps.items" :key="index">
-                <div
-                  class="flex flex-col sm:flex-row sm:items-center py-3 gap-3"
-                  :class="{
-                    'border-t border-surface-200 dark:border-surface-700':
-                      index !== 0,
-                  }"
-                >
-                  <div class="md:w-48 relative">
-                    <img
-                      class="block xl:block mx-auto rounded w-full"
-                      :src="item.preview_img"
-                      :alt="item.title"
-                    />
-                  </div>
-                  <div
-                    class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-6"
-                  >
-                    <div
-                      class="flex flex-row md:flex-col justify-between items-start gap-2"
-                    >
-                      <div class="text-lg font-medium">
-                        {{ item.title }}
-                      </div>
-                      <span class="text-muted-color text-sm">
-                        {{ item.synopsis }}</span
-                      >
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <div
+              v-for="(item, index) in slotProps.items"
+              :key="index"
+              class="py-3"
+              :class="{
+                'border-t border-surface-200 dark:border-surface-700':
+                  index !== 0,
+              }"
+            >
+              <CardTVHorizontal
+                :image="item.preview_img"
+                :title="item.title"
+                :content="item.synopsis"
+                size="large"
+              />
             </div>
           </template>
 

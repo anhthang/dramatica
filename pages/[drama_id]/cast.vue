@@ -51,11 +51,18 @@
                       <div
                         class="grid grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4"
                       >
-                        <CardPeople
+                        <NuxtLink
                           v-for="people in items"
                           :key="people.id"
-                          :people="people"
-                        />
+                          :to="`/people/${people.people_id}`"
+                        >
+                          <CardPerson
+                            :image="people.people.profile_url"
+                            size="xlarge"
+                            :title="toLocalePeopleName(people.people, locale)"
+                            :subtitle="toLocaleCharacterName(people, locale)"
+                          />
+                        </NuxtLink>
                       </div>
                     </template>
                   </DataView>
@@ -84,11 +91,18 @@
                     }"
                   >
                     <template #grid="{ items }">
-                      <CardPeople
+                      <NuxtLink
                         v-for="people in items"
                         :key="people.id"
-                        :people="people"
-                      />
+                        :to="`/people/${people.people_id}`"
+                      >
+                        <CardPerson
+                          :image="people.people.profile_url"
+                          size="xlarge"
+                          :title="toLocalePeopleName(people.people, locale)"
+                          :subtitle="toLocaleCharacterName(people, locale)"
+                        />
+                      </NuxtLink>
                     </template>
                   </DataView>
                 </Fieldset>

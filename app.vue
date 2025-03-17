@@ -62,10 +62,6 @@ useSeoMeta({
 
 <style>
 :root {
-  --card-highlighted-bg-light: #d2e5ff;
-  --card-highlighted-bg-dark: #002159;
-  --card-highlighted-border: #1677ff;
-
   --color-text-gradient-stop-1: #4285f4;
   --color-text-gradient-stop-2: #9b72cb;
   --color-text-gradient-stop-3: #d96570;

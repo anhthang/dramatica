@@ -18,25 +18,43 @@
     >
       <template #option="{ option }">
         <div v-if="isDrama" class="flex items-center gap-2">
-          <Avatar :image="option.cover_url" pt:image:class="object-contain" />
-          <span>{{ option.title }}</span>
+          <CardTVHorizontal
+            :image="option.cover_url"
+            size="small"
+            :title="option.title"
+            simple
+          />
         </div>
         <div v-else class="flex items-center gap-2">
-          <Avatar
+          <CardPerson
+            simple
             :image="option.profile_url"
-            pt:image:class="object-cover"
-            shape="circle"
+            :title="`${toLocalePeopleName(option, locale)} (${option.native_name})`"
           />
-          <span>
-            {{ toLocalePeopleName(option, locale) }} ({{ option.native_name }})
-          </span>
         </div>
       </template>
     </AutoComplete>
 
     <div v-if="!edit && selection">
-      <CardTV v-if="isDrama" :tv="selection" :highlight="true" />
-      <CardPerson v-else :person="selection" :highlight="true" />
+      <CardTVHorizontal
+        v-if="isDrama"
+        :image="selection.cover_url"
+        :title="
+          selection.release_year
+            ? `${selection.title} (${selection.release_year})`
+            : tv.title
+        "
+        :subtitle="selection.title_pinyin || selection.original_title"
+        selected
+      />
+      <CardPerson
+        v-else
+        :image="selection.profile_url"
+        size="xlarge"
+        :title="toLocalePeopleName(selection, locale)"
+        :subtitle="selection.native_name"
+        selected
+      />
     </div>
 
     <div class="flex flex-col gap-2">

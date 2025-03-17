@@ -106,7 +106,12 @@
                   </template>
                   <template #content="{ item }">
                     <NuxtLink :to="`/${item.drama.id}`" class="flex-1">
-                      <CardTimeline :tv="item" :locale="locale" />
+                      <CardTVHorizontal
+                        :image="item.drama.cover_url"
+                        :title="item.drama.title"
+                        :subtitle="toLocaleCharacterName(item, locale)"
+                        :content="$t(item.role)"
+                      />
                     </NuxtLink>
                     <Button
                       label="Edit"
@@ -173,6 +178,7 @@
 </template>
 
 <script setup>
+import { CardTVHorizontal } from '#components'
 import groupBy from 'lodash.groupby'
 
 const { locale } = useI18n()

@@ -36,28 +36,3 @@ const tabList = computed(() => {
   }, {})
 })
 </script>
-
-<style>
-/** Global */
-.card-highlighted {
-  background-color: var(--card-highlighted-bg-light);
-  border-color: var(--card-highlighted-border);
-}
-
-html.dark-mode .card-highlighted {
-  background-color: var(--card-highlighted-bg-dark);
-}
-
-.card-highlighted::after {
-  position: absolute;
-  inset-block-start: 2px;
-  inset-inline-end: 2px;
-  width: 0;
-  height: 0;
-  border: 10px solid var(--card-highlighted-border);
-  border-block-end: 10px solid transparent;
-  border-inline-start: 10px solid transparent;
-  border-start-end-radius: 6px;
-  content: '';
-}
-</style>
