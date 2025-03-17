@@ -3,8 +3,10 @@
     class="flex items-center gap-3 w-full"
     :class="{
       'items-center !p-0': simple,
-      'p-3 relative bg-emerald-100 dark:bg-emerald-900 border-emerald-500 border rounded-md':
+      'p-3 relative bg-emerald-100 dark:bg-emerald-900 border border-emerald-500 rounded-md':
         selected,
+      'p-3 relative border border-slate-200 dark:border-zinc-700 rounded-md':
+        bordered && !selected,
     }"
   >
     <img
@@ -55,5 +57,6 @@ defineProps({
   },
   simple: Boolean,
   selected: Boolean,
+  bordered: Boolean,
 })
 </script>

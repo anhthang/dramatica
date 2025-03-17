@@ -1,5 +1,7 @@
 <template>
+  <Skeleton v-if="loading" class="!h-40" />
   <Form
+    v-else
     v-slot="$form"
     :initial-values="translation"
     :resolver

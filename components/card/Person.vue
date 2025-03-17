@@ -5,6 +5,8 @@
       'items-center !p-0': simple,
       'relative bg-emerald-100 dark:bg-emerald-900 border-emerald-500 border rounded-md':
         selected,
+      'p-3 relative border border-slate-200 dark:border-zinc-700 rounded-md':
+        bordered && !selected,
     }"
   >
     <Avatar
@@ -46,5 +48,6 @@ defineProps({
   },
   simple: Boolean,
   selected: Boolean,
+  bordered: Boolean,
 })
 </script>

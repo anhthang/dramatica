@@ -1,6 +1,9 @@
 <template>
-  <!-- <potential-duplicates-t-v v-if="!isEdit && tv.title" :props="tv" /> -->
+  <PotentialDuplicatesTV v-if="!isEdit && tv.title" :props="tv" class="mb-12" />
+
+  <Skeleton v-if="loading" class="!h-40" />
   <Form
+    v-else
     v-slot="$form"
     :initial-values="tv"
     :resolver
@@ -146,7 +149,7 @@
           />
           <InputIcon
             class="pi pi-search cursor-pointer hover:text-green-400"
-            @click="fetchMetadata"
+            @click="fetchMetadata(tv.watch_link)"
           />
         </IconField>
         <Message
@@ -454,25 +457,31 @@ const dayOfWeek = [
 const status = ['Upcoming', 'Airing', 'Ended', 'Hiatus']
 
 const loading = ref(false)
-const fetchMetadata = () => {
-  loading.value = true
+const fetchMetadata = (url) => {
+  if (url) {
+    loading.value = true
 
-  $fetch('/api/scrape/tv', {
-    method: 'get',
-    params: {
-      url: tv.value.watch_link,
-      language: 'en',
-    },
-  })
-    .then((data) => {
-      Object.assign(tv.value, data)
+    $fetch('/api/scrape/tv', {
+      method: 'get',
+      params: {
+        url,
+        language: 'en',
+      },
     })
-    .catch((error) => {
-      message.error(error.message)
-    })
-    .finally(() => {
-      loading.value = false
-    })
+      .then((data) => {
+        Object.assign(tv.value, data)
+      })
+      .catch((error) => {
+        toast.add({
+          severity: 'error',
+          summary: error.message,
+          life: 3000,
+        })
+      })
+      .finally(() => {
+        loading.value = false
+      })
+  }
 }
 
 // const onChangeDates = () => {
@@ -547,4 +556,6 @@ const onSubmit = async ({ valid }) => {
       })
     })
 }
+
+defineExpose({ fetchMetadata })
 </script>

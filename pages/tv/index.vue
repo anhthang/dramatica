@@ -49,31 +49,35 @@
               </Message>
             </div>
 
-            <div class="flex gap-2" @click="activateCallback('2')">
-              <Checkbox input-id="checkbox" />
-              <label for="checkbox">
-                I would prefer to enter the information manually.
-              </label>
+            <div class="flex justify-end">
+              <Button
+                v-if="metadata.watch_link"
+                label="Fetch & Prefill"
+                icon="pi pi-sync"
+                :disabled="!$form.valid"
+                @click="onSubmit(() => activateCallback('2'))"
+              />
+              <Button
+                v-else
+                label="Skip & Enter Manually"
+                icon="pi pi-arrow-circle-right"
+                severity="secondary"
+                @click="activateCallback('2')"
+              />
             </div>
           </Form>
-          <div class="flex pt-6 justify-end">
-            <Button
-              label="Fetch"
-              icon="pi pi-sync"
-              :disabled="!metadata.watch_link"
-              @click="activateCallback('2')"
-            />
-          </div>
         </StepPanel>
         <StepPanel
           v-slot="{ activateCallback }"
           value="2"
           pt:root:class="!bg-transparent"
         >
-          <FormTV :metadata="metadata" @on-back="activateCallback('1')" />
+          <FormTV ref="tvForm" @on-back="activateCallback('1')" />
         </StepPanel>
       </StepPanels>
     </Stepper>
+
+    <Toast />
   </Panel>
 </template>
 
@@ -93,30 +97,12 @@ const resolver = ref(
   ),
 )
 
-// const loading = ref(false)
+const tvForm = ref()
+const onSubmit = async (callback) => {
+  await tvForm.value.fetchMetadata(metadata.value.watch_link)
 
-// const fetchMetadata = (callback) => {
-//   loading.value = true
-
-//   $fetch('/api/scrape/tv', {
-//     method: 'get',
-//     params: {
-//       url: metadata.value.watch_link,
-//       language: 'en',
-//     },
-//   })
-//     .then(({ season_id, ...rest }) => {
-//       Object.assign(metadata.value, rest)
-//     })
-//     .catch((error) => {
-//       message.error(error.message)
-//     })
-//     .finally(() => {
-//       loading.value = false
-
-//       callback()
-//     })
-// }
+  callback()
+}
 
 useSeoMeta({
   title: 'Add New TV',

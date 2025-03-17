@@ -1,5 +1,9 @@
 <template>
-  <!-- <potential-duplicates-people v-if="!isEdit && people.name" :props="people" /> -->
+  <PotentialDuplicatesPeople
+    v-if="!isEdit && people.name"
+    :props="people"
+    class="mb-12"
+  />
 
   <Form
     v-slot="$form"
@@ -12,7 +16,7 @@
       <div class="flex flex-col gap-2">
         <label for="people_name">Stage Name</label>
         <IconField>
-          <InputIcon class="pi pi-user" />
+          <InputIcon class="pi pi-user-edit" />
           <InputText
             id="people_name"
             v-model.trim="people.name"
@@ -33,7 +37,7 @@
       <div class="flex flex-col gap-2">
         <label for="people_native_name">Native Name</label>
         <IconField>
-          <InputIcon class="pi pi-user" />
+          <InputIcon class="pi pi-user-edit" />
           <InputText
             id="people_native_name"
             v-model.trim="people.native_name"
@@ -54,7 +58,7 @@
       <div class="flex flex-col gap-2">
         <label for="people_name_vi">Vietnamese Name</label>
         <IconField>
-          <InputIcon class="pi pi-user" />
+          <InputIcon class="pi pi-user-edit" />
           <InputText
             id="people_name_vi"
             v-model.trim="people.name_vi"
@@ -94,7 +98,6 @@
           v-model="people.dob"
           date-format="dd/mm/yy"
           show-button-bar
-          :min-date="new Date()"
           class="w-full"
         />
       </div>
