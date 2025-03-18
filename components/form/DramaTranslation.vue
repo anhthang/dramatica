@@ -41,7 +41,7 @@
           fluid
         />
         <InputIcon
-          class="pi pi-search cursor-pointer hover:text-green-400"
+          class="pi pi-sync cursor-pointer hover:text-emerald-500"
           @click="fetchMetadata"
         />
       </IconField>

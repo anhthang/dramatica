@@ -7,7 +7,7 @@
       pt:title:class="flex items-center gap-4 font-medium text-3xl"
     >
       <template #icons>
-        <Button label="Add" icon="pi pi-video" @click="toggle('open')" />
+        <Button label="Add" icon="pi pi-video" @click="toggle" />
       </template>
 
       <DataTable :value="drama.availability" striped-rows>
@@ -42,7 +42,12 @@
                 icon="pi pi-pen-to-square"
                 severity="secondary"
                 size="small"
-                @click="toggle('open', data)"
+                @click="
+                  () => {
+                    selection = data
+                    toggle()
+                  }
+                "
               />
               <!-- <Button
                 label="Delete"
@@ -56,7 +61,7 @@
       </DataTable>
 
       <Dialog
-        v-model:visible="visible.open"
+        v-model:visible="visible"
         modal
         :header="selection ? 'Edit Streaming Service' : 'Add Streaming Service'"
         dismissable-mask
@@ -78,7 +83,7 @@ import keyBy from 'lodash.keyby'
 const route = useRoute()
 const { locale } = useI18n()
 
-const { data: drama } = await useAsyncData(
+const { data: drama, refresh } = await useAsyncData(
   `drama-${route.params.drama_id}`,
   () => $fetch(`/api/${route.params.drama_id}`),
 )
@@ -94,15 +99,14 @@ useSeoMeta({
   description: drama.value && translation.value.synopsis,
 })
 
-const visible = ref({
-  open: false,
-})
-
+const visible = ref(false)
 const selection = ref()
 
-const toggle = (key, record) => {
-  visible.value[key] = !visible.value[key]
+const toggle = (shouldRefresh) => {
+  visible.value = !visible.value
 
-  selection.value = record
+  if (shouldRefresh) {
+    refresh()
+  }
 }
 </script>

@@ -3,7 +3,7 @@
     class="h-full overflow-hidden"
     :pt="{
       body: 'flex-1',
-      caption: 'flex-grow',
+      // caption: 'flex-grow',
       subtitle: 'flex justify-between gap-2',
     }"
   >
@@ -12,7 +12,10 @@
     </template>
 
     <template #title>
-      {{ episode.title || `${$t('Episode')} ${episode.episode_number}` }}
+      <Avatar class="mr-1" shape="circle">
+        {{ episode.episode_number }}
+      </Avatar>
+      {{ episode.title }}
     </template>
 
     <template #subtitle>

@@ -46,12 +46,18 @@
         {{ $form.watch_link.error.message }}
       </Message>
     </div>
+
+    <div class="flex flex-col gap-2">
+      <Button label="Save" type="submit" :disabled="!$form.valid" />
+    </div>
   </Form>
 </template>
 
 <script setup>
 import { zodResolver } from '@primevue/forms/resolvers/zod'
 import { z } from 'zod'
+
+const emit = defineEmits(['onSuccess'])
 
 const { metadata } = defineProps({
   isEdit: Boolean,
@@ -99,6 +105,8 @@ const onSubmit = async ({ valid }) => {
         summary: `[${service.value.streaming_service}] updated successfully!`,
         life: 3000,
       })
+
+      emit('onSuccess', true)
     })
     .catch((error) => {
       toast.add({

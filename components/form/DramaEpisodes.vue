@@ -42,8 +42,7 @@
               :key="index"
               class="py-3"
               :class="{
-                'border-t border-surface-200 dark:border-surface-700':
-                  index !== 0,
+                'border-t border-zinc-100 dark:border-zinc-700': index !== 0,
               }"
             >
               <CardTVHorizontal
@@ -74,7 +73,7 @@
     </div>
 
     <div class="flex flex-col gap-2">
-      <Button label="Save" type="submit" />
+      <Button label="Save" type="submit" :disabled="status === 'pending'" />
     </div>
   </Form>
 </template>
@@ -82,6 +81,8 @@
 <script setup>
 import keyBy from 'lodash.keyby'
 import pick from 'lodash.pick'
+
+const emit = defineEmits(['onSuccess'])
 
 const props = defineProps({
   availability: {
@@ -164,6 +165,8 @@ const onSubmit = async () => {
         summary: 'Episodes added/updated successfully!',
         life: 3000,
       })
+
+      emit('onSuccess', true)
     })
     .catch((error) => {
       toast.add({

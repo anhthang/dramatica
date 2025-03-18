@@ -25,7 +25,12 @@
         <TabPanels class="bg-transparent">
           <TabPanel value="cast">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div class="col-span-4 md:col-span-3 flex flex-col gap-4">
+              <div
+                class="col-span-4 md:col-span-3 flex flex-col gap-4"
+                :class="{
+                  'md:col-span-4': !hasCrew,
+                }"
+              >
                 <Fieldset
                   v-for="role in roles.cast"
                   v-show="peopleByRole[role]"
@@ -49,7 +54,10 @@
                   >
                     <template #grid="{ items }">
                       <div
-                        class="grid grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4"
+                        class="grid grid-cols-2 lg:grid-cols-3 gap-4"
+                        :class="{
+                          'lg:grid-cols-4': !hasCrew,
+                        }"
                       >
                         <NuxtLink
                           v-for="people in items"
@@ -68,7 +76,10 @@
                   </DataView>
                 </Fieldset>
               </div>
-              <div class="col-span-4 md:col-span-1 flex flex-col gap-4">
+              <div
+                v-if="hasCrew"
+                class="col-span-4 md:col-span-1 flex flex-col gap-4"
+              >
                 <Fieldset
                   v-for="role in roles.crew"
                   v-show="peopleByRole[role]"
@@ -141,6 +152,8 @@
         />
       </Dialog>
     </Panel>
+
+    <Toast />
   </div>
 </template>
 
@@ -162,6 +175,8 @@ const { data: drama, refresh } = await useAsyncData(
     },
   },
 )
+
+const hasCrew = drama.value.people.some((p) => roles.crew.includes(p.role))
 
 const translation = computed(() => {
   const translationMap = keyBy(drama.value.translations, 'language')

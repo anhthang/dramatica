@@ -44,6 +44,8 @@
         />
       </Dialog>
     </Panel>
+
+    <Toast />
   </div>
 </template>
 
@@ -53,7 +55,7 @@ import keyBy from 'lodash.keyby'
 const route = useRoute()
 const { locale } = useI18n()
 
-const { data: drama } = await useAsyncData(
+const { data: drama, refresh } = await useAsyncData(
   `drama-${route.params.drama_id}`,
   () => $fetch(`/api/${route.params.drama_id}`),
 )
@@ -69,8 +71,12 @@ const episodes = computed(() =>
 )
 
 const visible = ref(false)
-const toggleFetch = () => {
+const toggleFetch = (shouldRefresh) => {
   visible.value = !visible.value
+
+  if (shouldRefresh) {
+    refresh()
+  }
 }
 
 const availability = computed(() => {
