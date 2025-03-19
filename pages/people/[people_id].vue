@@ -52,7 +52,8 @@
         <Divider />
 
         <DescriptionList
-          heading="Personal Information"
+          title="Personal Information"
+          :subtitle="people.biography"
           :descriptions="descriptions"
         />
 

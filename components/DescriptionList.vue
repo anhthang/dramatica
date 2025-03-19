@@ -1,8 +1,16 @@
 <template>
   <div>
-    <div v-if="heading" class="font-medium text-xl mb-2">
-      {{ $t(heading) }}
+    <div
+      v-if="title"
+      class="font-medium text-xl mb-2"
+      :class="{ 'mb-4': !subtitle }"
+    >
+      {{ $t(title) }}
     </div>
+    <div v-if="subtitle" class="text-slate-500 dark:text-zinc-400 mb-6">
+      {{ subtitle }}
+    </div>
+
     <ul class="list-none p-0 m-0">
       <li
         v-for="(description, idx) in descriptions"
@@ -36,7 +44,11 @@
 
 <script setup>
 defineProps({
-  heading: {
+  title: {
+    type: String,
+    default: '',
+  },
+  subtitle: {
     type: String,
     default: '',
   },

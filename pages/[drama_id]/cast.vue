@@ -12,10 +12,10 @@
       <template #icons>
         <Button label="Add" icon="pi pi-user-plus" @click="toggle('add')" />
         <Button
-          label="Edit"
-          icon="pi pi-user-edit"
+          label="Manage"
+          icon="pi pi-th-large"
           severity="secondary"
-          @click="toggle('edit')"
+          @click="toggle('manage')"
         />
       </template>
 
@@ -24,7 +24,54 @@
 
         <TabPanels class="bg-transparent">
           <TabPanel value="cast">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <DataTable v-if="visible.manage" :value="drama.people" striped-rows>
+              <Column field="name" header="Person">
+                <template #body="{ data }">
+                  <div class="flex items-center gap-2">
+                    <Avatar
+                      :image="data.people.profile_url"
+                      shape="circle"
+                      pt:image:class="object-cover"
+                    />
+                    <span>
+                      {{ toLocalePeopleName(data.people, $i18n.locale) }}
+                    </span>
+                  </div>
+                </template>
+              </Column>
+              <!-- <Column field="people.name" header="Name" /> -->
+              <Column field="character_name" header="Character">
+                <template #body="{ data }">
+                  {{ toLocaleCharacterName(data, $i18n.locale) }}
+                </template>
+              </Column>
+              <Column field="role" header="Role" />
+              <Column header="Actions">
+                <template #body="{ data }">
+                  <div class="flex gap-2">
+                    <Button
+                      label="Edit"
+                      icon="pi pi-pen-to-square"
+                      severity="secondary"
+                      size="small"
+                      @click="
+                        () => {
+                          selection = data
+                          toggle('edit')
+                        }
+                      "
+                    />
+                    <!-- <Button
+                      label="Delete"
+                      icon="pi pi-trash"
+                      severity="danger"
+                      size="small"
+                    /> -->
+                  </div>
+                </template>
+              </Column>
+            </DataTable>
+            <div v-else class="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div
                 class="col-span-4 md:col-span-3 flex flex-col gap-4"
                 :class="{
@@ -147,7 +194,7 @@
         <FormDramaPeople
           type="people"
           :edit="true"
-          :metadata="drama.people"
+          :metadata="selection"
           @on-success="toggle"
         />
       </Dialog>
@@ -191,7 +238,10 @@ const peopleByRole = computed(
 const visible = ref({
   add: false,
   edit: false,
+  manage: false,
 })
+
+const selection = ref()
 
 const toggle = (key, shouldRefresh) => {
   visible.value[key] = !visible.value[key]

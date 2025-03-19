@@ -35,7 +35,7 @@
       </template>
     </AutoComplete>
 
-    <div v-if="!edit && selection">
+    <div v-if="selection">
       <CardTVHorizontal
         v-if="isDrama"
         :image="selection.cover_url"
