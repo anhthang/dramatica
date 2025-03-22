@@ -24,7 +24,7 @@ export const isoDuration2Seconds = (isoDuration: string) => {
 export const themeSpecificServices = ['WeTV', 'Youku']
 
 export const roles = {
-  cast: ['Main', 'Supporting', 'Special Guest'],
+  cast: ['Main', 'Supporting', 'Guest'],
   crew: [
     'Director',
     'Writer',
@@ -44,8 +44,8 @@ export const serviceMap: { [x: string]: string } = {
   'www.youku.tv': 'Youku',
 }
 
-export const toLocalePeopleName = (people: any, locale: string = 'en') => {
-  return people[`name_${locale}`] || people.name
+export const toLocalePersonName = (person: any, locale: string = 'en') => {
+  return person[`name_${locale}`] || person.name
 }
 
 export const toLocaleCharacterName = (cast: any, locale: string = 'en') => {

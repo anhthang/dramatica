@@ -3,7 +3,7 @@ import { serverSupabaseClient } from '#supabase/server'
 export default defineEventHandler(async (event) => {
   const client = await serverSupabaseClient(event)
 
-  const { people_id } = event.context.params
+  const { person_id } = event.context.params
   const { language } = getQuery(event)
 
   const { data, error } = await client
@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
       drama_crew(*, drama:dramas(*, translations:drama_translations(*)))
       `,
     )
-    .eq('id', people_id)
+    .eq('id', person_id)
     .single()
 
   if (error) {

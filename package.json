@@ -1,13 +1,13 @@
 {
-  "name": "dramapedia",
-  "displayName": "Dramapedia",
+  "name": "dramatica",
+  "displayName": "Dramatica",
   "private": true,
-  "description": "Dive into a vast library of Asian dramas, all presented with convenient Vietnamese language support.",
+  "description": "Dramatica is a comprehensive platform dedicated to managing and exploring Chinese, Korean, and Japanese dramas with a Vietnamese-friendly experience.",
   "version": "0.1.0",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/anhthang/dramapedia.git"
+    "url": "git+ssh://git@github.com/anhthang/dramatica.git"
   },
   "keywords": [
     "drama",
@@ -18,9 +18,9 @@
   "author": "Anh Thang Bui <buianhthang89@gmail.com> (https://anhthang.org)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/anhthang/dramapedia/issues"
+    "url": "https://github.com/anhthang/dramatica/issues"
   },
-  "homepage": "dramapedia.vercel.app",
+  "homepage": "dramatica.vercel.app",
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
@@ -41,7 +41,7 @@
     "@nuxt/eslint": "^1.2.0",
     "@nuxt/fonts": "^0.11.0",
     "@nuxtjs/color-mode": "^3.5.2",
-    "@nuxtjs/i18n": "^9.3.2",
+    "@nuxtjs/i18n": "^9.3.4",
     "@nuxtjs/supabase": "^1.5.0",
     "@nuxtjs/tailwindcss": "^6.13.2",
     "@primevue/nuxt-module": "^4.3.2",
@@ -54,7 +54,7 @@
     "@types/lodash.sortby": "^4.7.9",
     "@types/lodash.unescape": "^4.0.9",
     "dayjs": "^1.11.13",
-    "eslint": "^9.22.0",
+    "eslint": "^9.23.0",
     "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-prettier": "^5.2.3",
     "eslint-plugin-vue": "^10.0.0",

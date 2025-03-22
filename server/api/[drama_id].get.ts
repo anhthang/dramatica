@@ -12,8 +12,8 @@ export default defineEventHandler(async (event) => {
     .select(
       `*,
       availability:drama_availability(*),
-      cast:drama_cast(*, people(*)),
-      crew:drama_crew(*, people(*)),
+      cast:drama_cast(*, person:people(*)),
+      crew:drama_crew(*, person:people(*)),
       episodes(*),
       genres:drama_genres(genre:genres(id, name)),
       translations:drama_translations(*)

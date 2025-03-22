@@ -1,25 +1,25 @@
 <template>
   <PotentialDuplicatesPeople
-    v-if="!isEdit && people.name"
-    :props="people"
+    v-if="!isEdit && person.name"
+    :props="person"
     class="mb-12"
   />
 
   <Form
     v-slot="$form"
-    :initial-values="people"
+    :initial-values="person"
     :resolver
     class="flex flex-col gap-6"
     @submit="onSubmit"
   >
     <div class="grid grid-cols-3 gap-4">
       <div class="flex flex-col gap-2">
-        <label for="people_name">Stage Name</label>
+        <label for="name">Stage Name</label>
         <IconField>
           <InputIcon class="pi pi-user-edit" />
           <InputText
-            id="people_name"
-            v-model.trim="people.name"
+            id="name"
+            v-model.trim="person.name"
             name="name"
             type="text"
             fluid
@@ -35,12 +35,12 @@
         </Message>
       </div>
       <div class="flex flex-col gap-2">
-        <label for="people_native_name">Native Name</label>
+        <label for="native_name">Native Name</label>
         <IconField>
           <InputIcon class="pi pi-user-edit" />
           <InputText
-            id="people_native_name"
-            v-model.trim="people.native_name"
+            id="native_name"
+            v-model.trim="person.native_name"
             name="native_name"
             type="text"
             fluid
@@ -56,12 +56,12 @@
         </Message>
       </div>
       <div class="flex flex-col gap-2">
-        <label for="people_name_vi">Vietnamese Name</label>
+        <label for="name_vi">Vietnamese Name</label>
         <IconField>
           <InputIcon class="pi pi-user-edit" />
           <InputText
-            id="people_name_vi"
-            v-model.trim="people.name_vi"
+            id="name_vi"
+            v-model.trim="person.name_vi"
             name="name_vi"
             type="text"
             fluid
@@ -80,8 +80,8 @@
 
     <div class="grid grid-cols-3 gap-4">
       <div class="flex flex-col gap-2">
-        <label for="people_gender">Gender</label>
-        <Select v-model="people.gender" name="gender" :options="genders">
+        <label for="gender">Gender</label>
+        <Select v-model="person.gender" name="gender" :options="genders">
         </Select>
         <Message
           v-if="$form.gender?.invalid"
@@ -93,21 +93,21 @@
         </Message>
       </div>
       <div class="flex flex-col gap-2">
-        <label for="people_dob">Date of Birth</label>
+        <label for="dob">Date of Birth</label>
         <DatePicker
-          v-model="people.dob"
+          v-model="person.dob"
           date-format="dd/mm/yy"
           show-button-bar
           class="w-full"
         />
       </div>
       <div class="flex flex-col gap-2">
-        <label for="people_profile_url">Profile Picture</label>
+        <label for="profile_url">Profile Picture</label>
         <IconField>
           <InputIcon class="pi pi-image" />
           <InputText
-            id="people_profile_url"
-            v-model.trim="people.profile_url"
+            id="profile_url"
+            v-model.trim="person.profile_url"
             name="profile_url"
             type="text"
             fluid
@@ -125,10 +125,10 @@
     </div>
 
     <div class="flex flex-col gap-2">
-      <label for="people_biography">Biography</label>
+      <label for="biography">Biography</label>
       <Textarea
-        id="people_biography"
-        v-model.trim="people.biography"
+        id="biography"
+        v-model.trim="person.biography"
         name="biography"
         :rows="5"
         auto-resize
@@ -141,12 +141,12 @@
 
     <div class="grid grid-cols-3 gap-4">
       <div class="flex flex-col gap-2">
-        <label for="people_weibo">Weibo</label>
+        <label for="weibo">Weibo</label>
         <IconField>
           <InputIcon class="pi pi-comment" />
           <InputText
-            id="people_weibo"
-            v-model.trim="people.weibo"
+            id="weibo"
+            v-model.trim="person.weibo"
             name="weibo"
             type="text"
             fluid
@@ -162,12 +162,12 @@
         </Message>
       </div>
       <div class="flex flex-col gap-2">
-        <label for="people_douyin">Douyin</label>
+        <label for="douyin">Douyin</label>
         <IconField>
           <InputIcon class="pi pi-tiktok" />
           <InputText
-            id="people_douyin"
-            v-model.trim="people.douyin"
+            id="douyin"
+            v-model.trim="person.douyin"
             name="douyin"
             type="text"
             fluid
@@ -183,12 +183,12 @@
         </Message>
       </div>
       <div class="flex flex-col gap-2">
-        <label for="people_instagram">Instagram</label>
+        <label for="instagram">Instagram</label>
         <IconField>
           <InputIcon class="pi pi-instagram" />
           <InputText
-            id="people_instagram"
-            v-model.trim="people.instagram"
+            id="instagram"
+            v-model.trim="person.instagram"
             name="instagram"
             type="text"
             fluid
@@ -235,15 +235,15 @@ const { isEdit, metadata } = defineProps({
   },
 })
 
-const people = ref({
+const person = ref({
   name: '',
 })
 
 onBeforeMount(() => {
-  Object.assign(people.value, metadata)
+  Object.assign(person.value, metadata)
 
   if (metadata.dob) {
-    people.value.dob = new Date(metadata.dob)
+    person.value.dob = new Date(metadata.dob)
   }
 })
 
@@ -272,21 +272,21 @@ const onSubmit = async ({ valid }) => {
 
   disabled.value = true
 
-  if (people.value.dob) {
-    people.value.dob = toISODate(people.value.dob)
+  if (person.value.dob) {
+    person.value.dob = toISODate(person.value.dob)
   }
 
-  const url = isEdit ? `/api/people/${people.value.id}` : '/api/people'
+  const url = isEdit ? `/api/people/${person.value.id}` : '/api/people'
 
   $fetch(url, {
     method: 'post',
-    body: people.value,
+    body: person.value,
   })
     .then(() => {
       if (isEdit) {
         toast.add({
           severity: 'success',
-          summary: `[${people.value.name}] updated successfully!`,
+          summary: `[${person.value.name}] updated successfully!`,
           life: 3000,
         })
 
@@ -294,7 +294,7 @@ const onSubmit = async ({ valid }) => {
       } else {
         toast.add({
           severity: 'success',
-          summary: people.value.name,
+          summary: person.value.name,
           detail: 'People added successfully!',
           life: 3000,
         })

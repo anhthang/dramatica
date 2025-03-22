@@ -122,12 +122,12 @@
                       <NuxtLink
                         v-for="people in items"
                         :key="people.id"
-                        :to="`/people/${people.people_id}`"
+                        :to="`/people/${people.person_id}`"
                       >
                         <CardPerson
-                          :image="people.people.profile_url"
+                          :image="people.person.profile_url"
                           size="xlarge"
-                          :title="toLocalePeopleName(people.people, locale)"
+                          :title="toLocalePersonName(people.person, locale)"
                           :subtitle="toLocaleCharacterName(people, locale)"
                         />
                       </NuxtLink>
@@ -165,12 +165,12 @@
                     <NuxtLink
                       v-for="people in items"
                       :key="people.id"
-                      :to="`/people/${people.people_id}`"
+                      :to="`/people/${people.person_id}`"
                     >
                       <CardPerson
-                        :image="people.people.profile_url"
+                        :image="people.person.profile_url"
                         size="xlarge"
-                        :title="toLocalePeopleName(people.people, locale)"
+                        :title="toLocalePersonName(people.person, locale)"
                         :subtitle="toLocaleCharacterName(people, locale)"
                       />
                     </NuxtLink>

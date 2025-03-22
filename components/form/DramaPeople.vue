@@ -29,7 +29,7 @@
           <CardPerson
             simple
             :image="option.profile_url"
-            :title="`${toLocalePeopleName(option, locale)} (${option.native_name})`"
+            :title="`${toLocalePersonName(option, locale)} (${option.native_name})`"
           />
         </div>
       </template>
@@ -51,7 +51,7 @@
         v-else
         :image="selection.profile_url"
         size="xlarge"
-        :title="toLocalePeopleName(selection, locale)"
+        :title="toLocalePersonName(selection, locale)"
         :subtitle="selection.native_name"
         selected
       />
@@ -132,11 +132,11 @@
       <label for="member_billing_order">Billing Order</label>
       <IconField>
         <InputIcon class="pi pi-hashtag" />
-        <InputText
-          id="member_billing_order"
-          v-model.trim="member.billing_order"
+        <InputNumber
+          v-model.number="member.billing_order"
+          input-id="tv_billing_order"
           name="billing_order"
-          type="text"
+          :use-grouping="false"
           fluid
         />
       </IconField>
@@ -202,7 +202,7 @@ const isCast = computed(() => roles.cast.includes(member.value.role))
 
 const member = isDrama
   ? ref({
-      people_id: Number(route.params.people_id),
+      person_id: Number(route.params.person_id),
     })
   : ref({
       drama_id: Number(route.params.drama_id),
@@ -210,9 +210,9 @@ const member = isDrama
 
 onMounted(() => {
   if (edit) {
-    const { drama, people, ...rest } = metadata
+    const { drama, person, ...rest } = metadata
 
-    selection.value = isDrama ? drama : people
+    selection.value = isDrama ? drama : person
     Object.assign(member.value, rest)
   }
 })
@@ -239,7 +239,7 @@ const onSelectSuggestion = (option) => {
   if (isDrama) {
     member.value.drama_id = option.value.id
   } else {
-    member.value.people_id = option.value.id
+    member.value.person_id = option.value.id
   }
 
   selection.value = option.value
@@ -252,7 +252,7 @@ const resolver = ref(
   zodResolver(
     z.object({
       drama_id: z.number().nullish(),
-      people_id: z.number().nullish(),
+      person_id: z.number().nullish(),
       role: z.enum(enumRoles),
       character_name: z.string().nullish(),
       character_name_vi: z.string().nullish(),
@@ -266,7 +266,7 @@ const onSubmit = async ({ valid }) => {
 
   const body = isCast.value
     ? member.value
-    : pick(member.value, ['drama_id', 'people_id', 'role'])
+    : pick(member.value, ['drama_id', 'person_id', 'role'])
 
   $fetch(`/api/tv/${member.value.drama_id}/people`, {
     method: 'post',

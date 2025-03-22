@@ -16,7 +16,7 @@
         <CardPerson
           :image="person.profile_url"
           size="large"
-          :title="toLocalePeopleName(person, $i18n.locale)"
+          :title="toLocalePersonName(person, $i18n.locale)"
           :subtitle="person.native_name"
           :selected="person.name.toLowerCase() === props.name.toLowerCase()"
           bordered

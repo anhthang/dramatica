@@ -1,7 +1,7 @@
 <template>
   <Panel
-    v-if="people"
-    :header="peopleName"
+    v-if="person"
+    :header="personName"
     pt:root:class="!border-0 !bg-transparent"
     pt:title:class="flex items-center gap-4 font-medium text-3xl"
   >
@@ -9,8 +9,8 @@
       <div class="col-span-4 md:col-span-1 flex flex-col gap-4">
         <div class="flex flex-col gap-4 items-center">
           <Avatar
-            :image="people.profile_url"
-            :alt="peopleName"
+            :image="person.profile_url"
+            :alt="personName"
             shape="circle"
             class="w-48 h-48"
             pt:image:class="object-cover"
@@ -19,28 +19,28 @@
           <!-- <div class="text-3xl">{{ peopleName }}</div> -->
 
           <div class="flex gap-2">
-            <NuxtLink :to="people.weibo" target="_blank">
+            <NuxtLink :to="person.weibo" target="_blank">
               <Button
                 text
                 icon="pi pi-comment"
                 size="large"
-                :disabled="!people.weibo"
+                :disabled="!person.weibo"
               />
             </NuxtLink>
-            <NuxtLink :to="people.douyin" target="_blank">
+            <NuxtLink :to="person.douyin" target="_blank">
               <Button
                 text
                 icon="pi pi-tiktok"
                 size="large"
-                :disabled="!people.douyin"
+                :disabled="!person.douyin"
               />
             </NuxtLink>
-            <NuxtLink :to="people.instagram" target="_blank">
+            <NuxtLink :to="person.instagram" target="_blank">
               <Button
                 text
                 icon="pi pi-instagram"
                 size="large"
-                :disabled="!people.instagram"
+                :disabled="!person.instagram"
               />
             </NuxtLink>
           </div>
@@ -50,7 +50,7 @@
 
         <DescriptionList
           title="Personal Information"
-          :subtitle="people.biography"
+          :subtitle="person.biography"
           :descriptions="descriptions"
         />
 
@@ -130,11 +130,11 @@
     <Dialog
       v-model:visible="visible.edit"
       modal
-      header="Edit People"
+      header="Edit Person"
       dismissable-mask
       class="w-[72rem]"
     >
-      <FormPeople :is-edit="true" :metadata="people" @on-success="toggle" />
+      <FormPerson :is-edit="true" :metadata="person" @on-success="toggle" />
     </Dialog>
 
     <Dialog
@@ -146,7 +146,7 @@
     >
       <FormDramaPeople
         type="drama"
-        :existing="people.dramas.map((d) => d.drama_id)"
+        :existing="person.dramas.map((d) => d.drama_id)"
         @on-success="toggle"
       />
     </Dialog>
@@ -179,10 +179,10 @@ const route = useRoute()
 
 const metadata = ref()
 
-const { data: people, refresh } = await useAsyncData(
-  `people-${route.params.people_id}-${locale.value}`,
+const { data: person, refresh } = await useAsyncData(
+  `people-${route.params.person_id}-${locale.value}`,
   () =>
-    $fetch(`/api/people/${route.params.people_id}`, {
+    $fetch(`/api/people/${route.params.person_id}`, {
       params: { language: locale.value },
     }),
   {
@@ -192,29 +192,29 @@ const { data: people, refresh } = await useAsyncData(
 
 const descriptions = computed(() => {
   return [
-    { title: 'Native Name', value: people.value.native_name },
-    { title: 'Gender', value: people.value.gender },
-    { title: 'Birthday', value: toLocaleDate(people.value.dob, locale) },
+    { title: 'Native Name', value: person.value.native_name },
+    { title: 'Gender', value: person.value.gender },
+    { title: 'Birthday', value: toLocaleDate(person.value.dob, locale) },
   ]
 })
 
 const dramaByYear = computed(() =>
-  groupBy(people.value.dramas, (i) => i.drama.release_year || 'TBA'),
+  groupBy(person.value.dramas, (i) => i.drama.release_year || 'TBA'),
 )
 
-const peopleName = computed(() =>
-  toLocalePeopleName(people.value, locale.value),
+const personName = computed(() =>
+  toLocalePersonName(person.value, locale.value),
 )
 
 useSeoMeta({
-  title: peopleName,
-  description: people.value && people.value.biography,
-  ogTitle: peopleName,
-  ogDescription: people.value && people.value.biography,
-  ogImage: people.value && people.value.profile_url,
-  twitterTitle: peopleName,
-  twitterDescription: people.value && people.value.biography,
-  twitterImage: people.value && people.value.profile_url,
+  title: personName,
+  description: person.value && person.value.biography,
+  ogTitle: personName,
+  ogDescription: person.value && person.value.biography,
+  ogImage: person.value && person.value.profile_url,
+  twitterTitle: personName,
+  twitterDescription: person.value && person.value.biography,
+  twitterImage: person.value && person.value.profile_url,
 })
 
 const visible = ref({

@@ -1,88 +1,20 @@
-<br><p align="center">
-<img height="100px" src="./public/tv.png" />
+# Dramatica – Your Ultimate Asian Drama Database 🎭
 
-</p>
+**Dramatica** is a comprehensive platform dedicated to managing and exploring **Chinese, Korean, and Japanese dramas** with a **Vietnamese-friendly experience**. Whether you're a drama enthusiast or an industry professional, **Dramatica** helps you **organize, track, and discover** your favorite series, cast, and crew members—all in one place.
 
-<h1 align="center">Dramapedia</h1>
-<br>
+## 🌟 Features
 
-## Screenshots
+✅ **Extensive Drama Database** – Manage and explore **C-Dramas, K-Dramas, and J-Dramas** with detailed information.  
+✅ **Cast & Crew Management** – Track actors, directors, and screenwriters with their **Vietnamese-transliterated** names.  
+✅ **Multi-Language Support** – Display drama details in **Vietnamese** while keeping original names for reference.  
+✅ **Episode & Season Tracking** – Easily navigate through drama episodes, air dates, and ratings.  
+✅ **Seamless Search & Filtering** – Find dramas by genre, country, year, or cast members.
+
+Whether you're a **hardcore fan, content curator, or drama database manager**, **Dramatica** brings **Asian entertainment closer** in a **beautiful, user-friendly** way. 🌏✨
+
+📚 **Dramatica is more than just a drama tracker—it’s the ultimate knowledge hub for Asian entertainment!** 🌟
+
+## 📸 Screenshots
 
 ![TV](./public/screenshots/tv.png)
 ![Episodes](./public/screenshots/tv-episodes.png)
-
-# Nuxt 3 Minimal Starter
-
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
-
-## Setup
-
-Make sure to install the dependencies:
-
-```bash
-# npm
-npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm run dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.

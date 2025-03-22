@@ -14,12 +14,12 @@
         <template #body="{ data }">
           <div class="flex items-center gap-2">
             <Avatar
-              :image="data.people.profile_url"
+              :image="data.person.profile_url"
               shape="circle"
               pt:image:class="object-cover"
             />
             <span>
-              {{ toLocalePeopleName(data.people, $i18n.locale) }}
+              {{ toLocalePersonName(data.person, $i18n.locale) }}
             </span>
           </div>
         </template>
@@ -66,7 +66,7 @@
     >
       <FormDramaPeople
         type="people"
-        :existing="drama.people.map((a) => a.people_id)"
+        :existing="drama.people.map((a) => a.person_id)"
         @on-success="toggle"
       />
     </Dialog>

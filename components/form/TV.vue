@@ -168,11 +168,11 @@
         <label for="tv_release_year">Release Year</label>
         <IconField>
           <InputIcon class="pi pi-hashtag" />
-          <InputText
-            id="tv_release_year"
-            v-model.trim="tv.release_year"
+          <InputNumber
+            v-model.number="tv.release_year"
+            input-id="tv_release_year"
             name="release_year"
-            type="text"
+            :use-grouping="false"
             fluid
           />
         </IconField>
@@ -189,11 +189,11 @@
         <label for="tv_number_of_episodes">Total Episodes</label>
         <IconField>
           <InputIcon class="pi pi-hashtag" />
-          <InputText
-            id="tv_number_of_episodes"
-            v-model.trim="tv.number_of_episodes"
+          <InputNumber
+            v-model.number="tv.number_of_episodes"
+            input-id="tv_number_of_episodes"
             name="number_of_episodes"
-            type="text"
+            :use-grouping="false"
             fluid
           />
         </IconField>
