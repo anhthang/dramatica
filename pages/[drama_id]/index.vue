@@ -30,7 +30,7 @@
             <div class="col-span-1 lg:col-span-6">
               <DescriptionList :descriptions="descriptions" />
 
-              <Tabs value="where_to_watch">
+              <Tabs v-if="availability.length" value="where_to_watch">
                 <TabList pt:tablist:class="bg-transparent">
                   <Tab value="where_to_watch">
                     <div class="flex items-center gap-2 text-inherit">
@@ -194,6 +194,8 @@
         </TabPanel>
       </TabPanels>
     </Tabs>
+
+    <Toast />
   </Panel>
 </template>
 
@@ -201,8 +203,10 @@
 import groupBy from 'lodash.groupby'
 import keyBy from 'lodash.keyby'
 
+const { locale } = useI18n()
 const route = useRoute()
 const config = useRuntimeConfig()
+const toast = useToast()
 
 const tabs = ref([
   {
@@ -224,8 +228,6 @@ const tabs = ref([
     icon: 'pi pi-youtube',
   },
 ])
-
-const { locale } = useI18n()
 
 const { data: drama } = await useAsyncData(
   `drama-${route.params.drama_id}`,
@@ -255,14 +257,18 @@ const episodes = computed(() =>
   drama.value.episodes.filter((e) => e.language === locale.value),
 )
 
-const availability = computed(() => [
-  {
-    drama_id: drama.value.id,
-    watch_link: translation.value.watch_link,
-    streaming_service: getStreamingService(drama.value.watch_link),
-  },
-  ...drama.value.availability,
-])
+const availability = computed(() => {
+  return drama.value.watch_link
+    ? [
+        {
+          drama_id: drama.value.id,
+          watch_link: translation.value.watch_link,
+          streaming_service: getStreamingService(drama.value.watch_link),
+        },
+        ...drama.value.availability,
+      ]
+    : drama.value.availability
+})
 
 const airDate = ({ air_date, end_date }) => {
   return end_date
@@ -286,7 +292,12 @@ const descriptions = computed(() => {
 
 const copyUrl = () => {
   navigator.clipboard.writeText(config.app.homepage + route.fullPath)
-  message.success('Copied to clipboard!')
+
+  toast.add({
+    severity: 'success',
+    summary: 'Copied to clipboard!',
+    life: 3000,
+  })
 }
 
 const seoTitle = computed(() => drama.value && translation.value.title_year)

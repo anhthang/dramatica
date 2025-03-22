@@ -10,6 +10,10 @@
     </template>
 
     <DataTable :value="drama.people" striped-rows>
+      <template #empty>
+        No cast or crew members assigned. Add actors and staff to complete the
+        drama details!
+      </template>
       <Column field="name" header="Person">
         <template #body="{ data }">
           <div class="flex items-center gap-2">
@@ -34,6 +38,15 @@
       <Column header="Actions">
         <template #body="{ data }">
           <div class="flex gap-2">
+            <NuxtLink :to="`/people/${data.person_id}`">
+              <Button
+                label="Profile"
+                icon="pi pi-user"
+                severity="info"
+                size="small"
+              />
+            </NuxtLink>
+
             <Button
               label="Edit"
               icon="pi pi-pen-to-square"
@@ -46,12 +59,6 @@
                 }
               "
             />
-            <!-- <Button
-              label="Delete"
-              icon="pi pi-trash"
-              severity="danger"
-              size="small"
-            /> -->
           </div>
         </template>
       </Column>

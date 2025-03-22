@@ -254,7 +254,6 @@
           v-model="tv.air_date"
           date-format="dd/mm/yy"
           show-button-bar
-          :min-date="new Date()"
           class="w-full"
         />
       </div>
@@ -264,7 +263,6 @@
           v-model="tv.end_date"
           date-format="dd/mm/yy"
           show-button-bar
-          :min-date="new Date()"
           class="w-full"
         />
       </div>
@@ -419,7 +417,6 @@ const { isEdit, metadata } = defineProps({
 
 const tv = ref({
   title: '',
-  dates: [],
   tv_genres: [],
 })
 
@@ -427,10 +424,10 @@ onBeforeMount(() => {
   Object.assign(tv.value, metadata)
 
   if (metadata.air_date) {
-    tv.value.dates[0] = new Date(metadata.air_date)
+    tv.value.air_date = new Date(metadata.air_date)
   }
   if (metadata.end_date) {
-    tv.value.dates[1] = new Date(metadata.end_date)
+    tv.value.end_date = new Date(metadata.end_date)
   }
 
   if (Array.isArray(metadata.genres)) {
@@ -484,17 +481,6 @@ const fetchMetadata = (url) => {
   }
 }
 
-// const onChangeDates = () => {
-//   if (tv.value.dates[0] && tv.value.dates[0].isValid()) {
-//     tv.value.air_date = tv.value.dates[0].format('YYYY-MM-DD')
-//   }
-//   if (tv.value.dates[1] && tv.value.dates[1].isValid()) {
-//     tv.value.end_date = tv.value.dates[1].format('YYYY-MM-DD')
-//     tv.value.release_year = tv.value.dates[1].year()
-//     tv.value.airing_status = 'Ended'
-//   }
-// }
-
 const resolver = ref(
   zodResolver(
     z.object({
@@ -524,6 +510,14 @@ const onSubmit = async ({ valid }) => {
   if (!valid) return
 
   const url = isEdit ? `/api/tv/${tv.value.id}` : '/api/tv'
+
+  if (tv.value.air_date) {
+    tv.value.air_date = toISODate(tv.value.air_date)
+  }
+  if (tv.value.end_date) {
+    tv.value.end_date = toISODate(tv.value.end_date)
+  }
+
   $fetch(url, {
     method: 'post',
     body: tv.value,

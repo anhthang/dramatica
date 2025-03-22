@@ -15,6 +15,10 @@
       :always-show-paginator="false"
       :rows="5"
     >
+      <template #empty>
+        No episodes added yet. Start by adding the first episode to keep track
+        of the series!
+      </template>
       <template #list="slotProps">
         <div
           v-for="(item, index) in slotProps.items"

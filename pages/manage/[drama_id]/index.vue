@@ -24,6 +24,8 @@
         @on-success="toggle"
       />
     </Dialog>
+
+    <Toast />
   </Panel>
 </template>
 

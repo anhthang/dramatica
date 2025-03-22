@@ -42,7 +42,7 @@
         :title="
           selection.release_year
             ? `${selection.title} (${selection.release_year})`
-            : tv.title
+            : selection.title
         "
         :subtitle="selection.title_pinyin || selection.original_title"
         selected

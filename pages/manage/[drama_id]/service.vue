@@ -5,6 +5,10 @@
     </template>
 
     <DataTable :value="drama.availability" striped-rows>
+      <template #empty>
+        No streaming services linked. Add a platform to make this drama
+        accessible!
+      </template>
       <Column field="streaming_service" header="Streaming Service">
         <template #body="{ data }">
           <img

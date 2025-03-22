@@ -19,7 +19,7 @@
       >
         <template #icons>
           <NuxtLink :to="`/${$route.params.drama_id}`">
-            <Button label="View TV" icon="pi pi-video" />
+            <Button label="View TV" icon="pi pi-video" severity="info" />
           </NuxtLink>
         </template>
         <div class="flex gap-4">
