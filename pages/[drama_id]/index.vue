@@ -9,53 +9,68 @@
     }"
   >
     <template #icons>
-      <Button
-        label="Edit"
-        icon="pi pi-pen-to-square"
-        severity="secondary"
-        @click="toggle('edit')"
-      />
-      <Button
-        label="Translation"
-        icon="pi pi-language"
-        severity="secondary"
-        @click="toggle('translation')"
-      />
+      <NuxtLink :to="`/manage/${drama.id}`">
+        <Button label="Manage" icon="pi pi-th-large" severity="secondary" />
+      </NuxtLink>
     </template>
 
     <Tabs value="information">
-      <TVTabList :id="drama.id" current-tab="information" />
+      <TabList pt:tablist:class="bg-transparent">
+        <Tab v-for="tab in tabs" :key="tab.label" :value="tab.value">
+          <div class="flex items-center gap-2 text-inherit">
+            <i :class="tab.icon" />
+            <span>{{ $t(tab.label) }}</span>
+          </div>
+        </Tab>
+      </TabList>
 
       <TabPanels class="bg-transparent">
         <TabPanel value="information">
           <div class="grid grid-cols-1 lg:grid-cols-10 gap-12 mt-2">
             <div class="col-span-1 lg:col-span-6">
               <DescriptionList :descriptions="descriptions" />
+
+              <Tabs value="where_to_watch">
+                <TabList pt:tablist:class="bg-transparent">
+                  <Tab value="where_to_watch">
+                    <div class="flex items-center gap-2 text-inherit">
+                      <i class="pi pi-desktop" />
+                      <span>{{ $t('Where to Watch') }}</span>
+                    </div>
+                  </Tab>
+                </TabList>
+                <TabPanels class="bg-transparent">
+                  <TabPanel value="where_to_watch">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-6">
+                      <NuxtLink
+                        v-for="service in availability"
+                        :key="service.id"
+                        :to="service.watch_link"
+                        target="_blank"
+                      >
+                        <img
+                          :src="
+                            themeSpecificServices.includes(
+                              service.streaming_service,
+                            )
+                              ? `/logo/${service.streaming_service.toLowerCase()}-${$colorMode.value}.png`
+                              : `/logo/${service.streaming_service.toLowerCase()}.png`
+                          "
+                          :alt="service.streaming_service"
+                          :data-name="`/logo/${service.streaming_service.toLowerCase()}-${$colorMode.value}.png`"
+                          class="w-1/2"
+                        />
+                      </NuxtLink>
+                    </div>
+                  </TabPanel>
+                </TabPanels>
+              </Tabs>
             </div>
 
             <div class="col-span-1 lg:col-span-4 flex flex-col gap-4">
               <img :alt="translation.title" :src="translation.cover_url" />
 
               <div class="flex gap-4">
-                <NuxtLink
-                  v-if="translation.watch_link"
-                  :to="translation.watch_link"
-                  target="_blank"
-                  style="width: 100%"
-                >
-                  <Button
-                    :label="$t('Watch')"
-                    icon="pi pi-play-circle"
-                    size="large"
-                    fluid
-                    :class="{
-                      '!bg-[#ff4a22] border-[#ff4a22]': streaming === 'wetv',
-                      '!bg-[#1cc749] border-[#1cc749]': streaming === 'iqiyi',
-                      '!bg-[#e50914] border-[#e50914]': streaming === 'netflix',
-                      '!bg-[#2c78ff] border-[#2c78ff]': streaming === 'youku',
-                    }"
-                  />
-                </NuxtLink>
                 <Button
                   :label="$t('Share')"
                   icon="pi pi-share-alt"
@@ -67,45 +82,161 @@
             </div>
           </div>
         </TabPanel>
+
+        <TabPanel value="cast">
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div
+              class="col-span-4 md:col-span-3 flex flex-col gap-4"
+              :class="{
+                'md:col-span-4': !hasCrew,
+              }"
+            >
+              <Fieldset
+                v-for="role in roles.cast"
+                v-show="peopleByRole[role]"
+                :key="role"
+                pt:legend:class="w-auto"
+              >
+                <template #legend>
+                  <div class="flex items-center gap-2">
+                    <span class="pi pi-users" />
+                    <span class="font-semibold"> {{ role }} </span>
+                  </div>
+                </template>
+
+                <DataView
+                  :value="peopleByRole[role]"
+                  layout="grid"
+                  :pt="{
+                    header: '!bg-transparent !border-0 text-lg font-medium',
+                    content: '!bg-transparent',
+                  }"
+                >
+                  <template #grid="{ items }">
+                    <div
+                      class="grid grid-cols-2 lg:grid-cols-3 gap-4"
+                      :class="{
+                        'lg:grid-cols-4': !hasCrew,
+                      }"
+                    >
+                      <NuxtLink
+                        v-for="people in items"
+                        :key="people.id"
+                        :to="`/people/${people.people_id}`"
+                      >
+                        <CardPerson
+                          :image="people.people.profile_url"
+                          size="xlarge"
+                          :title="toLocalePeopleName(people.people, locale)"
+                          :subtitle="toLocaleCharacterName(people, locale)"
+                        />
+                      </NuxtLink>
+                    </div>
+                  </template>
+                </DataView>
+              </Fieldset>
+            </div>
+            <div
+              v-if="hasCrew"
+              class="col-span-4 md:col-span-1 flex flex-col gap-4"
+            >
+              <Fieldset
+                v-for="role in roles.crew"
+                v-show="peopleByRole[role]"
+                :key="role"
+                pt:legend:class="w-auto"
+              >
+                <template #legend>
+                  <div class="flex items-center gap-2">
+                    <span class="pi pi-book" />
+                    <span class="font-semibold"> {{ role }} </span>
+                  </div>
+                </template>
+
+                <DataView
+                  :value="peopleByRole[role]"
+                  layout="grid"
+                  :pt="{
+                    header: '!bg-transparent !border-0 text-lg font-medium',
+                    content: '!bg-transparent',
+                  }"
+                >
+                  <template #grid="{ items }">
+                    <NuxtLink
+                      v-for="people in items"
+                      :key="people.id"
+                      :to="`/people/${people.people_id}`"
+                    >
+                      <CardPerson
+                        :image="people.people.profile_url"
+                        size="xlarge"
+                        :title="toLocalePeopleName(people.people, locale)"
+                        :subtitle="toLocaleCharacterName(people, locale)"
+                      />
+                    </NuxtLink>
+                  </template>
+                </DataView>
+              </Fieldset>
+            </div>
+          </div>
+        </TabPanel>
+
+        <TabPanel value="episodes">
+          <div
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
+          >
+            <CardEpisode
+              v-for="episode in episodes"
+              :key="episode.episode_number"
+              :episode="episode"
+            />
+          </div>
+        </TabPanel>
       </TabPanels>
     </Tabs>
-
-    <Dialog
-      v-model:visible="visible.edit"
-      modal
-      header="Edit Drama"
-      dismissable-mask
-      class="w-[72rem]"
-    >
-      <FormTV :is-edit="true" :metadata="drama" @on-success="toggle" />
-    </Dialog>
-
-    <Dialog
-      v-model:visible="visible.translation"
-      modal
-      header="Drama Translation"
-      dismissable-mask
-      class="w-[48rem]"
-    >
-      <FormDramaTranslation
-        :translations="drama.translations"
-        @on-success="toggle"
-      />
-    </Dialog>
   </Panel>
 </template>
 
 <script setup>
+import groupBy from 'lodash.groupby'
 import keyBy from 'lodash.keyby'
 
 const route = useRoute()
 const config = useRuntimeConfig()
 
+const tabs = ref([
+  {
+    route: `/${route.params.drama_id}`,
+    value: 'information',
+    label: 'Information',
+    icon: 'pi pi-info-circle',
+  },
+  {
+    route: `/${route.params.drama_id}/cast`,
+    value: 'cast',
+    label: 'Cast',
+    icon: 'pi pi-users',
+  },
+  {
+    route: `/${route.params.drama_id}/episodes`,
+    value: 'episodes',
+    label: 'Episodes',
+    icon: 'pi pi-youtube',
+  },
+])
+
 const { locale } = useI18n()
 
-const { data: drama, refresh } = await useAsyncData(
+const { data: drama } = await useAsyncData(
   `drama-${route.params.drama_id}`,
   () => $fetch(`/api/${route.params.drama_id}`),
+  {
+    transform: (data) => {
+      const people = data.cast.concat(data.crew)
+      data.people = people
+      return data
+    },
+  },
 )
 
 const translation = computed(() => {
@@ -114,9 +245,24 @@ const translation = computed(() => {
   return translationMap[locale.value] || translationMap.en
 })
 
-const streaming = getStreamingService(
-  translation.value.watch_link,
-).toLowerCase()
+const hasCrew = drama.value.people.some((p) => roles.crew.includes(p.role))
+
+const peopleByRole = computed(
+  () => drama && groupBy(drama.value.people, 'role'),
+)
+
+const episodes = computed(() =>
+  drama.value.episodes.filter((e) => e.language === locale.value),
+)
+
+const availability = computed(() => [
+  {
+    drama_id: drama.value.id,
+    watch_link: translation.value.watch_link,
+    streaming_service: getStreamingService(drama.value.watch_link),
+  },
+  ...drama.value.availability,
+])
 
 const airDate = ({ air_date, end_date }) => {
   return end_date
@@ -157,17 +303,4 @@ useSeoMeta({
   twitterDescription: seoDescription,
   twitterImage: seoImage,
 })
-
-const visible = ref({
-  edit: false,
-  translation: false,
-})
-
-const toggle = (key, shouldRefresh) => {
-  visible.value[key] = !visible.value[key]
-
-  if (shouldRefresh) {
-    refresh()
-  }
-}
 </script>

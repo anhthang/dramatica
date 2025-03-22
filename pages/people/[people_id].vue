@@ -5,9 +5,6 @@
     pt:root:class="!border-0 !bg-transparent"
     pt:title:class="flex items-center gap-4 font-medium text-3xl"
   >
-    <template #icons>
-      <Button label="Add" icon="pi pi-video" @click="toggle('add_drama')" />
-    </template>
     <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
       <div class="col-span-4 md:col-span-1 flex flex-col gap-4">
         <div class="flex flex-col gap-4 items-center">
@@ -66,72 +63,67 @@
         />
       </div>
       <div class="col-span-4 md:col-span-3 flex flex-col gap-4">
-        <Tabs value="drama">
-          <TabList>
-            <Tab value="drama" as="div" class="flex items-center gap-2">
-              <i class="pi pi-video" />
-              <span>Drama</span>
-            </Tab>
-          </TabList>
-          <TabPanels>
-            <TabPanel value="drama">
-              <div
-                v-for="year of Object.keys(dramaByYear).reverse()"
-                :key="year"
-              >
-                <Timeline
-                  :value="[year]"
-                  class="my-4"
-                  pt:event-opposite:class="hidden"
-                >
-                  <template #marker="{ item }">
-                    <span class="text-xl font-medium">{{ item }}</span>
-                  </template>
-                </Timeline>
+        <Panel>
+          <template #icons>
+            <Button
+              label="Add"
+              icon="pi pi-video"
+              size="small"
+              @click="toggle('add_drama')"
+            />
+          </template>
+          <div v-for="year of Object.keys(dramaByYear).reverse()" :key="year">
+            <Timeline
+              :value="[year]"
+              class="my-4"
+              pt:event-opposite:class="hidden"
+            >
+              <template #marker="{ item }">
+                <span class="text-xl font-medium">{{ item }}</span>
+              </template>
+            </Timeline>
 
-                <Timeline
-                  :value="dramaByYear[year]"
-                  pt:root:class="gap-4"
-                  pt:event-opposite:class="hidden"
-                  pt:event-content:class="flex items-center"
-                >
-                  <template #marker="{ item }">
-                    <i
-                      v-if="item.drama.airing_status === 'Ended'"
-                      class="pi pi-check-circle text-green-500"
-                    />
-                    <i
-                      v-if="item.drama.airing_status === 'Airing'"
-                      class="pi pi-play-circle text-blue-500"
-                    />
-                  </template>
-                  <template #content="{ item }">
-                    <NuxtLink :to="`/${item.drama.id}`" class="flex-1">
-                      <CardTVHorizontal
-                        :image="item.drama.cover_url"
-                        :title="item.drama.title"
-                        :subtitle="toLocaleCharacterName(item, locale)"
-                        :content="$t(item.role)"
-                      />
-                    </NuxtLink>
-                    <Button
-                      label="Edit"
-                      icon="pi pi-pen-to-square"
-                      severity="secondary"
-                      size="small"
-                      @click="
-                        () => {
-                          metadata = item
-                          toggle('edit_drama')
-                        }
-                      "
-                    />
-                  </template>
-                </Timeline>
-              </div>
-            </TabPanel>
-          </TabPanels>
-        </Tabs>
+            <Timeline
+              :value="dramaByYear[year]"
+              pt:root:class="gap-4"
+              pt:event-opposite:class="hidden"
+              pt:event-content:class="flex items-center"
+            >
+              <template #marker="{ item }">
+                <i
+                  v-if="item.drama.airing_status === 'Ended'"
+                  class="pi pi-check-circle text-green-500"
+                />
+                <i
+                  v-if="item.drama.airing_status === 'Airing'"
+                  class="pi pi-play-circle text-blue-500"
+                />
+              </template>
+              <template #content="{ item }">
+                <NuxtLink :to="`/${item.drama.id}`" class="flex-1">
+                  <CardTVHorizontal
+                    :image="item.drama.cover_url"
+                    :title="item.drama.title"
+                    :subtitle="toLocaleCharacterName(item, locale)"
+                    :content="$t(item.role)"
+                  />
+                </NuxtLink>
+                <Button
+                  label="Edit"
+                  icon="pi pi-pen-to-square"
+                  severity="secondary"
+                  size="small"
+                  @click="
+                    () => {
+                      metadata = item
+                      toggle('edit_drama')
+                    }
+                  "
+                />
+              </template>
+            </Timeline>
+          </div>
+        </Panel>
       </div>
     </div>
 
