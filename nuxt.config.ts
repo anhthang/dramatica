@@ -26,7 +26,10 @@ export default defineNuxtConfig({
   ],
 
   fonts: {
-    families: [{ name: 'Cabin', provider: 'google' }],
+    families: [
+      { name: 'Cabin', provider: 'google' },
+      { name: 'Amarante', provider: 'google' },
+    ],
   },
 
   i18n: {

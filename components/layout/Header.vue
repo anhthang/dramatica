@@ -2,7 +2,11 @@
   <Menubar>
     <template #start>
       <NuxtLink to="/">
-        <img :src="`/tv.png`" class="h-8" />
+        <span
+          class="logo-text text-3xl bg-gradient-to-r from-blue-400 to-violet-600 text-transparent bg-clip-text"
+        >
+          {{ $config.app.name }}
+        </span>
       </NuxtLink>
     </template>
 
@@ -17,3 +21,11 @@
     </template>
   </Menubar>
 </template>
+
+<style>
+.logo-text {
+  font-family: 'Amarante', serif;
+  font-weight: 400;
+  font-style: normal;
+}
+</style>

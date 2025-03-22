@@ -171,7 +171,6 @@
                         :image="people.person.profile_url"
                         size="xlarge"
                         :title="toLocalePersonName(people.person, locale)"
-                        :subtitle="toLocaleCharacterName(people, locale)"
                       />
                     </NuxtLink>
                   </template>

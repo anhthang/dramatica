@@ -9,23 +9,18 @@
       />
     </template>
 
-    <DataTable :value="drama.people" striped-rows>
+    <DataTable :value="drama.people" striped-rows sort-field="billing_order">
       <template #empty>
         No cast or crew members assigned. Add actors and staff to complete the
         drama details!
       </template>
       <Column field="name" header="Person">
         <template #body="{ data }">
-          <div class="flex items-center gap-2">
-            <Avatar
-              :image="data.person.profile_url"
-              shape="circle"
-              pt:image:class="object-cover"
-            />
-            <span>
-              {{ toLocalePersonName(data.person, $i18n.locale) }}
-            </span>
-          </div>
+          <CardPerson
+            :image="data.person.profile_url"
+            :title="toLocalePersonName(data.person, $i18n.locale)"
+            simple
+          />
         </template>
       </Column>
       <!-- <Column field="people.name" header="Name" /> -->

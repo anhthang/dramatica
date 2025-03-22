@@ -9,34 +9,29 @@
       />
     </template>
 
-    <DataView
+    <DataTable
       :value="episodes"
+      striped-rows
       paginator
       :always-show-paginator="false"
-      :rows="5"
+      rows="8"
     >
       <template #empty>
         No episodes added yet. Start by adding the first episode to keep track
         of the series!
       </template>
-      <template #list="slotProps">
-        <div
-          v-for="(item, index) in slotProps.items"
-          :key="index"
-          class="py-3"
-          :class="{
-            'border-t border-zinc-100 dark:border-zinc-700': index !== 0,
-          }"
-        >
+      <Column field="episode_number" header="Episode" />
+      <Column field="preview_image">
+        <template #body="{ data }">
           <CardTVHorizontal
-            :image="item.preview_img"
-            :title="item.title"
-            :content="item.synopsis"
+            :image="data.preview_img"
+            :title="data.title"
+            :content="data.synopsis"
             size="large"
           />
-        </div>
-      </template>
-    </DataView>
+        </template>
+      </Column>
+    </DataTable>
 
     <Dialog
       v-model:visible="visible"

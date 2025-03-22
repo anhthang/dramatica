@@ -8,7 +8,7 @@
     }"
   >
     <template #header>
-      <img loading="lazy" :src="episode.preview_img" />
+      <img loading="lazy" class="w-full" :src="episode.preview_img" />
     </template>
 
     <template #title>

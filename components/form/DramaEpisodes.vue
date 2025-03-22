@@ -20,11 +20,16 @@
     <Skeleton v-if="status === 'pending'" class="!h-20" />
     <Card
       v-else-if="tv"
-      pt:root:class="!border-0"
+      pt:root:class="!border-0 overflow-hidden"
       pt:subtitle:class="text-justify"
     >
       <template #header>
-        <img loading="lazy" :alt="tv.title" :src="tv.cover_url" />
+        <img
+          loading="lazy"
+          class="w-full"
+          :alt="tv.title"
+          :src="tv.cover_url"
+        />
       </template>
       <template #title>{{ tv.title }}</template>
       <template #subtitle>{{ tv.synopsis }}</template>
@@ -79,9 +84,6 @@
 </template>
 
 <script setup>
-import keyBy from 'lodash.keyby'
-import pick from 'lodash.pick'
-
 const emit = defineEmits(['onSuccess'])
 
 const props = defineProps({
@@ -123,21 +125,14 @@ const { data: tv, status } = useAsyncData(
     watch: [language],
     transform: (data) => {
       const [original, netflix] = data
+
+      /**
+       * Using Netflix as the primary data source since it provides episode synopses.
+       * Fixing the issue where episodes cannot be crawled from Youku for TV series with more than 35 episodes (as of now).
+       * Noting that some TV series on Netflix merge two episodes into one. Need to verify this later with the original source.
+       */
       if (netflix) {
-        const epMap = keyBy(netflix.episodes, 'episode_number')
-
-        original.episodes.forEach((ep) => {
-          if (epMap[ep.episode_number]) {
-            const picked = pick(epMap[ep.episode_number], [
-              'title',
-              'synopsis',
-              'synopsis_source',
-              // 'preview_img', // prefer airing source img instead of netflix
-            ])
-
-            Object.assign(ep, picked)
-          }
-        })
+        return netflix
       }
 
       return original
