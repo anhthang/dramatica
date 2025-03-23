@@ -181,9 +181,7 @@ const { type, edit, metadata, existing } = defineProps({
       return []
     },
   },
-  edit: {
-    type: Boolean,
-  },
+  edit: Boolean,
   metadata: {
     type: Object,
     default: () => ({}),

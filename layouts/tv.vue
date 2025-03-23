@@ -69,8 +69,9 @@ const items = computed(() => [
   {
     label: 'Cast & Crew',
     icon: 'pi pi-users',
-    route: `/manage/${route.params.drama_id}/cast`,
-    class: route.path === `/manage/${route.params.drama_id}/cast` && activeMenu,
+    route: `/manage/${route.params.drama_id}/people`,
+    class:
+      route.path === `/manage/${route.params.drama_id}/people` && activeMenu,
     command: onChangeMenu,
   },
   {
@@ -82,11 +83,11 @@ const items = computed(() => [
     command: onChangeMenu,
   },
   {
-    label: 'Services',
+    label: 'Streaming Services',
     icon: 'pi pi-desktop',
-    route: `/manage/${route.params.drama_id}/service`,
+    route: `/manage/${route.params.drama_id}/streaming`,
     class:
-      route.path === `/manage/${route.params.drama_id}/service` && activeMenu,
+      route.path === `/manage/${route.params.drama_id}/streaming` && activeMenu,
     command: onChangeMenu,
   },
 ])

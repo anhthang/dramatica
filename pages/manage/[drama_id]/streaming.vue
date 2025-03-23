@@ -1,7 +1,7 @@
 <template>
   <Panel>
     <template #icons>
-      <Button label="Add" icon="pi pi-video" size="small" @click="toggle" />
+      <Button label="Add" icon="pi pi-desktop" size="small" @click="toggle" />
     </template>
 
     <DataTable :value="drama.availability" striped-rows>
@@ -9,7 +9,7 @@
         No streaming services linked. Add a platform to make this drama
         accessible!
       </template>
-      <Column field="streaming_service" header="Streaming Service">
+      <Column field="streaming_service" header="Service">
         <template #body="{ data }">
           <img
             v-if="themeSpecificServices.includes(data.streaming_service)"
@@ -75,12 +75,9 @@
 </template>
 
 <script setup>
-// import keyBy from 'lodash.keyby'
-
 definePageMeta({ layout: 'tv' })
 
 const route = useRoute()
-// const { locale } = useI18n()
 
 const { data: drama, refresh } = await useAsyncData(
   `drama-${route.params.drama_id}`,
@@ -93,17 +90,6 @@ const { data: drama, refresh } = await useAsyncData(
     },
   },
 )
-
-// const translation = computed(() => {
-//   const translationMap = keyBy(drama.value.translations, 'language')
-
-//   return translationMap[locale.value] || translationMap.en
-// })
-
-// useSeoMeta({
-//   title: drama.value && `Streaming Services - ${translation.value.title_year}`,
-//   description: drama.value && translation.value.synopsis,
-// })
 
 const visible = ref(false)
 const selection = ref()

@@ -20,7 +20,15 @@
     />
 
     <span v-if="simple">{{ title }}</span>
-    <Card v-else class="!shadow-none bg-transparent flex-1" pt:body:class="p-0">
+    <Card
+      v-else
+      class="!shadow-none !bg-transparent flex-1"
+      pt:body:class="p-0"
+      :pt="{
+        caption: extraSubtitle && 'flex-row',
+        title: extraSubtitle && 'flex-grow',
+      }"
+    >
       <template #title>{{ title }}</template>
       <template v-if="subtitle" #subtitle>{{ subtitle }}</template>
       <template v-if="content" #content>{{ content }}</template>
@@ -58,5 +66,6 @@ defineProps({
   simple: Boolean,
   selected: Boolean,
   bordered: Boolean,
+  extraSubtitle: Boolean,
 })
 </script>

@@ -53,6 +53,8 @@
               <CardTVHorizontal
                 :image="item.preview_img"
                 :title="item.title"
+                :subtitle="runtime2Duration(item.runtime)"
+                extra-subtitle
                 :content="item.synopsis"
                 size="large"
               />
@@ -84,6 +86,9 @@
 </template>
 
 <script setup>
+import keyBy from 'lodash.keyby'
+import pick from 'lodash.pick'
+
 const emit = defineEmits(['onSuccess'])
 
 const props = defineProps({
@@ -132,6 +137,17 @@ const { data: tv, status } = useAsyncData(
        * Noting that some TV series on Netflix merge two episodes into one. Need to verify this later with the original source.
        */
       if (netflix) {
+        const epMap = keyBy(original.episodes, 'episode_number')
+        netflix.episodes.forEach((ep) => {
+          if (epMap[ep.episode_number]) {
+            const picked = pick(epMap[ep.episode_number], [
+              'runtime',
+              'air_date',
+            ])
+            Object.assign(ep, picked)
+          }
+        })
+
         return netflix
       }
 

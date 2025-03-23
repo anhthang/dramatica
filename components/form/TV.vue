@@ -405,10 +405,7 @@ const emit = defineEmits(['onBack', 'onSuccess'])
 const toast = useToast()
 
 const { isEdit, metadata } = defineProps({
-  isEdit: {
-    type: Boolean,
-    default: false,
-  },
+  isEdit: Boolean,
   metadata: {
     type: Object,
     default: () => ({}),

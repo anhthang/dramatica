@@ -12,10 +12,18 @@
       <NuxtLink :to="`/manage/${drama.id}`">
         <Button label="Manage" icon="pi pi-th-large" severity="secondary" />
       </NuxtLink>
+
+      <Button
+        :label="$t('Share')"
+        icon="pi pi-share-alt"
+        severity="secondary"
+        fluid
+        @click="copyUrl"
+      />
     </template>
 
     <Tabs value="information">
-      <TabList pt:tablist:class="bg-transparent">
+      <TabList pt:tablist:class="!bg-transparent">
         <Tab v-for="tab in tabs" :key="tab.label" :value="tab.value">
           <div class="flex items-center gap-2 text-inherit">
             <i :class="tab.icon" />
@@ -24,60 +32,50 @@
         </Tab>
       </TabList>
 
-      <TabPanels class="bg-transparent">
+      <TabPanels class="!bg-transparent">
         <TabPanel value="information">
           <div class="grid grid-cols-1 lg:grid-cols-10 gap-12 mt-2">
             <div class="col-span-1 lg:col-span-6">
               <DescriptionList :descriptions="descriptions" />
-
-              <Tabs v-if="availability.length" value="where_to_watch">
-                <TabList pt:tablist:class="bg-transparent">
-                  <Tab value="where_to_watch">
-                    <div class="flex items-center gap-2 text-inherit">
-                      <i class="pi pi-desktop" />
-                      <span>{{ $t('Where to Watch') }}</span>
-                    </div>
-                  </Tab>
-                </TabList>
-                <TabPanels class="bg-transparent">
-                  <TabPanel value="where_to_watch">
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-6">
-                      <NuxtLink
-                        v-for="service in availability"
-                        :key="service.id"
-                        :to="service.watch_link"
-                        target="_blank"
-                      >
-                        <img
-                          :src="
-                            themeSpecificServices.includes(
-                              service.streaming_service,
-                            )
-                              ? `/logo/${service.streaming_service.toLowerCase()}-${$colorMode.value}.png`
-                              : `/logo/${service.streaming_service.toLowerCase()}.png`
-                          "
-                          :alt="service.streaming_service"
-                          :data-name="`/logo/${service.streaming_service.toLowerCase()}-${$colorMode.value}.png`"
-                          class="w-1/2"
-                        />
-                      </NuxtLink>
-                    </div>
-                  </TabPanel>
-                </TabPanels>
-              </Tabs>
             </div>
 
-            <div class="col-span-1 lg:col-span-4 flex flex-col gap-4">
-              <img :alt="translation.title" :src="translation.cover_url" />
+            <div class="col-span-1 lg:col-span-4 flex flex-col gap-6">
+              <img
+                :alt="translation.title"
+                :src="translation.cover_url"
+                class="rounded"
+              />
 
-              <div class="flex gap-4">
-                <Button
-                  :label="$t('Share')"
-                  icon="pi pi-share-alt"
-                  size="large"
-                  fluid
-                  @click="copyUrl"
-                />
+              <div class="flex justify-evenly">
+                <NuxtLink
+                  v-for="service in availability"
+                  :key="service.id"
+                  :to="service.watch_link"
+                  target="_blank"
+                >
+                  <Button
+                    outlined
+                    :label="$t('Watch')"
+                    icon="pi pi-play-circle"
+                    severity="secondary"
+                    size="large"
+                    fluid
+                    class="h-full"
+                  >
+                    <img
+                      :src="
+                        themeSpecificServices.includes(
+                          service.streaming_service,
+                        )
+                          ? `/logo/${service.streaming_service.toLowerCase()}-${$colorMode.value}.png`
+                          : `/logo/${service.streaming_service.toLowerCase()}.png`
+                      "
+                      :alt="service.streaming_service"
+                      :data-name="`/logo/${service.streaming_service.toLowerCase()}-${$colorMode.value}.png`"
+                      class="h-8"
+                    />
+                  </Button>
+                </NuxtLink>
               </div>
             </div>
           </div>

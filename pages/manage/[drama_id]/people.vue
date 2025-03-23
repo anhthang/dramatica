@@ -93,12 +93,9 @@
 </template>
 
 <script setup>
-// import keyBy from 'lodash.keyby'
-
 definePageMeta({ layout: 'tv' })
 
 const route = useRoute()
-// const { locale } = useI18n()
 
 const { data: drama, refresh } = await useAsyncData(
   `drama-${route.params.drama_id}`,
@@ -111,12 +108,6 @@ const { data: drama, refresh } = await useAsyncData(
     },
   },
 )
-
-// const translation = computed(() => {
-//   const translationMap = keyBy(drama.value.translations, 'language')
-
-//   return translationMap[locale.value] || translationMap.en
-// })
 
 const visible = ref({
   add: false,
@@ -132,9 +123,4 @@ const toggle = (key, shouldRefresh) => {
     refresh()
   }
 }
-
-// useSeoMeta({
-//   title: drama.value && `Cast & Crew - ${translation.value.title_year}`,
-//   description: drama.value && translation.value.synopsis,
-// })
 </script>

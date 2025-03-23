@@ -20,7 +20,11 @@
     <Avatar v-else :label="title.charAt(0)" :size="size" shape="circle" />
 
     <span v-if="simple">{{ title }}</span>
-    <Card v-else class="!shadow-none bg-transparent flex-1" pt:body:class="p-0">
+    <Card
+      v-else
+      class="!shadow-none !bg-transparent flex-1"
+      pt:body:class="p-0"
+    >
       <template #title>{{ title }}</template>
       <template v-if="subtitle" #subtitle>{{ subtitle }}</template>
     </Card>
