@@ -177,7 +177,7 @@ const onSubmit = async () => {
         life: 3000,
       })
 
-      emit('onSuccess', true)
+      emit('onSuccess', 'fetch', true)
     })
     .catch((error) => {
       toast.add({

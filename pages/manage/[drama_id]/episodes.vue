@@ -5,7 +5,7 @@
         label="Fetch"
         icon="pi pi-sync"
         size="small"
-        @click="toggleFetch"
+        @click="toggle('fetch')"
       />
     </template>
 
@@ -22,7 +22,7 @@
       </template>
       <Column field="episode_number">
         <template #body="{ data }">
-          <Avatar :label="data.episode_number" shape="circle" />
+          <Avatar :label="data.episode_number.toString()" shape="circle" />
         </template>
       </Column>
       <Column field="preview_image" header="Episode">
@@ -37,19 +37,42 @@
           />
         </template>
       </Column>
+      <Column header="Actions">
+        <template #body="{ data }">
+          <Button
+            label="Edit"
+            icon="pi pi-pen-to-square"
+            severity="secondary"
+            size="small"
+            @click="
+              () => {
+                selection = data
+                toggle('edit')
+              }
+            "
+          />
+        </template>
+      </Column>
     </DataTable>
 
     <Dialog
-      v-model:visible="visible"
+      v-model:visible="visible.edit"
+      modal
+      :header="`Edit Episode ${selection?.episode_number}`"
+      dismissable-mask
+      class="w-[48rem]"
+    >
+      <FormEpisode :metadata="selection" @on-success="toggle" />
+    </Dialog>
+
+    <Dialog
+      v-model:visible="visible.fetch"
       modal
       header="Episode Information"
       dismissable-mask
       class="w-[48rem]"
     >
-      <FormDramaEpisodes
-        :availability="availability"
-        @on-success="toggleFetch"
-      />
+      <FormDramaEpisodes :availability="availability" @on-success="toggle" />
     </Dialog>
     <Toast />
   </Panel>
@@ -70,9 +93,15 @@ const episodes = computed(() =>
   drama.value.episodes.filter((e) => e.language === locale.value),
 )
 
-const visible = ref(false)
-const toggleFetch = (shouldRefresh) => {
-  visible.value = !visible.value
+const selection = ref()
+
+const visible = ref({
+  edit: false,
+  fetch: false,
+})
+
+const toggle = (key, shouldRefresh) => {
+  visible.value[key] = !visible.value[key]
 
   if (shouldRefresh) {
     refresh()
