@@ -20,7 +20,7 @@
   "bugs": {
     "url": "https://github.com/anhthang/dramatica/issues"
   },
-  "homepage": "dramatica.vercel.app",
+  "homepage": "https://dramatica.vercel.app",
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",

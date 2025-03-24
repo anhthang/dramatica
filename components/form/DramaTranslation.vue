@@ -30,11 +30,11 @@
     </div>
 
     <div class="flex flex-col gap-2">
-      <label for="translation_watch_link">Watch Link</label>
+      <label for="watch_link">Watch Link</label>
       <IconField>
         <InputIcon class="pi pi-video" />
         <InputText
-          id="translation_watch_link"
+          id="watch_link"
           v-model.trim="translation.watch_link"
           name="watch_link"
           type="text"
@@ -56,11 +56,11 @@
     </div>
 
     <div class="flex flex-col gap-2">
-      <label for="translation_title">Title</label>
+      <label for="title">Title</label>
       <IconField>
         <InputIcon class="pi pi-pencil" />
         <InputText
-          id="translation_title"
+          id="title"
           v-model.trim="translation.title"
           name="title"
           type="text"
@@ -78,9 +78,9 @@
     </div>
 
     <div class="flex flex-col gap-2">
-      <label for="translation_synopsis">Synopsis</label>
+      <label for="synopsis">Synopsis</label>
       <Textarea
-        id="translation_synopsis"
+        id="synopsis"
         v-model.trim="translation.synopsis"
         name="synopsis"
         :rows="5"
@@ -93,11 +93,11 @@
     </div>
 
     <div class="flex flex-col gap-2">
-      <label for="translation_synopsis_source">Source</label>
+      <label for="synopsis_source">Source</label>
       <IconField>
         <InputIcon class="pi pi-pencil" />
         <InputText
-          id="translation_synopsis_source"
+          id="synopsis_source"
           v-model.trim="translation.synopsis_source"
           name="synopsis_source"
           type="text"
@@ -115,11 +115,11 @@
     </div>
 
     <div class="flex flex-col gap-2">
-      <label for="translation_poster_url">Poster</label>
+      <label for="poster_url">Poster</label>
       <IconField>
         <InputIcon class="pi pi-image" />
         <InputText
-          id="translation_poster_url"
+          id="poster_url"
           v-model.trim="translation.poster_url"
           name="poster_url"
           type="text"
@@ -137,11 +137,11 @@
     </div>
 
     <div class="flex flex-col gap-2">
-      <label for="translation_cover">Cover</label>
+      <label for="cover">Cover</label>
       <IconField>
         <InputIcon class="pi pi-image" />
         <InputText
-          id="translation_cover"
+          id="cover"
           v-model.trim="translation.cover_url"
           name="cover"
           type="text"

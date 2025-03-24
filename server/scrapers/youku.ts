@@ -29,7 +29,7 @@ const scraper = async (url: string) => {
     const { data } = i18n
 
     return data.data
-  } catch (error) {
+  } catch (_error) {
     console.log('unable to parse i18n')
 
     return

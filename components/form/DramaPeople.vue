@@ -58,7 +58,7 @@
     </div>
 
     <div class="flex flex-col gap-2">
-      <label for="member_role">Role</label>
+      <label for="role">Role</label>
       <Select
         v-model="member.role"
         name="role"
@@ -79,11 +79,11 @@
     </div>
 
     <div v-if="isCast" class="flex flex-col gap-2">
-      <label for="member_character_name">Character</label>
+      <label for="character_name">Character</label>
       <IconField>
         <InputIcon class="pi pi-user" />
         <InputText
-          id="member_character_name"
+          id="character_name"
           v-model.trim="member.character_name"
           name="character_name"
           type="text"
@@ -104,11 +104,11 @@
     </div>
 
     <div v-if="isCast" class="flex flex-col gap-2">
-      <label for="member_character_name_vi">Character (Vietnamese)</label>
+      <label for="character_name_vi">Character (Vietnamese)</label>
       <IconField>
         <InputIcon class="pi pi-user" />
         <InputText
-          id="member_character_name_vi"
+          id="character_name_vi"
           v-model.trim="member.character_name_vi"
           name="character_name_vi"
           type="text"
@@ -129,12 +129,12 @@
     </div>
 
     <div v-if="isCast" class="flex flex-col gap-2">
-      <label for="member_billing_order">Billing Order</label>
+      <label for="billing_order">Billing Order</label>
       <IconField>
         <InputIcon class="pi pi-hashtag" />
         <InputNumber
           v-model.number="member.billing_order"
-          input-id="tv_billing_order"
+          input-id="billing_order"
           name="billing_order"
           :use-grouping="false"
           fluid

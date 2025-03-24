@@ -7,7 +7,7 @@
     @submit="onSubmit"
   >
     <div class="flex flex-col gap-2">
-      <label for="service_streaming_service">Streaming Service</label>
+      <label for="streaming_service">Streaming Service</label>
       <Select
         v-model="service.streaming_service"
         name="streaming_service"
@@ -26,11 +26,11 @@
     </div>
 
     <div class="flex flex-col gap-2">
-      <label for="service_watch_link">Watch Link</label>
+      <label for="watch_link">Watch Link</label>
       <IconField>
         <InputIcon class="pi pi-external-link" />
         <InputText
-          id="service_watch_link"
+          id="watch_link"
           v-model.trim="service.watch_link"
           name="watch_link"
           type="text"

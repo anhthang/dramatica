@@ -12,11 +12,11 @@
   >
     <div class="grid grid-cols-3 gap-4">
       <div class="flex flex-col gap-2">
-        <label for="tv_title">Title</label>
+        <label for="title">Title</label>
         <IconField>
           <InputIcon class="pi pi-pencil" />
           <InputText
-            id="tv_title"
+            id="title"
             v-model.trim="tv.title"
             name="title"
             type="text"
@@ -33,11 +33,11 @@
         </Message>
       </div>
       <div class="flex flex-col gap-2">
-        <label for="tv_title_pinyin">Pinyin Title</label>
+        <label for="title_pinyin">Pinyin Title</label>
         <IconField>
           <InputIcon class="pi pi-pencil" />
           <InputText
-            id="tv_title_pinyin"
+            id="title_pinyin"
             v-model.trim="tv.title_pinyin"
             name="title_pinyin"
             type="text"
@@ -55,11 +55,11 @@
       </div>
 
       <div class="flex flex-col gap-2">
-        <label for="tv_original_title">Original Title</label>
+        <label for="original_title">Original Title</label>
         <IconField>
           <InputIcon class="pi pi-pencil" />
           <InputText
-            id="tv_original_title"
+            id="original_title"
             v-model.trim="tv.original_title"
             name="original_title"
             type="text"
@@ -78,9 +78,9 @@
     </div>
 
     <div class="flex flex-col gap-2">
-      <label for="tv_synopsis">Synopsis</label>
+      <label for="synopsis">Synopsis</label>
       <Textarea
-        id="tv_synopsis"
+        id="synopsis"
         v-model.trim="tv.synopsis"
         name="synopsis"
         :rows="5"
@@ -94,11 +94,11 @@
 
     <div class="grid grid-cols-3 gap-4">
       <div class="flex flex-col gap-2">
-        <label for="tv_synopsis_source">Source</label>
+        <label for="synopsis_source">Source</label>
         <IconField>
           <InputIcon class="pi pi-pencil" />
           <InputText
-            id="tv_synopsis_source"
+            id="synopsis_source"
             v-model.trim="tv.synopsis_source"
             name="synopsis_source"
             type="text"
@@ -115,11 +115,11 @@
         </Message>
       </div>
       <div class="flex flex-col gap-2">
-        <label for="tv_airing_platform">Airing Platform</label>
+        <label for="airing_platform">Airing Platform</label>
         <IconField>
           <InputIcon class="pi pi-desktop" />
           <InputText
-            id="tv_airing_platform"
+            id="airing_platform"
             v-model.trim="tv.airing_platform"
             name="airing_platform"
             type="text"
@@ -137,11 +137,11 @@
       </div>
 
       <div class="flex flex-col gap-2">
-        <label for="tv_watch_link">Watch Link</label>
+        <label for="watch_link">Watch Link</label>
         <IconField>
           <InputIcon class="pi pi-video" />
           <InputText
-            id="tv_watch_link"
+            id="watch_link"
             v-model.trim="tv.watch_link"
             name="watch_link"
             type="text"
@@ -165,12 +165,12 @@
 
     <div class="grid grid-cols-3 gap-4">
       <div class="flex flex-col gap-2">
-        <label for="tv_release_year">Release Year</label>
+        <label for="release_year">Release Year</label>
         <IconField>
           <InputIcon class="pi pi-hashtag" />
           <InputNumber
             v-model.number="tv.release_year"
-            input-id="tv_release_year"
+            input-id="release_year"
             name="release_year"
             :use-grouping="false"
             fluid
@@ -186,12 +186,12 @@
         </Message>
       </div>
       <div class="flex flex-col gap-2">
-        <label for="tv_number_of_episodes">Total Episodes</label>
+        <label for="number_of_episodes">Total Episodes</label>
         <IconField>
           <InputIcon class="pi pi-hashtag" />
           <InputNumber
             v-model.number="tv.number_of_episodes"
-            input-id="tv_number_of_episodes"
+            input-id="number_of_episodes"
             name="number_of_episodes"
             :use-grouping="false"
             fluid
@@ -208,11 +208,11 @@
       </div>
 
       <div class="flex flex-col gap-2">
-        <label for="tv_rating_name">Rating</label>
+        <label for="rating_name">Rating</label>
         <IconField>
           <InputIcon class="pi pi-shield" />
           <InputText
-            id="tv_rating_name"
+            id="rating_name"
             v-model.trim="tv.rating_name"
             name="rating_name"
             type="text"
@@ -232,7 +232,7 @@
 
     <div class="grid grid-cols-3 gap-4">
       <div class="flex flex-col gap-2">
-        <label for="tv_airing_status">Airing Status</label>
+        <label for="airing_status">Airing Status</label>
         <Select
           v-model="tv.airing_status"
           name="airing_status"
@@ -249,7 +249,7 @@
         </Message>
       </div>
       <div class="flex flex-col gap-2">
-        <label for="tv_air_date">Air Date</label>
+        <label for="air_date">Air Date</label>
         <DatePicker
           v-model="tv.air_date"
           date-format="dd/mm/yy"
@@ -258,7 +258,7 @@
         />
       </div>
       <div class="flex flex-col gap-2">
-        <label for="tv_end_date">End Date</label>
+        <label for="end_date">End Date</label>
         <DatePicker
           v-model="tv.end_date"
           date-format="dd/mm/yy"
@@ -269,8 +269,9 @@
     </div>
 
     <div class="grid gap-2">
-      <label for="tv_genre">Genres</label>
+      <label for="genre">Genres</label>
       <MultiSelect
+        v-model="tv.tv_genres"
         name="tv_genre"
         :options="tvGenres"
         option-label="label"
@@ -282,11 +283,11 @@
 
     <div class="grid grid-cols-3 gap-4">
       <div class="flex flex-col gap-2">
-        <label for="tv_douban">Douban</label>
+        <label for="douban">Douban</label>
         <IconField>
           <InputIcon class="pi pi-tiktok" />
           <InputText
-            id="tv_douban"
+            id="douban"
             v-model.trim="tv.douban"
             name="douban"
             type="text"
@@ -303,11 +304,11 @@
         </Message>
       </div>
       <div class="flex flex-col gap-2">
-        <label for="tv_imdb">IMDb</label>
+        <label for="imdb">IMDb</label>
         <IconField>
           <InputIcon class="pi pi-desktop" />
           <InputText
-            id="tv_imdb"
+            id="imdb"
             v-model.trim="tv.imdb"
             name="imdb"
             type="text"
@@ -327,11 +328,11 @@
 
     <div class="grid grid-cols-3 gap-4">
       <div class="flex flex-col gap-2">
-        <label for="tv_poster_url">Poster</label>
+        <label for="poster_url">Poster</label>
         <IconField>
           <InputIcon class="pi pi-image" />
           <InputText
-            id="tv_poster_url"
+            id="poster_url"
             v-model.trim="tv.poster_url"
             name="poster_url"
             type="text"
@@ -348,11 +349,11 @@
         </Message>
       </div>
       <div class="flex flex-col gap-2">
-        <label for="tv_cover">Cover</label>
+        <label for="cover">Cover</label>
         <IconField>
           <InputIcon class="pi pi-image" />
           <InputText
-            id="tv_cover"
+            id="cover"
             v-model.trim="tv.cover_url"
             name="cover"
             type="text"
@@ -463,6 +464,12 @@ const fetchMetadata = (url) => {
       },
     })
       .then((data) => {
+        if (Array.isArray(data.tv_genres)) {
+          data.tv_genres = tvGenres.value
+            .filter((g) => data.tv_genres.includes(g.label))
+            .map(({ value }) => value)
+        }
+
         Object.assign(tv.value, data)
       })
       .catch((error) => {

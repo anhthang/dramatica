@@ -24,7 +24,7 @@ const scraper = async (url: string, language: string) => {
     const data = JSON.parse(node.getText())
 
     return JSON.parse(data.props.pageProps.data)
-  } catch (error) {
+  } catch (_error) {
     console.log('unable to parse json data')
 
     return
@@ -47,6 +47,7 @@ const parser = (data: any, language: string) => {
     title: coverInfo.title,
     synopsis: unescape(coverInfo.description).trim(),
     synopsis_source: 'WeTV',
+    airing_platforn: 'WeTV',
     cover_url: coverInfo.posterHz,
     poster_url: coverInfo.posterVt,
     number_of_episodes:
@@ -67,6 +68,7 @@ const parser = (data: any, language: string) => {
         air_date: d.videoCheckUpTime.substring(0, 10),
         synopsis: d.desc || d.introduction,
       })),
+    tv_genres: coverInfo.mainGenres,
   }
 }
 
