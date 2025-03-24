@@ -14,7 +14,7 @@
       </NuxtLink>
 
       <Button
-        :label="$t('Share')"
+        label="Share"
         icon="pi pi-share-alt"
         severity="secondary"
         fluid

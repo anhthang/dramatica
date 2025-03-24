@@ -274,7 +274,7 @@ const onSubmit = async ({ valid }) => {
       if (isDrama) {
         toast.add({
           severity: 'success',
-          summary: `[${selection.value.title}] has been successfully added to the people!`,
+          summary: `[${selection.value.title}] has been successfully added to the person!`,
           life: 3000,
         })
 

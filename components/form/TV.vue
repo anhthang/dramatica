@@ -527,7 +527,7 @@ const onSubmit = async ({ valid }) => {
           life: 3000,
         })
 
-        emit('onSuccess', 'edit', true)
+        emit('onSuccess')
       } else {
         toast.add({
           severity: 'success',

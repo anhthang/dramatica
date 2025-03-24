@@ -5,6 +5,8 @@
     pt:title:class="flex items-center gap-4 font-medium text-3xl"
   >
     <FormPerson />
+
+    <Toast />
   </Panel>
 </template>
 

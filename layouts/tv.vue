@@ -83,6 +83,15 @@ const items = computed(() => [
     command: onChangeMenu,
   },
   {
+    label: 'Translations',
+    icon: 'pi pi-language',
+    route: `/manage/${route.params.drama_id}/translations`,
+    class:
+      route.path === `/manage/${route.params.drama_id}/translations` &&
+      activeMenu,
+    command: onChangeMenu,
+  },
+  {
     label: 'Streaming Services',
     icon: 'pi pi-desktop',
     route: `/manage/${route.params.drama_id}/streaming`,

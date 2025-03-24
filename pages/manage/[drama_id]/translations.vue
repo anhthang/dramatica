@@ -1,6 +1,9 @@
 <template>
   <Panel>
-    <FormTV :is-edit="true" :metadata="drama" @on-success="refresh" />
+    <FormDramaTranslation
+      :translations="drama.translations"
+      @on-success="refresh"
+    />
 
     <Toast />
   </Panel>

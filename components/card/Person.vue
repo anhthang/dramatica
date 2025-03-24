@@ -39,7 +39,7 @@
 defineProps({
   image: {
     type: String,
-    required: true,
+    default: '',
   },
   size: {
     type: String,
