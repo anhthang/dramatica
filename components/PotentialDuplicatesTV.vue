@@ -8,7 +8,7 @@
     </Message>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <nuxt-link
+      <NuxtLink
         v-for="tv in data"
         :key="tv.id"
         :to="`/${tv.id}`"
@@ -20,7 +20,7 @@
           :selected="tv.title.toLowerCase() === props.title.toLowerCase()"
           bordered
         />
-      </nuxt-link>
+      </NuxtLink>
     </div>
   </div>
 </template>

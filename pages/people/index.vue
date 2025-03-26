@@ -1,6 +1,6 @@
 <template>
   <Panel
-    header="Add New People"
+    header="Add New Person"
     pt:root:class="!border-0 !bg-transparent"
     pt:title:class="flex items-center gap-4 font-medium text-3xl"
   >
@@ -12,6 +12,6 @@
 
 <script setup>
 useSeoMeta({
-  title: 'Add New People',
+  title: 'Add New Person',
 })
 </script>

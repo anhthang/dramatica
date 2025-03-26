@@ -16,5 +16,5 @@ Whether you're a **hardcore fan, content curator, or drama database manager**, *
 
 ## 📸 Screenshots
 
-![TV](./public/screenshots/tv.png)
-![Episodes](./public/screenshots/tv-episodes.png)
+![Light preview](./public/screenshots/homepage-light.jpeg#gh-light-mode-only)
+![Dark preview](./public/screenshots/homepage-dark.jpeg#gh-dark-mode-only)

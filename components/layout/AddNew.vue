@@ -1,7 +1,7 @@
 <template>
   <SplitButton
     icon="pi pi-plus-circle"
-    label="Add"
+    label="Add New..."
     outlined
     severity="secondary"
     :model="items"
@@ -14,12 +14,12 @@ const router = useRouter()
 
 const items = [
   {
-    label: 'New TV/Drama',
+    label: 'TV/Drama',
     icon: 'pi pi-video',
     command: () => router.push('/tv'),
   },
   {
-    label: 'New People',
+    label: 'People',
     icon: 'pi pi-user-plus',
     command: () => router.push('/people'),
   },
