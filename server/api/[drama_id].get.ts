@@ -1,7 +1,6 @@
 import { serverSupabaseClient } from '#supabase/server'
 import pick from 'lodash.pick'
 import sortBy from 'lodash.sortby'
-import { getStreamingService } from '~/utils'
 
 export default defineEventHandler(async (event) => {
   const client = await serverSupabaseClient(event)
@@ -13,8 +12,8 @@ export default defineEventHandler(async (event) => {
     .select(
       `*,
       availability:drama_availability(*),
-      cast:drama_cast(*, people(*)),
-      crew:drama_crew(*, people(*)),
+      cast:drama_cast(*, person:people(*)),
+      crew:drama_crew(*, person:people(*)),
       episodes(*),
       genres:drama_genres(genre:genres(id, name)),
       translations:drama_translations(*)
@@ -57,13 +56,6 @@ export default defineEventHandler(async (event) => {
     data.cast = sortBy(data.cast, ['billing_order', 'people.name'])
 
     data.genres = data.genres.map(({ genre }) => genre)
-
-    if (data.watch_link) {
-      data.availability.unshift({
-        streaming_service: getStreamingService(data.watch_link),
-        watch_link: data.watch_link,
-      })
-    }
   }
 
   return data

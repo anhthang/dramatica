@@ -1,24 +1,35 @@
+import { execSync } from 'child_process'
+import Aura from '@primevue/themes/aura'
 import app from './package.json'
+
+const revision = execSync('git rev-parse --short HEAD').toString().trim()
+
+const isProduction = process.env.NODE_ENV === 'production'
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
 
+  build: {
+    // fixing @babel/runtime issue in production build
+    transpile: [...(isProduction ? ['@babel/runtime'] : [])],
+  },
+
   modules: [
-    '@buianhthang/nuxt',
     '@nuxt/eslint',
     '@nuxt/fonts',
     '@nuxtjs/color-mode',
-    '@nuxtjs/supabase',
     '@nuxtjs/i18n',
+    '@nuxtjs/supabase',
+    '@nuxtjs/tailwindcss',
+    '@primevue/nuxt-module',
   ],
 
-  colorMode: {
-    preference: 'dark',
-  },
-
   fonts: {
-    families: [{ name: 'Cabin', provider: 'google' }],
+    families: [
+      { name: 'Cabin', provider: 'google' },
+      { name: 'Amarante', provider: 'google' },
+    ],
   },
 
   i18n: {
@@ -44,9 +55,22 @@ export default defineNuxtConfig({
     defaultLocale: 'en',
   },
 
+  primevue: {
+    options: {
+      theme: {
+        preset: Aura,
+        options: {
+          darkModeSelector: '.dark-mode',
+        },
+      },
+    },
+  },
+
   supabase: {
     redirect: false,
   },
+
+  buildId: `v${app.version} (${revision})`,
 
   runtimeConfig: {
     app: {
@@ -55,4 +79,6 @@ export default defineNuxtConfig({
       homepage: app.homepage,
     },
   },
+
+  compatibilityDate: '2025-03-10',
 })

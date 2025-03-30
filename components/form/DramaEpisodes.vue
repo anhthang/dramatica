@@ -1,111 +1,154 @@
 <template>
-  <a-card v-if="tv" :loading="pending">
-    <template v-if="!pending" #cover>
-      <img :src="tv.cover_url" />
-    </template>
+  <Form class="flex flex-col gap-6" @submit="onSubmit">
+    <div class="flex flex-col gap-2">
+      <RadioButtonGroup
+        v-model="language"
+        name="language"
+        class="flex flex-wrap gap-4"
+      >
+        <div
+          v-for="{ code, name } in locales"
+          :key="code"
+          class="flex items-center gap-2"
+        >
+          <RadioButton input-id="code" :value="code" />
+          <label for="code">{{ name }}</label>
+        </div>
+      </RadioButtonGroup>
+    </div>
 
-    <a-card-meta :title="tv.title" :description="tv.synopsis" />
-
-    <a-list
-      v-if="tv.episodes.length"
-      item-layout="vertical"
-      :data-source="tv.episodes"
-      :pagination="{ pageSize: 5, simple: true }"
+    <Skeleton v-if="status === 'pending'" class="!h-20" />
+    <Card
+      v-else-if="tv"
+      pt:root:class="!border-0 overflow-hidden"
+      pt:subtitle:class="text-justify"
     >
       <template #header>
-        <a-typography-text strong> Synopses </a-typography-text>
+        <img
+          loading="lazy"
+          class="w-full"
+          :alt="tv.title"
+          :src="tv.cover_url"
+        />
       </template>
+      <template #title>{{ tv.title }}</template>
+      <template #subtitle>{{ tv.synopsis }}</template>
 
-      <template #renderItem="{ item }">
-        <a-list-item>
-          <a-list-item-meta :title="item.title" :description="item.synopsis" />
-
-          <template #extra>
-            <img :width="240" :alt="item.title" :src="item.preview_img" />
+      <template #content>
+        <DataView
+          :value="tv.episodes"
+          paginator
+          :always-show-paginator="false"
+          :rows="5"
+        >
+          <template #list="slotProps">
+            <div
+              v-for="(item, index) in slotProps.items"
+              :key="index"
+              class="py-3"
+              :class="{
+                'border-t border-zinc-100 dark:border-zinc-700': index !== 0,
+              }"
+            >
+              <CardTVHorizontal
+                :image="item.preview_img"
+                :title="item.title"
+                :subtitle="runtime2Duration(item.runtime)"
+                extra-subtitle
+                :content="item.synopsis"
+                size="large"
+              />
+            </div>
           </template>
 
-          <template #actions>
-            <span v-if="item.air_date">
-              <calendar-outlined /> {{ toLocaleDate(item.air_date, language) }}
-            </span>
-            <span v-if="item.runtime">
-              <clock-circle-outlined /> {{ runtime2Duration(item.runtime) }}
-            </span>
+          <template #footer>
+            <Message severity="warn" size="small" variant="simple">
+              Please verify the data carefully before inserting it to avoid
+              incorrect entries.
+            </Message>
           </template>
-        </a-list-item>
+        </DataView>
       </template>
+    </Card>
 
-      <template #footer>
-        <a-typography-paragraph type="warning">
-          <a-typography-text type="warning">
-            Please verify the data carefully before inserting it to avoid
-            incorrect entries.
-          </a-typography-text>
-        </a-typography-paragraph>
-        <a-typography-paragraph>
-          <a-checkbox v-model:checked="ignoreTitle">
-            Leave the checkbox checked for episode titles that appear to be the
-            drama name followed by a number.
-          </a-checkbox>
-        </a-typography-paragraph>
-      </template>
-    </a-list>
-  </a-card>
+    <div v-if="status === 'success'" class="flex gap-2">
+      <Checkbox v-model="ignoreTitle" input-id="checkbox" binary />
+      <label for="checkbox">
+        Leave the checkbox checked for episode titles that appear to be the
+        drama name followed by a number.
+      </label>
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <Button label="Save" type="submit" :disabled="status === 'pending'" />
+    </div>
+  </Form>
 </template>
 
 <script setup>
 import keyBy from 'lodash.keyby'
 import pick from 'lodash.pick'
 
-const route = useRoute()
+const emit = defineEmits(['onSuccess'])
 
 const props = defineProps({
   availability: {
     type: Array,
     default: () => [],
   },
-  language: {
-    type: String,
-    required: true,
-  },
 })
 
-const { data: tv, pending } = useAsyncData(
+const { locale, locales } = useI18n()
+const route = useRoute()
+const toast = useToast()
+
+const language = ref(locale.value)
+
+const { data: tv, status } = useAsyncData(
   () =>
     Promise.all(
-      props.availability.map((s) =>
-        $fetch(`/api/scrape/tv/${route.params.drama_id}/episodes`, {
-          method: 'get',
-          params: {
-            url: s.watch_link,
-            drama_id: route.params.drama_id,
-            language: props.language,
-          },
-        }).catch(() => {
-          // sometime netflix scraper is broken
-          return undefined
-        }),
-      ),
+      props.availability
+        .filter(
+          (a) =>
+            a.streaming_service === 'Netflix' || a.language === language.value,
+        )
+        .map((s) =>
+          $fetch(`/api/scrape/tv/${route.params.drama_id}/episodes`, {
+            method: 'get',
+            params: {
+              url: s.watch_link,
+              drama_id: route.params.drama_id,
+              language: language.value,
+            },
+          }).catch(() => {
+            // sometime netflix scraper is broken
+            return undefined
+          }),
+        ),
     ),
   {
-    watch: [() => props.language],
+    watch: [language],
     transform: (data) => {
       const [original, netflix] = data
-      if (netflix) {
-        const epMap = keyBy(netflix.episodes, 'episode_number')
 
-        original.episodes.forEach((ep) => {
+      /**
+       * Using Netflix as the primary data source since it provides episode synopses.
+       * Fixing the issue where episodes cannot be crawled from Youku for TV series with more than 35 episodes (as of now).
+       * Noting that some TV series on Netflix merge two episodes into one. Need to verify this later with the original source.
+       */
+      if (netflix) {
+        const epMap = keyBy(original.episodes, 'episode_number')
+        netflix.episodes.forEach((ep) => {
           if (epMap[ep.episode_number]) {
             const picked = pick(epMap[ep.episode_number], [
-              'title',
-              'synopsis',
-              'synopsis_source',
-              // 'preview_img', // prefer airing source img instead of netflix
+              'runtime',
+              'air_date',
             ])
-
             Object.assign(ep, picked)
           }
         })
+
+        return netflix
       }
 
       return original
@@ -128,14 +171,20 @@ const onSubmit = async () => {
     body,
   })
     .then(() => {
-      message.success('Episodes added/updated successfully!')
+      toast.add({
+        severity: 'success',
+        summary: 'Episodes added/updated successfully!',
+        life: 3000,
+      })
+
+      emit('onSuccess', 'fetch', true)
     })
     .catch((error) => {
-      message.error(error.message)
+      toast.add({
+        severity: 'error',
+        summary: error.message,
+        life: 3000,
+      })
     })
 }
-
-defineExpose({
-  onSubmit,
-})
 </script>

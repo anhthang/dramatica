@@ -13,7 +13,10 @@ export default withNuxt(
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-unused-vars': [
         'error',
-        { ignoreRestSiblings: true },
+        {
+          ignoreRestSiblings: true,
+          caughtErrorsIgnorePattern: '^_',
+        },
       ],
     },
   },

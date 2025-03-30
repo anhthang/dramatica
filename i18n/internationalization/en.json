@@ -10,6 +10,7 @@
   "Aired": "Aired",
   "Genres": "Genres",
   "Synopsis": "Synopsis",
+  "Information": "Information",
   "Cast": "Cast",
   "Episodes": "Episodes",
   "Episode": "Episode",
@@ -27,5 +28,9 @@
   "more": "more",
   "No Biography": "We don't have a biography for { peopleName }",
   "Male": "Male",
-  "Female": "Female"
+  "Female": "Female",
+
+  "Main": "Main",
+  "Supporting": "Supporting",
+  "Guest": "Guest"
 }

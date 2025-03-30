@@ -1,36 +1,38 @@
 <template>
-  <a-card hoverable style="height: 100%">
-    <template #cover>
-      <img :src="episode.preview_img" />
+  <Card
+    class="h-full overflow-hidden"
+    :pt="{
+      body: 'flex-1',
+      // caption: 'flex-grow',
+      subtitle: 'flex justify-between gap-2',
+    }"
+  >
+    <template #header>
+      <img loading="lazy" class="w-full" :src="episode.preview_img" />
     </template>
 
-    <a-flex vertical gap="small">
-      <a-card-meta
-        :title="episode.title || `${$t('Episode')} ${episode.episode_number}`"
-      >
-        <template v-if="episode.title" #avatar>
-          <a-avatar>{{ episode.episode_number }}</a-avatar>
-        </template>
+    <template #title>
+      <Avatar class="mr-1" shape="circle">
+        {{ episode.episode_number }}
+      </Avatar>
+      {{ episode.title }}
+    </template>
 
-        <template #description>
-          <span v-if="episode.air_date">
-            <calendar-outlined />
-            {{ toLocaleDate(episode.air_date, $i18n.locale) }}
-          </span>
-          <a-divider
-            v-if="episode.air_date && episode.runtime"
-            type="vertical"
-          />
-          <span v-if="episode.runtime">
-            <clock-circle-outlined />
-            {{ runtime2Duration(episode.runtime) }}
-          </span>
-        </template>
-      </a-card-meta>
+    <template #subtitle>
+      <span class="flex items-center gap-1">
+        <i class="pi pi-calendar" />
+        {{ toLocaleDate(episode.air_date, $i18n.locale) }}
+      </span>
+      <span v-if="episode.runtime" class="flex items-center gap-1">
+        <i class="pi pi-clock" />
+        {{ runtime2Duration(episode.runtime) }}
+      </span>
+    </template>
 
+    <template #content>
       {{ episode.synopsis }}
-    </a-flex>
-  </a-card>
+    </template>
+  </Card>
 </template>
 
 <script setup>

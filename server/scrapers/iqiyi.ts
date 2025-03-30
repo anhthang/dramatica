@@ -3,9 +3,13 @@ import get from 'lodash.get'
 import unescape from 'lodash.unescape'
 import xpath from 'xpath-html'
 
-const langCodeMap: { [x: string]: string } = {
-  en: 'en_us',
-  vi: 'vi_vn',
+/**
+ * Use "vn" as the modeCode since "cn" returns missing episodes (Our Memories (2024))
+ * and the API does not support "en"
+ */
+const codeMap: { [x: string]: string[] } = {
+  en: ['vn', 'en_us'],
+  vi: ['vn', 'vi_vn'],
 }
 
 const scraper = async (url: string) => {
@@ -22,7 +26,7 @@ const scraper = async (url: string) => {
       videoAlbumInfo: { albumId },
     } = data?.props?.initialState?.album || {}
     return { albumId }
-  } catch (error) {
+  } catch (_error) {
     console.log('unable to parse json data')
 
     return { albumId: '' }
@@ -32,10 +36,12 @@ const scraper = async (url: string) => {
 export const tv = async (url: string, language: string = 'en') => {
   const { albumId } = await scraper(url)
 
+  const [modeCode, langCode] = codeMap[language]
+
   const params: { [x: string]: string } = {
     platformId: '3',
-    modeCode: 'cn',
-    langCode: langCodeMap[language],
+    modeCode,
+    langCode,
   }
 
   const { data } = await fetch(
@@ -44,14 +50,14 @@ export const tv = async (url: string, language: string = 'en') => {
 
   const publishTime = dayjs(data.publishTime, 'YYYYMMDD')
 
-  let airing_status
-  if (data.preview === 1) {
-    airing_status = 'Upcoming'
-  } else if (data.tvCount === data.total) {
-    airing_status = 'Ended'
-  } else {
-    airing_status = 'Airing'
-  }
+  // let airing_status
+  // if (data.preview === 1) {
+  //   airing_status = 'Upcoming'
+  // } else if (data.tvCount === data.total) {
+  //   airing_status = 'Ended'
+  // } else {
+  //   airing_status = 'Airing'
+  // }
 
   return {
     title: data.name.trim(),
@@ -59,7 +65,7 @@ export const tv = async (url: string, language: string = 'en') => {
     synopsis_source: 'iQIYI',
     airing_platform:
       data.isExclusive === 1 || data.isQiyiProduced === 1 ? 'iQIYI' : null,
-    airing_status,
+    // airing_status,
     rating_name: data.rating,
     cover_url: data.albumPic
       .replace('http://', 'https://')
@@ -80,13 +86,14 @@ export const episodes = async (
   language: string,
 ) => {
   const { albumId } = await scraper(url)
+  const [modeCode, langCode] = codeMap[language]
 
   const information: { [x: string]: any } = await tv(url, language)
 
   const params: { [x: string]: string } = {
     platformId: '3',
-    modeCode: 'cn',
-    langCode: langCodeMap[language],
+    modeCode,
+    langCode,
     startOrder: '1',
     endOrder: information.number_of_episodes,
   }

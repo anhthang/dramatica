@@ -1,48 +1,11 @@
 <template>
-  <a-config-provider :theme="themeCfg">
-    <NuxtLayout name="desktop">
-      <NuxtPage />
-    </NuxtLayout>
-  </a-config-provider>
+  <NuxtLayout>
+    <NuxtPage />
+  </NuxtLayout>
 </template>
 
 <script setup>
-import { theme } from 'ant-design-vue'
-import 'ant-design-vue/dist/reset.css'
-
-const themeCfg = ref({
-  algorithm: theme.defaultAlgorithm,
-  token: {
-    fontFamily: 'Cabin, sans-serif;',
-  },
-})
-
-const colorMode = useColorMode()
-
-const getAlgorithm = (preference) => {
-  switch (preference) {
-    case 'dark':
-      return theme.darkAlgorithm
-    case 'light':
-      return theme.defaultAlgorithm
-    default:
-      return colorMode.value === 'dark'
-        ? theme.darkAlgorithm
-        : theme.defaultAlgorithm
-  }
-}
-
-watch(
-  () => colorMode.value,
-  () => {
-    themeCfg.value.algorithm = getAlgorithm(colorMode.preference)
-  },
-)
-
-onMounted(() => {
-  const preference = localStorage.getItem('nuxt-color-mode')
-  themeCfg.value.algorithm = getAlgorithm(preference)
-})
+import 'primeicons/primeicons.css'
 
 const user = useState('authenticated', () => undefined)
 const getAuthUser = (authUser) => {
@@ -99,17 +62,9 @@ useSeoMeta({
 
 <style>
 :root {
-  --card-highlighted-bg-light: #d2e5ff;
-  --card-highlighted-bg-dark: #002159;
-  --card-highlighted-border: #1677ff;
+  --p-card-body-padding: 1.125rem;
+  --p-card-title-font-size: 1.125rem;
 
-  --color-text-gradient-stop-1: #4285f4;
-  --color-text-gradient-stop-2: #9b72cb;
-  --color-text-gradient-stop-3: #d96570;
-  --color-surface: #fff;
-
-  --poster-height: 320px;
-  --cover-height: 210px;
-  font-family: Cabin, sans-serif;
+  font-family: 'Cabin', sans-serif;
 }
 </style>

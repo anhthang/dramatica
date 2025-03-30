@@ -1,33 +1,39 @@
 <template>
   <div
-    class="flex gap-3 p-3"
+    class="flex items-center gap-3 w-full"
     :class="{
       'items-center !p-0': simple,
-      'relative bg-emerald-100 dark:bg-emerald-900 border-emerald-500 border rounded-md':
+      'p-3 relative bg-emerald-100 dark:bg-emerald-900 border border-emerald-500 rounded-md':
         selected,
       'p-3 relative border border-slate-200 dark:border-zinc-700 rounded-md':
         bordered && !selected,
     }"
   >
-    <Avatar
-      v-if="image"
-      :image="image"
-      :size="size"
-      class="relative"
-      pt:image:class="object-cover"
-      shape="circle"
+    <img
+      class="w-40 shrink-0 rounded"
+      :class="{
+        '!w-16': size === 'small',
+        '!w-48': size === 'large',
+      }"
+      :src="image"
+      :alt="title"
     />
-    <Avatar v-else :label="title.charAt(0)" :size="size" shape="circle" />
 
     <span v-if="simple">{{ title }}</span>
     <Card
       v-else
       class="!shadow-none !bg-transparent flex-1"
       pt:body:class="p-0"
+      :pt="{
+        caption: extraSubtitle && 'flex-row',
+        title: extraSubtitle && 'flex-grow',
+      }"
     >
       <template #title>{{ title }}</template>
       <template v-if="subtitle" #subtitle>{{ subtitle }}</template>
+      <template v-if="content" #content>{{ content }}</template>
     </Card>
+
     <div
       v-if="selected"
       class="absolute top-0 right-0 w-0 h-0 border-[10px] border-emerald-500 border-b-[10px] border-b-transparent border-l-[10px] border-l-transparent rounded-tr-md"
@@ -39,7 +45,7 @@
 defineProps({
   image: {
     type: String,
-    default: '',
+    required: true,
   },
   size: {
     type: String,
@@ -53,8 +59,13 @@ defineProps({
     type: String,
     default: '',
   },
+  content: {
+    type: String,
+    default: '',
+  },
   simple: Boolean,
   selected: Boolean,
   bordered: Boolean,
+  extraSubtitle: Boolean,
 })
 </script>

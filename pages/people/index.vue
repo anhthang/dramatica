@@ -1,29 +1,17 @@
 <template>
-  <a-page-header class="container" title="People">
-    <a-card :loading="loading" title="People Information">
-      <template #extra>
-        <a-button type="primary" :loading="loading" @click="onSave">
-          <save-outlined /> Save
-        </a-button>
-      </template>
-      <form-people ref="peopleForm" />
-    </a-card>
-  </a-page-header>
+  <Panel
+    header="Add New Person"
+    pt:root:class="!border-0 !bg-transparent"
+    pt:title:class="flex items-center gap-4 font-medium text-3xl"
+  >
+    <FormPerson />
+
+    <Toast />
+  </Panel>
 </template>
 
 <script setup>
 useSeoMeta({
-  title: 'People',
+  title: 'Add New Person',
 })
-
-const loading = ref(false)
-const peopleForm = ref()
-
-const onSave = async () => {
-  loading.value = true
-
-  await peopleForm.value.onSubmit()
-
-  loading.value = false
-}
 </script>
