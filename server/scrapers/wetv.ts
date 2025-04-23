@@ -47,7 +47,7 @@ const parser = (data: any, language: string) => {
     title: coverInfo.title,
     synopsis: unescape(coverInfo.description).trim(),
     synopsis_source: 'WeTV',
-    airing_platforn: 'WeTV',
+    airing_platform: 'WeTV',
     cover_url: coverInfo.posterHz,
     poster_url: coverInfo.posterVt,
     number_of_episodes:
